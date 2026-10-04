@@ -21,7 +21,7 @@ test('all assessment cards have concise bilingual descriptions, triggers and thr
 
 test('the visible muscle resource routes every selectable muscle to a clinical region',()=>{
  assert.deepEqual(Object.keys(ANATOMY_MODELS),['skeleton','muscle']);
- assert.equal(ANATOMY_MODELS.muscle.file,'nervous_male.glb');
+ assert.equal(ANATOMY_MODELS.muscle.file,'muscle-optimized.glb');
  const bytes=fs.readFileSync(new URL(`../public/anatomy/${ANATOMY_MODELS.muscle.file}`,import.meta.url));
  const atlas=JSON.parse(bytes.subarray(20,20+bytes.readUInt32LE(12)));
  const muscles=atlas.nodes.filter(node=>node.mesh!==undefined&&isVisibleAnatomyMesh(node.name,'muscle'));

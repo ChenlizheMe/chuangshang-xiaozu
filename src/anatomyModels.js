@@ -1,10 +1,10 @@
 import {anatomyIdentity,safePartLabel} from './anatomyLabels.js';
 
-// The muscle view uses the existing mixed nervous-system asset. Its neural
-// nodes are filtered by anatomical identity before rendering or picking.
+// The optimized muscle resource is derived from the existing mixed asset.
+// Non-muscle nodes are stripped offline; retain the guard for future assets.
 export const ANATOMY_MODELS = {
  skeleton: {file:'skeletal_male.glb',zh:'骨骼',en:'SKELETON'},
- muscle: {file:'nervous_male.glb',zh:'肌肉',en:'MUSCLE'}
+ muscle: {file:'muscle-optimized.glb',zh:'肌肉',en:'MUSCLE'}
 };
 
 export function isVisibleAnatomyMesh(raw,layer){

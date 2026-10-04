@@ -12,3 +12,10 @@ https://creativecommons.org/licenses/by-sa/4.0/
 The anatomy assets are separate from the original WhereHurt source code. Their
 license and attribution requirements continue to apply. Refer to the upstream
 project for the complete attribution chain and source terms.
+
+muscle-optimized.glb is a modified derivative of nervous_male.glb. It removes
+non-muscle structures and simplifies and recompresses the remaining geometry
+while retaining its source anatomical names and transforms. The same
+CC BY-SA 4.0 attribution and share-alike terms apply to this derived asset.
+Regeneration instructions and optimization statistics are in README.md and
+public/anatomy/muscle-optimized.json.

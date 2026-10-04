@@ -4,6 +4,7 @@ import {gsap} from 'gsap';
 import {Canvas,useLoader,useThree} from '@react-three/fiber';
 import {Html} from '@react-three/drei';
 import * as THREE from 'three';
+import {MeshBVH,acceleratedRaycast} from 'three-mesh-bvh';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader.js';
 import SignalDisplay from './SignalDisplay.jsx';
@@ -89,7 +90,7 @@ const MAX_ZOOM=24;
 function CameraRig({orbit,lift,elevation,zoom}){const {camera}=useThree(); useEffect(()=>{const radius=(INITIAL_ZOOM*INITIAL_ZOOM)/Math.max(MIN_ZOOM,zoom); const theta=orbit*Math.PI/180; const phi=elevation*Math.PI/180; const baseTargetY=0; const horizontalRadius=Math.cos(phi)*radius; camera.position.set(Math.sin(theta)*horizontalRadius,baseTargetY+lift+Math.sin(phi)*radius,Math.cos(theta)*horizontalRadius); // Lift translates camera + target; elevation is the free two-axis orbit pitch.
  camera.lookAt(0,baseTargetY+lift,0); camera.updateProjectionMatrix()},[camera,orbit,lift,elevation,zoom]); return null}
 function Model({layer,onPart,selectedObject,registerApproximatePick}){
-  const {camera,gl}=useThree();
+  const {camera,gl,raycaster:sceneRaycaster}=useThree();
   const gltf=useLoader(GLTFLoader,MODEL_URLS[layer],configureGLTF);
   // Reuse cached geometry and shared base materials. Only the selected mesh
   // receives a temporary material, keeping memory use low during layer swaps.
@@ -108,10 +109,18 @@ function Model({layer,onPart,selectedObject,registerApproximatePick}){
       }
     });
     gltf.scene.traverse(object=>{
-      if(object.isMesh)object.userData.inActiveLayer=isVisibleAnatomyMesh(semanticPartName(object),layer);
+      if(!object.isMesh)return;
+      object.userData.inActiveLayer=isVisibleAnatomyMesh(semanticPartName(object),layer);
+      object.visible=object.userData.inActiveLayer;
+      if(object.visible){
+        if(!object.geometry.boundsTree)object.geometry.boundsTree=new MeshBVH(object.geometry,{maxLeafTris:10});
+        object.raycast=acceleratedRaycast;
+      }else object.raycast=()=>{};
     });
     return gltf.scene;
   },[gltf,layer]);
+  const pickableMeshes=useMemo(()=>{const meshes=[];root.traverse(object=>{if(object.isMesh&&object.userData.inActiveLayer)meshes.push(object)});return meshes},[root]);
+  useEffect(()=>{const previous=sceneRaycaster.firstHitOnly;sceneRaycaster.firstHitOnly=true;return()=>{sceneRaycaster.firstHitOnly=previous}},[sceneRaycaster]);
   const groupRef=useRef();
   const clickRef=useRef(null);
   // Normalize every asset into the same centered, human-scale frame. The source GLBs
@@ -132,8 +141,8 @@ function Model({layer,onPart,selectedObject,registerApproximatePick}){
       const x=Number(event.clientX);const y=Number(event.clientY);
       if(!Number.isFinite(x)||!Number.isFinite(y)||!rect.width||!rect.height)return;
       const ndc=new THREE.Vector2(((x-rect.left)/rect.width)*2-1,-(((y-rect.top)/rect.height)*2-1));
-      const raycaster=new THREE.Raycaster();raycaster.setFromCamera(ndc,camera);
-      const rayHit=raycaster.intersectObject(root,true).find(hit=>hit.object?.isMesh&&hit.object.visible);
+      const raycaster=new THREE.Raycaster();raycaster.firstHitOnly=true;raycaster.setFromCamera(ndc,camera);
+      const rayHit=raycaster.intersectObjects(pickableMeshes,false)[0];
       if(rayHit){commitSelection(rayHit.object);return;}
       let nearest=null;
       root.updateWorldMatrix(true,true);
@@ -156,56 +165,46 @@ function Model({layer,onPart,selectedObject,registerApproximatePick}){
     };
     registerApproximatePick.current=pickNearest;
     return()=>{if(registerApproximatePick.current===pickNearest)registerApproximatePick.current=null;};
-  },[camera,gl,root,registerApproximatePick,selectedObject,onPart]);
-  useEffect(()=>{root.traverse(o=>{
-    // Draco assets contain only triangle primitives. Hide line/point helpers defensively;
-    // they are the source of the intermittent black contour flash in some WebGL drivers.
-    if(o.isLine||o.isLineSegments||o.isPoints){o.visible=false;return}
-    if(!o.isMesh)return;
-    o.userData.part=semanticPartName(o)||'general';
-    const materials=Array.isArray(o.material)?o.material:o.material?[o.material]:[];
-    if(!materials.length)return;
-    const hit=o===selectedObject;
-    // GLB files often reuse one material across many meshes. Clone only the
-    // selected mesh so its orange state cannot be overwritten by the next mesh
-    // in the traversal, then restore the shared material when it is cleared.
-    if(hit&&!o.userData.whereHurtMaterial){
-      o.userData.originalMaterial=o.material;
-      const cloned=materials.map(material=>material?.clone()).filter(Boolean);
-      o.material=Array.isArray(o.material)?cloned:cloned[0];
-      o.userData.whereHurtMaterial=true;
-    }else if(!hit&&o.userData.whereHurtMaterial){
-      const highlighted=o.material;
-      o.material=o.userData.originalMaterial;
-      (Array.isArray(highlighted)?highlighted:[highlighted]).forEach(material=>material?.dispose?.());
-      delete o.userData.originalMaterial;
-      delete o.userData.whereHurtMaterial;
-    }
-    const owned=Array.isArray(o.material)?o.material:[o.material];
-    o.visible=o.userData.inActiveLayer;
-    o.frustumCulled=true;
-    o.castShadow=false;
-    o.receiveShadow=false;
-    o.renderOrder=layer==='skeleton'?1:2;
-    owned.forEach(material=>{
-      if(!material)return;
-      material.color.set(hit?'#ff6338':layer==='skeleton'?'#d4c99d':'#c96759');
-      if(material.emissive){material.emissive.set(hit?'#ff2e00':'#000000');material.emissiveIntensity=hit?.65:0;}
-      if('roughness' in material)material.roughness=.72;
-      if('metalness' in material)material.metalness=.12;
-      material.side=THREE.DoubleSide;
-      material.depthTest=true;
-      material.depthWrite=true;
-      material.transparent=false;
-      material.opacity=1;
-      material.alphaTest=0;
-      material.blending=THREE.NormalBlending;
-      material.polygonOffset=false;
-      if('flatShading' in material)material.flatShading=false;
-      material.needsUpdate=true;
+  },[camera,gl,root,pickableMeshes,registerApproximatePick,selectedObject,onPart]);
+  // Prepare shared base materials once per asset, rather than flagging every
+  // material for shader updates after each selection.
+  useEffect(()=>{
+    const prepared=new Set();
+    root.traverse(o=>{
+      if(o.isLine||o.isLineSegments||o.isPoints){o.visible=false;return}
+      if(!o.isMesh)return;
+      o.userData.part=semanticPartName(o)||'general';
+      o.visible=o.userData.inActiveLayer;
+      o.frustumCulled=true;o.castShadow=false;o.receiveShadow=false;
+      o.renderOrder=layer==='skeleton'?1:2;
+      const materials=Array.isArray(o.material)?o.material:[o.material];
+      for(const material of materials){
+        if(!material||prepared.has(material))continue;prepared.add(material);
+        material.color.set(layer==='skeleton'?'#d4c99d':'#c96759');
+        if(material.emissive){material.emissive.set('#000000');material.emissiveIntensity=0}
+        if('roughness' in material)material.roughness=.72;
+        if('metalness' in material)material.metalness=.12;
+        material.side=THREE.DoubleSide;material.depthTest=true;material.depthWrite=true;
+        material.transparent=false;material.opacity=1;material.alphaTest=0;
+        material.blending=THREE.NormalBlending;material.polygonOffset=false;
+        if('flatShading' in material)material.flatShading=false;
+        material.needsUpdate=true;
+      }
     });
-  });},[root,layer,selectedObject]);
-  useEffect(()=>()=>{root.traverse(o=>{if(!o.isMesh||!o.userData.whereHurtMaterial)return;const highlighted=o.material;o.material=o.userData.originalMaterial;(Array.isArray(highlighted)?highlighted:[highlighted]).forEach(material=>material?.dispose?.());delete o.userData.originalMaterial;delete o.userData.whereHurtMaterial;})},[root]);
+  },[root,layer]);
+  // Only the selected mesh gets a temporary material. Its cleanup restores the
+  // original shared material without touching other meshes or their shaders.
+  useEffect(()=>{
+    if(!selectedObject?.visible||!selectedObject.userData.inActiveLayer)return;
+    const original=selectedObject.material;
+    const highlighted=(Array.isArray(original)?original:[original]).map(material=>{
+      const clone=material.clone();clone.color.set('#ff6338');
+      if(clone.emissive){clone.emissive.set('#ff2e00');clone.emissiveIntensity=.65}
+      return clone;
+    });
+    selectedObject.material=Array.isArray(original)?highlighted:highlighted[0];
+    return()=>{selectedObject.material=original;highlighted.forEach(material=>material.dispose())};
+  },[root,selectedObject]);
   const meshPart=e=>decodeName(e.object?.userData?.part||e.object?.name||'general');
   const onMeshPointerDown=e=>{if(e.button!==0||clickRef.current?.pointerId===e.pointerId)return;const object=e.intersections?.find(hit=>hit.object.visible&&hit.object.userData.inActiveLayer)?.object;if(!object)return;clickRef.current={pointerId:e.pointerId,part:meshPart({object}),object,x:e.clientX,y:e.clientY,startedAt:performance.now(),moved:false};};
   const onMeshPointerMove=e=>{const candidate=clickRef.current;if(!candidate||candidate.pointerId!==e.pointerId)return;const distance=Math.hypot(e.clientX-candidate.x,e.clientY-candidate.y);if(distance>6)candidate.moved=true;};

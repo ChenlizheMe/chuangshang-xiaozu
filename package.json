@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "test:labels": "node --test tests/anatomy-labels.test.mjs",
     "test:clinical": "node --test tests/clinical-regions.test.mjs",
-    "test:engine": "node --test tests/clinical-engine.test.mjs"
+    "test:engine": "node --test tests/clinical-engine.test.mjs",
+    "optimize:muscle": "node scripts/optimize-muscle.mjs",
+    "test:models": "node --test tests/anatomy-models.test.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",
@@ -18,6 +20,14 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "three": "^0.169.0",
+    "three-mesh-bvh": "^0.7.8",
     "vite": "^5.4.10"
+  },
+  "devDependencies": {
+    "@gltf-transform/core": "^4.5.1",
+    "@gltf-transform/extensions": "^4.5.1",
+    "@gltf-transform/functions": "^4.5.1",
+    "draco3dgltf": "^1.5.7",
+    "meshoptimizer": "^1.3.0"
   }
 }

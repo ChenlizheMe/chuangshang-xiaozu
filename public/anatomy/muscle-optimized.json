@@ -1,0 +1,17 @@
+{
+  "source": "nervous_male.glb",
+  "output": "muscle-optimized.glb",
+  "sourceFaces": 3240138,
+  "visibleFaces": 832780,
+  "reducedFaces": 340498,
+  "selectableStructures": 274,
+  "sourceBytes": 8535424,
+  "outputBytes": 1456856,
+  "simplify": {
+    "ratio": 0.3,
+    "error": 0.002,
+    "lockBorder": true,
+    "minimumFaces": 64
+  },
+  "attribution": "Anatria-3D / Z-Anatomy / BodyParts3D, CC BY-SA 4.0; see NOTICE"
+}

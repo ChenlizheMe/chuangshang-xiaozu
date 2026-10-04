@@ -23,11 +23,19 @@ npm run build
 模型资源来自 Anatria-3D 的公开男性 GLB：
 https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 
-界面只提供骨骼和肌肉两层。骨骼使用 `skeletal_male.glb`；肌肉按当前选定资源改用 `nervous_male.glb`，按节点解剖名称过滤非肌肉结构，神经层暂时停用。资源文件名不能作为组织类型的判断依据，点击名称与临床区域仍按实际节点识别。资源本地托管，不依赖运行时第三方下载。
+界面只提供骨骼和肌肉两层。骨骼使用 `skeletal_male.glb`；肌肉使用从 `nervous_male.glb` 派生的 `muscle-optimized.glb`，神经层暂时停用。非肌肉结构在生成资源时移除，保留全部 274 个可选结构的名称、坐标和独立高亮。资源文件名不能作为组织类型的判断依据，点击名称与临床区域仍按实际节点识别。资源本地托管，不依赖运行时第三方下载。
 
 这份肌肉资源不包含腹直肌、腹外斜肌、腹内斜肌和腹横肌等腹壁结构，当前不能通过模型点击这些缺失区域；对应的腹部分析规则保留在知识库中。它不代表完整肌肉图谱。
 
 这些文件来自 Z-Anatomy / BodyParts3D 衍生数据，仓库标注 CC BY-SA 4.0；使用时应保留署名与相同许可要求。当前使用男性模型，不代表完整男女双套解剖覆盖，继续保留 NOTICE/署名。
+
+## 肌肉模型优化
+
+运行 `npm run optimize:muscle` 可从仓库保留的原始模型重新生成优化资源和 `muscle-optimized.json` 报告。使用 glTF Transform、Meshoptimizer 减面和 Draco 压缩；锁定网格边界，限制误差为模型半径的 0.2%，小于 100 面的结构不减面。文件体积由 8,535,424 字节降至 1,456,856 字节；可见三角面由 832,780 降至 340,498。
+
+运行时为可选结构建立 BVH，鼠标命中使用每块结构的最近交点；点击只替换选中结构的材质，避免每次选中都更新整个模型的材质。电视后处理保持现有画面效果。
+
+`npm run test:models` 校验名称完整性、解剖位置和边界、面数与体积，以及普通射线与 BVH 的命中一致性。工具依据：[glTF Transform](https://gltf-transform.dev/)、[three-mesh-bvh](https://github.com/gkjohnson/three-mesh-bvh)。
 
 ## 医疗边界
 
