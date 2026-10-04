@@ -8,6 +8,8 @@ import {CLINICAL_RULES} from './clinicalRules.js';
 // unmistakably local observations out of unrelated body regions (for example,
 // nasal congestion should not appear when the selected structure is the mouth).
 const REGION_OVERRIDES={
+  '磨牙':['tooth','jaw','head'],
+  '咀嚼加重':['tooth','jaw'],'压力大':['tooth','jaw','head','neck'],
   '眼干':['eye'],'异物感':['eye'],'眼红':['eye'],'复视':['eye','head'],
   '冷热敏感':['tooth'],'持续冷热痛':['tooth','jaw'],'刺激去除即缓解':['tooth'],
   '自发痛':['tooth','jaw'],'牙齿裂纹':['tooth'],'牙齿松动':['tooth','jaw'],'牙龈退缩':['tooth','jaw'],
@@ -68,12 +70,14 @@ const regionForTag=(knowledge,id)=>{
 
 export function visibleSymptoms(knowledge,{parts=[],layer='skeleton',kind='feelings'}={}){
   const tags=knowledge[kind]||[];
+  const universalTiming=tag=>kind==='timing'&&(tag.group==='duration'||['突然起病','持续加重','短暂发作','反复数月'].includes(tag.id));
   const profiles=parts.map(part=>clinicalProfile(part,layer));
   if(profiles.length&&profiles.every(p=>p.organ)){
     const conditions=new Set(profiles.flatMap(p=>ORGAN_CONDITIONS[p.organ]||[]));
     const supported=new Set(knowledge.conditions.filter(c=>conditions.has(c.id)).flatMap(c=>{const r=CLINICAL_RULES[c.id];return [...r.required.flat(),...r.optional,...(r.exclude||[])];}));
     const urgent={chest:['突发剧痛','晕厥','呼吸困难'],abdomen:['突发剧痛','晕厥','黑便','血便','呕血','腹部僵硬']};
     return tags.filter(tag=>{
+      if(universalTiming(tag))return true;
       if(tag.id==='可能怀孕')return profiles.some(p=>p.region==='abdomen');
       return supported.has(tag.id)||SYSTEMIC_TAGS.has(tag.id)||profiles.some(p=>urgent[p.region]?.includes(tag.id));
     });
@@ -81,6 +85,7 @@ export function visibleSymptoms(knowledge,{parts=[],layer='skeleton',kind='feeli
   const selected=new Set(parts.map(part=>clinicalProfile(part,layer).region).filter(region=>region&&region!=='general'));
   if(!selected.size)return tags;
   return tags.filter(tag=>{
+    if(universalTiming(tag))return true;
     if(SYSTEMIC_TAGS.has(tag.id)&&tag.id!=='可能怀孕')return true;
     const regions=regionForTag(knowledge,tag.id);
     return regions.some(region=>selected.has(region));

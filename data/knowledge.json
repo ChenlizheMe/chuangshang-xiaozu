@@ -121,11 +121,6 @@
       "en": "pain on biting"
     },
     {
-      "id": "夜间痛",
-      "zh": "夜间痛",
-      "en": "night pain"
-    },
-    {
       "id": "放射痛",
       "zh": "放射痛",
       "en": "radiating pain"
@@ -189,11 +184,6 @@
       "id": "自发痛",
       "zh": "没碰也会痛",
       "en": "Spontaneous pain"
-    },
-    {
-      "id": "夜间麻木",
-      "zh": "夜间麻得明显",
-      "en": "Night numbness"
     },
     {
       "id": "拇食中指麻木",
@@ -3937,7 +3927,83 @@
       "context": []
     }
   ],
-  "context": [
+  "timing": [
+    {
+      "id": "刚刚开始",
+      "zh": "刚刚开始",
+      "en": "Just started",
+      "group": "duration"
+    },
+    {
+      "id": "持续数小时",
+      "zh": "持续数小时",
+      "en": "Several hours",
+      "group": "duration"
+    },
+    {
+      "id": "持续1至3天",
+      "zh": "持续1至3天",
+      "en": "1–3 days",
+      "group": "duration"
+    },
+    {
+      "id": "持续超过3天",
+      "zh": "持续超过3天",
+      "en": "Over 3 days",
+      "group": "duration"
+    },
+    {
+      "id": "夜间痛",
+      "zh": "夜间痛",
+      "en": "night pain"
+    },
+    {
+      "id": "夜间麻木",
+      "zh": "夜间麻得明显",
+      "en": "Night numbness"
+    },
+    {
+      "id": "新运动后1至3天",
+      "zh": "新运动后隔1–3天酸痛",
+      "en": "1–3 days after unfamiliar exercise"
+    },
+    {
+      "id": "持续加重",
+      "zh": "越来越严重",
+      "en": "Progressively worsening"
+    },
+    {
+      "id": "反复数月",
+      "zh": "反复了几个月",
+      "en": "Recurring for months"
+    },
+    {
+      "id": "短暂发作",
+      "zh": "每次几秒到几分钟",
+      "en": "Brief episodes"
+    },
+    {
+      "id": "晨起第一步痛",
+      "zh": "起床第一步脚跟疼",
+      "en": "First-step heel pain"
+    },
+    {
+      "id": "突然起病",
+      "zh": "突然开始",
+      "en": "Sudden onset"
+    },
+    {
+      "id": "持续超过10天",
+      "zh": "持续超过10天",
+      "en": "Over 10 days"
+    },
+    {
+      "id": "经期相关",
+      "zh": "和月经时间有关",
+      "en": "Menstrual association"
+    }
+  ],
+  "triggers": [
     {
       "id": "咀嚼加重",
       "zh": "嚼东西时加重",
@@ -3957,11 +4023,6 @@
       "id": "运动后",
       "zh": "运动或负荷增加后",
       "en": "After exercise/load increase"
-    },
-    {
-      "id": "新运动后1至3天",
-      "zh": "新运动后隔1–3天酸痛",
-      "en": "1–3 days after unfamiliar exercise"
     },
     {
       "id": "反复用力",
@@ -4034,21 +4095,6 @@
       "en": "Better after a bowel movement"
     },
     {
-      "id": "持续加重",
-      "zh": "越来越严重",
-      "en": "Progressively worsening"
-    },
-    {
-      "id": "反复数月",
-      "zh": "反复了几个月",
-      "en": "Recurring for months"
-    },
-    {
-      "id": "短暂发作",
-      "zh": "每次几秒到几分钟",
-      "en": "Brief episodes"
-    },
-    {
       "id": "触碰诱发",
       "zh": "轻碰 / 刷牙就诱发",
       "en": "Triggered by light touch"
@@ -4089,11 +4135,6 @@
       "en": "Worse with kneeling"
     },
     {
-      "id": "晨起第一步痛",
-      "zh": "起床第一步脚跟疼",
-      "en": "First-step heel pain"
-    },
-    {
       "id": "屈肘加重",
       "zh": "弯着胳膊更麻",
       "en": "Worse with elbow bent"
@@ -4112,21 +4153,6 @@
       "id": "负重加重",
       "zh": "走路负重时加重",
       "en": "Worse with weight-bearing"
-    },
-    {
-      "id": "突然起病",
-      "zh": "突然开始",
-      "en": "Sudden onset"
-    },
-    {
-      "id": "持续超过10天",
-      "zh": "持续超过10天",
-      "en": "Over 10 days"
-    },
-    {
-      "id": "经期相关",
-      "zh": "和月经时间有关",
-      "en": "Menstrual association"
     },
     {
       "id": "磨牙",

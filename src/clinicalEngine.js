@@ -1,23 +1,23 @@
 import {clinicalProfile} from './clinicalRegions.js';
 import {ORGAN_CONDITIONS} from './organAtlas.js';
 import {CLINICAL_RULES} from './clinicalRules.js';
-import {evidenceFamily,interpretText,SYSTEMIC_TAGS} from './symptomLanguage.js';
+import {evidenceFamily} from './symptomLanguage.js';
+import {basicAssessment} from './basicAssessments.js';
 export const CONDITION_REGIONS=Object.fromEntries(Object.entries(CLINICAL_RULES).map(([id,r])=>[id,r.regions]));
 const DEFAULT_ORGAN_LOCATION={heart:'unknown',stomach:'epigastric',pancreas:'epigastric',appendix:'rlq',liver:'ruq',biliary:'ruq',spleen:'luq',kidney:'flank',ureter:'flank',bladder:'suprapubic'};
 export function normalizeReport(report){
- const parsed=interpretText(report.text);
- // An explicit checkbox wins over text negation, but the conflict is surfaced.
- const checked=new Set([...(report.feelings||[]),...(report.signs||[]),...(report.context||[])]);
- const tags=new Set([...checked,...parsed.findings.map(f=>f.id)].filter(t=>t!=='看不出异常'));
- const conflicts=parsed.denied.filter(t=>checked.has(t)||parsed.findings.some(f=>f.id===t));
- return {...report,location:report.location&&report.location!=='unknown'?report.location:parsed.location||'unknown',tags,denied:new Set(parsed.denied.filter(t=>!checked.has(t))),conflicts};
+ // Only explicitly selected tags are clinical inputs. context remains an API
+ // compatibility alias; the interface records timing and triggers separately.
+ const tags=new Set([...(report.feelings||[]),...(report.signs||[]),...(report.timing||[]),...(report.triggers||[]),...(report.context||[])].filter(t=>t!=='看不出异常'));
+ return {...report,location:report.location||'unknown',tags};
 }
 const fits=(profile,rule,id)=>profile.organ?ORGAN_CONDITIONS[profile.organ]?.includes(id)||['sleep-deprivation','dehydration-pattern','blood-test-direction'].includes(id):rule.regions.includes(profile.region)&&(!rule.tissues||rule.tissues.includes(profile.tissue));
 export function assessSymptoms(knowledge,input={}){
- const legacy=(input.parts||[]).map(part=>({part,layer:input.layer||'skeleton',feelings:input.feelings||[],signs:input.signs||[],context:input.context||[],text:input.text||'',location:input.location||'unknown'}));
- const normalized=(input.reports||legacy).filter(r=>r.part).map(normalizeReport);
+ const legacy=(input.parts||[]).map(part=>({...input,part,layer:input.layer||'skeleton',location:input.location||'unknown'}));
+ const validTags=new Set(['feelings','signs','timing','triggers'].flatMap(kind=>knowledge[kind].map(t=>t.id)));
+ const normalized=(input.reports||legacy).filter(r=>r.part).slice(0,1).map(normalizeReport);
+ for(const report of normalized)report.tags=new Set([...report.tags].filter(t=>validTags.has(t)));
  const profiles=normalized.map(r=>({...clinicalProfile(r.part,r.layer),raw:r.part,layer:r.layer}));
- const systemic=new Set(normalized.flatMap(r=>[...r.tags].filter(t=>SYSTEMIC_TAGS.has(t)&&!r.conflicts.includes(t))));
  const symptoms=new Set(normalized.flatMap(r=>[...r.tags]));
  const has=(...tags)=>tags.some(t=>symptoms.has(t));
  const abdominal=profiles.some(p=>p.region==='abdomen');
@@ -44,7 +44,7 @@ export function assessSymptoms(knowledge,input={}){
  const missing=[],candidates=[];
  for(let i=0;i<normalized.length;i++){
   const report=normalized[i],profile=profiles[i];
-  const tags=new Set([...report.tags,...[...systemic].filter(t=>!report.denied.has(t))]);
+  const tags=report.tags;
   for(const condition of knowledge.conditions){
    const rule=CLINICAL_RULES[condition.id];if(!rule||!fits(profile,rule,condition.id))continue;
    if(rule.lifestyle&&urgent.length||rule.exclude?.some(t=>tags.has(t)))continue;
@@ -55,7 +55,7 @@ export function assessSymptoms(knowledge,input={}){
    const matched=[...new Set([...groups.flat(),...rule.optional.filter(t=>tags.has(t))])];
    const families=new Set(matched.map(evidenceFamily));
    const unknownLocation=rule.locations&&['unknown','diffuse'].includes(location)&&!tags.has('腹痛迁移至右下腹');
-   if(unmatched.length||families.size<2||unknownLocation||matched.some(t=>report.conflicts.includes(t))){
+   if(unmatched.length||families.size<2||unknownLocation){
     if(matched.length)missing.push({id:condition.id,part:report.part,layer:report.layer,matched:matched.length,groups:unmatched,location:unknownLocation});
     continue;
    }
@@ -67,8 +67,7 @@ export function assessSymptoms(knowledge,input={}){
    candidates.push({...condition,score,why,matchedSymptoms:matched,evidenceFamilies:[...families],family:rule.family,partRefs:[{part:report.part,layer:report.layer}],lifestyle:!!rule.lifestyle});
   }
  }
- // Merge the same clinical direction across valid area reports. Specific
- // regional branches suppress their generic counterpart within that area.
+ // Specific branches suppress their generic counterpart within the area.
  const chosen=[];
  for(const candidate of candidates.sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id))){
   const duplicate=chosen.find(c=>c.id===candidate.id);
@@ -77,6 +76,7 @@ export function assessSymptoms(knowledge,input={}){
   chosen.push(candidate);
  }
  const items=chosen.slice(0,6);
+ if(!items.length&&normalized.length){const basic=basicAssessment(profiles[0],normalized[0],urgent);if(basic)items.push(basic);}
  const suggestions=[...new Set(missing.sort((a,b)=>b.matched-a.matched).slice(0,3).flatMap(m=>m.groups.map(g=>g.find(t=>!symptoms.has(t))).filter(Boolean)))].slice(0,6);
- return {profiles,items,urgent:[...new Map(urgent.map(w=>[w.zh,w])).values()],suggestions,needsLocation:missing.some(m=>m.location),conflicts:[...new Set(normalized.flatMap(r=>r.conflicts))],needsSymptoms:!symptoms.size,needsPart:!profiles.length,needsEvidence:profiles.length>0&&!items.length};
+ return {profiles,items,urgent:[...new Map(urgent.map(w=>[w.zh,w])).values()],suggestions,needsLocation:missing.some(m=>m.location),needsSymptoms:!symptoms.size,needsPart:!profiles.length,needsEvidence:profiles.length>0&&!items.length};
 }

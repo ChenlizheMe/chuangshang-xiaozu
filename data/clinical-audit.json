@@ -1,7 +1,7 @@
 {
-  "version": 2,
+  "version": 3,
   "date": "2026-10-04",
-  "method": "Explicit per-condition feature gates, not a trained diagnostic model",
+  "method": "Single-area explicit feature gates plus separate symptom-level basic directions; not a trained diagnostic model",
   "removedOrMerged": {
     "joint-swelling-pattern": [
       "joint-inflammation",
@@ -130,5 +130,13 @@
     "No diagnostic probability or confirmed diagnosis",
     "Absence of a selected feature is unknown, not a negative test",
     "Anatomy selection cannot identify an internal lesion"
-  ]
+  ],
+  "basicAssessmentUpdate": {
+    "input": "Single anatomical area, selected feelings/signs/timing/triggers; no free text",
+    "specificRules": "75 gated directions retained; two independent evidence families and mandatory features",
+    "fallback": "Selected feelings, signs or symptom-related context support one basic card when no specific direction matches; anatomy or duration alone is insufficient",
+    "example": "Tooth tightness -> biting-load discomfort; clenching/grinding are possible factors, not confirmed causes",
+    "urgency": "Urgent signals take priority; basic cards cannot offer lifestyle reassurance instead",
+    "review": "Case-vector and code review, not physician review or clinical validation"
+  }
 }
