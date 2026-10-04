@@ -1,4 +1,5 @@
 import {anatomyIdentity,safePartLabel} from './anatomyLabels.js';
+import {ORGAN_ATLAS} from './organAtlas.js';
 
 // Anatomical identity is independent of the visible layer: the nervous GLB
 // contains muscles and sense organs as well as nerves.
@@ -67,11 +68,12 @@ const INFO={
 export function clinicalProfile(raw,layer){
  const {name,side}=anatomyIdentity(raw);const label=safePartLabel(raw,layer);
  const text=`${label.zh} ${name}`;
- const region=REGIONS.find(([,pattern])=>pattern.test(text))?.[0]||'general';
- const tissue=/神经|脊髓|脑|nerve|tract|nucleus|gyrus|sulc|cereb|fascicul|gangli/i.test(text)?'nerve':/肌|腱|筋膜|muscle|tendon|fascia/i.test(text)?'muscle':/骨|韧带|软骨|椎间盘|关节|bone|ligament|cartilage/i.test(text)?'skeleton':layer;
+ const organ=layer==='organ'?ORGAN_ATLAS[name.toLowerCase()]:null;
+ const region=organ?.region||REGIONS.find(([,pattern])=>pattern.test(text))?.[0]||'general';
+ const tissue=organ?'organ':/神经|脊髓|脑|nerve|tract|nucleus|gyrus|sulc|cereb|fascicul|gangli/i.test(text)?'nerve':/肌|腱|筋膜|muscle|tendon|fascia/i.test(text)?'muscle':/骨|韧带|软骨|椎间盘|关节|bone|ligament|cartilage/i.test(text)?'skeleton':layer;
  const [zh,en,summary,summaryEn,question,questionEn]=INFO[region];
  const sideZh=side?`${side==='left'?'左侧':'右侧'}${zh}`:zh;
  const sideEn=side?`${side==='left'?'Left ':'Right '}${en}`:en;
- return {region,tissue,side,name,label,title:{zh:sideZh,en:sideEn},summary,summaryEn,question,questionEn};
+ return {region,tissue,organ:organ?.organ,side,name,label,title:{zh:sideZh,en:sideEn},summary,summaryEn,question,questionEn};
 }
 export const ABDOMEN_LOCATIONS=[['unknown','腹部位置待确认','Location uncertain'],['ruq','右上腹','Right upper'],['luq','左上腹','Left upper'],['epigastric','上腹正中','Upper middle'],['rlq','右下腹','Right lower'],['llq','左下腹','Left lower'],['suprapubic','下腹正中','Lower middle'],['flank','侧腰腹','Flank'],['diffuse','弥漫/说不清','Diffuse']];

@@ -1,8 +1,11 @@
 import {clinicalProfile} from './clinicalRegions.js';
+import {ORGAN_CONDITIONS} from './organAtlas.js';
 
 // Explicit clinical regions, not substring aliases (e.g. 'rectus' is not
 // necessarily abdominal). These are educational differentials, not probabilities.
 export const CONDITION_REGIONS = {
+ 'cardiac-ischaemia-warning':['chest'],'pancreatitis-pattern':['abdomen'],
+ 'hepatobiliary-pattern':['abdomen'],'splenic-injury-warning':['abdomen'],
  'muscle-strain':['neck','spine','shoulder','upper-limb','hand','chest','abdomen','hip','knee','lower-limb','ankle','foot'],
  'nerve-irritation':['neck','spine','shoulder','upper-limb','hand','hip','lower-limb','ankle','foot'],
  'skin-irritation':['skin'], 'itch-skin-pattern':['skin'], 'visible-skin-change-pattern':['skin'],
@@ -82,7 +85,7 @@ export function assessSymptoms(knowledge,{parts=[],layer='skeleton',feelings=[],
  if(abdominal&&has('可能怀孕'))warn('可能怀孕且腹痛：尽快就医确认；单侧剧痛、出血、肩尖痛或晕厥立即急诊。','Possible pregnancy with abdominal pain needs prompt assessment; severe one-sided pain, bleeding, shoulder-tip pain or fainting is an emergency.');
  const items=knowledge.conditions.flatMap(condition=>{
    const regions=CONDITION_REGIONS[condition.id]||[];
-   const matching=profiles.filter(p=>regions.includes(p.region)||regions.includes('skeleton')&&p.tissue==='skeleton'||regions.includes('skin')&&SKIN_SIGNS.some(t=>symptoms.has(t))&& !['tooth','autonomic'].includes(p.region));
+   const matching=profiles.filter(p=>p.organ?ORGAN_CONDITIONS[p.organ]?.includes(condition.id):regions.includes(p.region)||regions.includes('skeleton')&&p.tissue==='skeleton'||regions.includes('skin')&&SKIN_SIGNS.some(t=>symptoms.has(t))&& !['tooth','autonomic'].includes(p.region));
    if(!matching.length)return [];
    // Location is user-confirmed; mesh laterality alone cannot tell upper/lower abdomen.
    let locationMismatch=false;

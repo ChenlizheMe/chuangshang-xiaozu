@@ -9,6 +9,7 @@ import * as THREE from 'three';
 import {MeshBVH,acceleratedRaycast} from 'three-mesh-bvh';
 import {isVisibleAnatomyMesh} from '../src/anatomyModels.js';
 import {safePartLabel} from '../src/anatomyLabels.js';
+import {ORGAN_GROUPS} from '../src/organAtlas.js';
 
 const asset=file=>new URL(`../public/anatomy/${file}`,import.meta.url);
 const readJSON=file=>{
@@ -17,27 +18,77 @@ const readJSON=file=>{
 };
 const io=new NodeIO().registerExtensions([KHRDracoMeshCompression]).registerDependencies({'draco3d.decoder':await draco3d.createDecoderModule()});
 
+test('heart and each lung are single selectable meshes in their original anatomical positions',async()=>{
+ const sourceNodes=new Map();
+ for(const file of ['visceral_male.glb','organ-supplement-source.glb']){
+  const source=await io.read(fileURLToPath(asset(file)));
+  for(const n of source.getRoot().listNodes().filter(n=>n.getMesh()))sourceNodes.set(n.getName(),n);
+ }
+ const worldBounds=nodes=>{
+  const box=new THREE.Box3(),point=new THREE.Vector3();
+  for(const node of nodes)for(const primitive of node.getMesh().listPrimitives()){
+   const positions=primitive.getAttribute('POSITION').getArray(),matrix=new THREE.Matrix4().fromArray(node.getWorldMatrix());
+   for(let i=0;i<positions.length;i+=3)box.expandByPoint(point.fromArray(positions,i).applyMatrix4(matrix));
+  }
+  return box;
+ };
+ for(const file of ['organs-optimized.glb','organs-mobile.glb']){
+  const result=await io.read(fileURLToPath(asset(file))),nodes=result.getRoot().listNodes().filter(n=>n.getMesh());
+  for(const [name,members] of Object.entries(ORGAN_GROUPS)){
+   const selected=nodes.filter(n=>n.getName()===name);assert.equal(selected.length,1,name);
+   assert.equal(selected[0].getMesh().listPrimitives().length,1,name+' must highlight as a whole');
+   assert.ok(!nodes.some(n=>members.includes(n.getName())),name+' retains a selectable fragment');
+   const before=worldBounds(members.map(n=>sourceNodes.get(n))),after=worldBounds(selected);
+   const tolerance=before.getSize(new THREE.Vector3()).length()*.025;
+   assert.ok(before.min.distanceTo(after.min)<tolerance&&before.max.distanceTo(after.max)<tolerance,name+' changed anatomical position');
+  }
+ }
+});
+
+test('mobile atlases preserve every selectable structure with substantially lighter geometry',()=>{
+ for(const [layer,fullFile,mobileFile] of [['skeleton','skeletal_male.glb','skeleton-mobile.glb'],['muscle','muscle-optimized.glb','muscle-mobile.glb'],['organ','organs-optimized.glb','organs-mobile.glb']]){
+  const full=readJSON(fullFile),mobile=readJSON(mobileFile);
+  const selectable=json=>json.nodes.filter(n=>n.mesh!==undefined);
+  assert.deepEqual(selectable(mobile).map(n=>n.name).sort(),selectable(full).map(n=>n.name).sort());
+  const faces=json=>selectable(json).reduce((sum,n)=>sum+json.meshes[n.mesh].primitives.reduce((total,p)=>total+json.accessors[p.indices].count/3,0),0);
+  assert.ok(faces(mobile)<faces(full)*.5,`${mobileFile} too many faces`);
+  for(const node of selectable(mobile)){
+   assert.ok(!/待核验|[a-z]{2}/i.test(safePartLabel(node.name,layer).zh),node.name);
+   assert.ok(isVisibleAnatomyMesh(node.name,layer),node.name);
+  }
+ }
+});
+
 test('optimized muscles retain every selectable source structure and reduce loading/rendering cost',()=>{
  const original=readJSON('nervous_male.glb');
  const optimized=readJSON('muscle-optimized.glb');
  const source=original.nodes.filter(n=>n.mesh!==undefined&&isVisibleAnatomyMesh(n.name,'muscle'));
  const result=optimized.nodes.filter(n=>n.mesh!==undefined);
- assert.deepEqual(result.map(n=>n.name).sort(),source.map(n=>n.name).sort());
- assert.equal(result.length,274);
+ const names=new Set(result.map(n=>n.name));
+ for(const node of source)assert.ok(names.has(node.name),node.name);
+ assert.ok(result.length>600);
+ for(const term of ['Rectus abdominis muscle','External abdominal oblique muscle','Internal abdominal oblique muscle','Transversus abdominis muscle']){
+  assert.ok(result.some(n=>n.name===term+'.l'),term+' left missing');
+  assert.ok(result.some(n=>n.name===term+'.r'),term+' right missing');
+ }
  for(const node of result){
   assert.ok(isVisibleAnatomyMesh(node.name,'muscle'),node.name);
   assert.ok(!/待核验|[a-z]{2}/i.test(safePartLabel(node.name,'muscle').zh),node.name);
  }
  const faces=(document,nodes)=>nodes.reduce((count,node)=>count+document.meshes[node.mesh].primitives.reduce((sum,p)=>sum+document.accessors[p.indices].count/3,0),0);
- const before=faces(original,source),after=faces(optimized,result);
+ const muscular=readJSON('muscular_male.glb');
+ const extra=muscular.nodes.filter(n=>n.mesh!==undefined&&names.has(n.name)&&!source.some(s=>s.name===n.name));
+ const before=faces(original,source)+faces(muscular,extra),after=faces(optimized,result);
  assert.ok(after<before*.45,`${after} faces compared with ${before}`);
- assert.ok(fs.statSync(asset('muscle-optimized.glb')).size<fs.statSync(asset('nervous_male.glb')).size*.2);
+ assert.ok(fs.statSync(asset('muscle-optimized.glb')).size<(fs.statSync(asset('nervous_male.glb')).size+fs.statSync(asset('muscular_male.glb')).size)*.2);
 });
 
 test('decimation preserves per-part transforms, bounds and BVH click results',async()=>{
  const original=await io.read(fileURLToPath(asset('nervous_male.glb')));
  const optimized=await io.read(fileURLToPath(asset('muscle-optimized.glb')));
  const sourceNodes=new Map(original.getRoot().listNodes().filter(n=>n.getMesh()&&isVisibleAnatomyMesh(n.getName(),'muscle')).map(n=>[n.getName(),n]));
+ const supplemental=await io.read(fileURLToPath(asset('muscular_male.glb')));
+ for(const node of supplemental.getRoot().listNodes().filter(n=>n.getMesh()))if(!sourceNodes.has(node.getName()))sourceNodes.set(node.getName(),node);
  const bounds=mesh=>{
   const box=new THREE.Box3();
   const point=new THREE.Vector3();
@@ -50,9 +101,9 @@ test('decimation preserves per-part transforms, bounds and BVH click results',as
  let hits=0;
  for(const node of optimized.getRoot().listNodes().filter(n=>n.getMesh())){
   const name=node.getName(),source=sourceNodes.get(name);
-  assert.deepEqual(node.getWorldMatrix(),source.getWorldMatrix(),`${name} moved`);
+  assert.ok(node.getWorldMatrix().every((value,i)=>Math.abs(value-source.getWorldMatrix()[i])<.00001),`${name} moved`);
   const before=bounds(source.getMesh()),after=bounds(node.getMesh());
-  const tolerance=before.getSize(new THREE.Vector3()).length()*.012+.00002;
+  const tolerance=before.getSize(new THREE.Vector3()).length()*.02+.00002;
   assert.ok(before.min.distanceTo(after.min)<tolerance&&before.max.distanceTo(after.max)<tolerance,`${name} silhouette bounds changed`);
   for(const primitive of node.getMesh().listPrimitives()){
    const geometry=new THREE.BufferGeometry();

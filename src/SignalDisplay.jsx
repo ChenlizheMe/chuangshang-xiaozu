@@ -54,10 +54,12 @@ const fragmentShader = /* glsl */`
   }
 `;
 
-export default function SignalDisplay({signal, readySignal, enabled=true}) {
-  const {gl,size,scene,camera} = useThree();
+export default function SignalDisplay({signal, readySignal, enabled=true, idleFps=24}) {
+  const {gl,size,scene,camera,invalidate} = useThree();
   const switchedAt = useRef(-10);
   const reducedMotion = useRef(false);
+  const timer = useRef();
+  const cached = useRef({dirty:true,revision:-1,view:new THREE.Matrix4(),projection:new THREE.Matrix4()});
   const pipeline = useMemo(() => {
     const target = new THREE.WebGLRenderTarget(1,1,{depthBuffer:true});
     const material = new THREE.ShaderMaterial({
@@ -73,16 +75,22 @@ export default function SignalDisplay({signal, readySignal, enabled=true}) {
   },[]);
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => {reducedMotion.current=preference.matches;};
+    const update = () => {reducedMotion.current=preference.matches;invalidate();};
     update(); preference.addEventListener('change',update);
     return () => preference.removeEventListener('change',update);
-  },[]);
-  useEffect(() => {switchedAt.current=performance.now()/1000;},[signal,readySignal]);
+  },[invalidate]);
+  useEffect(() => {
+    const visibility=()=>{clearTimeout(timer.current);if(!document.hidden)invalidate();};
+    document.addEventListener('visibilitychange',visibility);
+    return()=>{document.removeEventListener('visibilitychange',visibility);clearTimeout(timer.current);};
+  },[invalidate]);
+  useEffect(() => {switchedAt.current=performance.now()/1000;cached.current.dirty=true;invalidate();},[signal,readySignal,invalidate]);
   useEffect(() => {
     const ratio=Math.min(gl.getPixelRatio(),1.5);
     pipeline.target.setSize(Math.max(1,Math.floor(size.width*ratio)),Math.max(1,Math.floor(size.height*ratio)));
     pipeline.material.uniforms.resolution.value.set(size.width*ratio,size.height*ratio);
-  },[gl,size,pipeline]);
+    cached.current.dirty=true;invalidate();
+  },[gl,size,pipeline,invalidate]);
   useEffect(() => () => {
     pipeline.target.dispose(); pipeline.geometry.dispose(); pipeline.material.dispose();
   },[pipeline]);
@@ -93,12 +101,21 @@ export default function SignalDisplay({signal, readySignal, enabled=true}) {
     uniforms.motion.value=reducedMotion.current?0:1;
     uniforms.treatment.value=enabled?1:0;
     uniforms.burst.value=enabled&&!reducedMotion.current?Math.pow(Math.max(0,1-(now-switchedAt.current)/.65),2):0;
-    gl.setRenderTarget(pipeline.target);
-    gl.setClearColor(0x000000,0);
-    gl.clear();
-    gl.render(scene,camera);
+    camera.updateMatrixWorld();
+    const cache=cached.current,revision=scene.userData.anatomyRevision||0;
+    // CRT noise/sync animate over the cached image. Hundreds of anatomical
+    // meshes only render when the camera, model, highlight or viewport changes.
+    if(cache.dirty||cache.revision!==revision||!cache.view.equals(camera.matrixWorldInverse)||!cache.projection.equals(camera.projectionMatrix)){
+      gl.setRenderTarget(pipeline.target);gl.setClearColor(0x000000,0);gl.clear();gl.render(scene,camera);
+      cache.dirty=false;cache.revision=revision;cache.view.copy(camera.matrixWorldInverse);cache.projection.copy(camera.projectionMatrix);
+    }
     gl.setRenderTarget(null);
     gl.render(pipeline.output,pipeline.camera);
+    clearTimeout(timer.current);
+    if(!document.hidden&&enabled&&!reducedMotion.current){
+      const fps=now-switchedAt.current<.65?60:idleFps;
+      timer.current=setTimeout(invalidate,1000/fps);
+    }
   },1);
   return null;
 }

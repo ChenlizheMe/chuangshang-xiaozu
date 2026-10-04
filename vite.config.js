@@ -7,9 +7,12 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          if (id.includes('vite/preload-helper')) return 'preload'
           if (id.includes('node_modules/three') || id.includes('node_modules/three-stdlib')) return 'three'
           if (id.includes('node_modules/@react-three') || id.includes('node_modules/@react-spring')) return 'r3f'
-          if (id.includes('node_modules/react')) return 'react'
+          // Keep react-reconciler with the lazy 3D runtime. Grouping every
+          // react* package here pulls Three into the initial UI dependency graph.
+          if (/node_modules\/(?:react|react-dom|scheduler)\//.test(id)) return 'react'
         },
       },
     },

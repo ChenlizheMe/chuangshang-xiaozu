@@ -491,6 +491,11 @@
       "id": "排便后缓解",
       "zh": "排便后缓解",
       "en": "relieved after bowel movement"
+    },
+    {
+      "id": "外伤后",
+      "zh": "外伤后",
+      "en": "after an injury"
     }
   ],
   "conditions": [
@@ -3704,6 +3709,212 @@
         "zh": "晕厥、胸痛、严重气短、意识改变、持续呕吐或无法排尿时立即就医。",
         "en": "Seek emergency care for fainting, chest pain, severe breathlessness, confusion, persistent vomiting or inability to urinate."
       }
+    },
+    {
+      "id": "cardiac-ischaemia-warning",
+      "name": {
+        "zh": "心肌缺血相关胸痛（需排查）",
+        "en": "Possible cardiac ischaemia"
+      },
+      "parts": [
+        "chest"
+      ],
+      "feelings": [
+        "压迫感",
+        "灼烧",
+        "放射痛"
+      ],
+      "signs": [
+        "气短",
+        "出汗",
+        "苍白",
+        "心悸",
+        "恶心"
+      ],
+      "structures": [],
+      "summary": "胸部压迫或烧灼不适，可向手臂、背部或下颌扩散。",
+      "summaryEn": "Chest pressure or burning may spread to the arm, back or jaw.",
+      "shortDescription": {
+        "zh": "胸部压迫或烧灼不适，可向手臂、背部或下颌扩散。",
+        "en": "Chest pressure or burning may spread to the arm, back or jaw."
+      },
+      "triggers": {
+        "zh": "冠状动脉供血不足；活动或应激可诱发，也可在静息时发生。",
+        "en": "Reduced coronary blood supply; exertion or stress can trigger it, but it can occur at rest."
+      },
+      "advice": {
+        "zh": "立即停止活动；新发或持续胸部不适应尽快评估，勿自行驾车。",
+        "en": "Stop exertion. New or ongoing chest discomfort needs prompt assessment; do not drive yourself."
+      },
+      "threshold": {
+        "zh": "胸部不适持续不缓解，或伴气短、冷汗、晕厥：立即联系急救。",
+        "en": "Ongoing chest discomfort, breathlessness, cold sweat or fainting: call emergency services."
+      },
+      "redFlags": {
+        "zh": "胸部不适持续不缓解，或伴气短、冷汗、晕厥：立即联系急救。",
+        "en": "Ongoing chest discomfort, breathlessness, cold sweat or fainting: call emergency services."
+      },
+      "medication": {
+        "zh": "用药需结合进一步检查。",
+        "en": "Medication depends on further assessment."
+      },
+      "sources": [
+        "https://www.nhs.uk/conditions/heart-attack/"
+      ]
+    },
+    {
+      "id": "pancreatitis-pattern",
+      "name": {
+        "zh": "胰腺炎样上腹痛（需排查）",
+        "en": "Possible pancreatitis"
+      },
+      "parts": [
+        "abdomen"
+      ],
+      "feelings": [
+        "钝痛",
+        "胀痛",
+        "放射痛",
+        "进食后加重"
+      ],
+      "signs": [
+        "恶心",
+        "呕吐",
+        "发热",
+        "进食后腹痛"
+      ],
+      "structures": [],
+      "summary": "上腹持续痛可向背部放射，常伴恶心或呕吐。",
+      "summaryEn": "Persistent upper abdominal pain may spread to the back, with nausea or vomiting.",
+      "shortDescription": {
+        "zh": "上腹持续痛可向背部放射，常伴恶心或呕吐。",
+        "en": "Persistent upper abdominal pain may spread to the back, with nausea or vomiting."
+      },
+      "triggers": {
+        "zh": "胆结石、饮酒等可相关；需血液检查及必要的影像检查明确。",
+        "en": "Gallstones or alcohol may contribute; blood tests and sometimes imaging establish the cause."
+      },
+      "advice": {
+        "zh": "持续上腹痛应当日就医；避免饮酒，记录起病、进食关系及放射位置。",
+        "en": "Seek same-day assessment for persistent upper abdominal pain. Avoid alcohol and record onset and spread."
+      },
+      "threshold": {
+        "zh": "突发剧烈持续腹痛、反复呕吐、发热或气短：立即急诊。",
+        "en": "Sudden severe persistent abdominal pain, repeated vomiting, fever or breathlessness: emergency assessment."
+      },
+      "redFlags": {
+        "zh": "突发剧烈持续腹痛、反复呕吐、发热或气短：立即急诊。",
+        "en": "Sudden severe persistent abdominal pain, repeated vomiting, fever or breathlessness: emergency assessment."
+      },
+      "medication": {
+        "zh": "用药需结合进一步检查。",
+        "en": "Medication depends on further assessment."
+      },
+      "sources": [
+        "https://www.uclh.nhs.uk/patients-and-visitors/patient-information-pages/acute-pancreatitis"
+      ]
+    },
+    {
+      "id": "hepatobiliary-pattern",
+      "name": {
+        "zh": "肝胆疾病相关不适（需鉴别）",
+        "en": "Possible hepatobiliary disease"
+      },
+      "parts": [
+        "abdomen"
+      ],
+      "feelings": [
+        "钝痛",
+        "胀痛",
+        "隐痛"
+      ],
+      "signs": [
+        "黄疸",
+        "恶心",
+        "呕吐",
+        "发热"
+      ],
+      "structures": [],
+      "summary": "右上腹不适伴黄疸等表现，需要评估肝功能和胆道。",
+      "summaryEn": "Right-upper abdominal discomfort with jaundice needs liver and biliary assessment.",
+      "shortDescription": {
+        "zh": "右上腹不适伴黄疸等表现，需要评估肝功能和胆道。",
+        "en": "Right-upper abdominal discomfort with jaundice needs liver and biliary assessment."
+      },
+      "triggers": {
+        "zh": "肝脏炎症或胆道阻塞等；不能仅从疼痛判断具体原因。",
+        "en": "Liver inflammation or biliary obstruction, among other causes; pain alone cannot distinguish these."
+      },
+      "advice": {
+        "zh": "出现黄疸应尽快就医检查；暂停饮酒，核对近期药物及保健品。",
+        "en": "Seek urgent assessment for jaundice. Avoid alcohol and review recent medicines and supplements."
+      },
+      "threshold": {
+        "zh": "黄疸合并发热寒战、持续腹痛、反复呕吐或意识变化：立即急诊。",
+        "en": "Jaundice with fever/chills, persistent pain, repeated vomiting or altered awareness: emergency assessment."
+      },
+      "redFlags": {
+        "zh": "黄疸合并发热寒战、持续腹痛、反复呕吐或意识变化：立即急诊。",
+        "en": "Jaundice with fever/chills, persistent pain, repeated vomiting or altered awareness: emergency assessment."
+      },
+      "medication": {
+        "zh": "用药需结合进一步检查。",
+        "en": "Medication depends on further assessment."
+      },
+      "sources": [
+        "https://www.nhs.uk/conditions/hepatitis/"
+      ]
+    },
+    {
+      "id": "splenic-injury-warning",
+      "name": {
+        "zh": "脾区疼痛与损伤（需排查）",
+        "en": "Splenic-area pain or injury"
+      },
+      "parts": [
+        "abdomen"
+      ],
+      "feelings": [
+        "钝痛",
+        "胀痛",
+        "放射痛"
+      ],
+      "signs": [
+        "外伤后",
+        "局部压痛",
+        "眩晕",
+        "苍白"
+      ],
+      "structures": [],
+      "summary": "左肋后或左上腹痛；受撞击后需考虑脾损伤。",
+      "summaryEn": "Pain behind the left ribs or in the left upper abdomen; impact raises concern for splenic injury.",
+      "shortDescription": {
+        "zh": "左肋后或左上腹痛；受撞击后需考虑脾损伤。",
+        "en": "Pain behind the left ribs or in the left upper abdomen; impact raises concern for splenic injury."
+      },
+      "triggers": {
+        "zh": "腹部或左下胸撞击；脾肿大也可产生局部不适。",
+        "en": "Abdominal or lower-left chest trauma; an enlarged spleen may also cause discomfort."
+      },
+      "advice": {
+        "zh": "外伤后左上腹痛应尽快评估；停止运动，避免再撞击或反复按压。",
+        "en": "Promptly assess left-upper abdominal pain after trauma. Stop sport and avoid further impact or repeated pressing."
+      },
+      "threshold": {
+        "zh": "外伤后腹痛伴眩晕、苍白、心跳快或晕厥：立即联系急救。",
+        "en": "Pain after trauma with dizziness, pallor, rapid heartbeat or fainting: call emergency services."
+      },
+      "redFlags": {
+        "zh": "外伤后腹痛伴眩晕、苍白、心跳快或晕厥：立即联系急救。",
+        "en": "Pain after trauma with dizziness, pallor, rapid heartbeat or fainting: call emergency services."
+      },
+      "medication": {
+        "zh": "用药需结合进一步检查。",
+        "en": "Medication depends on further assessment."
+      },
+      "sources": [
+        "https://www.nhsinform.scot/illnesses-and-conditions/stomach-liver-and-gastrointestinal-tract/spleen-problems-and-spleen-removal/"
+      ]
     }
   ]
 }

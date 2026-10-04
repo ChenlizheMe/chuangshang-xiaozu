@@ -9,6 +9,25 @@ import {clinicalProfile} from '../src/clinicalRegions.js';
 const knowledge=JSON.parse(fs.readFileSync(new URL('../data/knowledge.json',import.meta.url),'utf8'));
 const selectableTags=new Set([...knowledge.feelings,...knowledge.signs].map(tag=>tag.id));
 
+test('organs route to their own differentials and expose relevant symptom selectors',()=>{
+ const bytes=fs.readFileSync(new URL('../public/anatomy/organs-mobile.glb',import.meta.url));
+ const atlas=JSON.parse(bytes.subarray(20,20+bytes.readUInt32LE(12)));
+ const organs=atlas.nodes.filter(n=>n.mesh!==undefined);
+ assert.equal(organs.length,30);
+ for(const node of organs){
+  const profile=clinicalProfile(node.name,'organ');assert.equal(profile.tissue,'organ',node.name);assert.ok(profile.organ,node.name);
+  const result=assessSymptoms(knowledge,{parts:[node.name],layer:'organ',feelings:knowledge.feelings.map(t=>t.id),signs:knowledge.signs.map(t=>t.id)});
+  assert.ok(result.items.length,node.name);assert.ok(result.items.every(c=>c.why.length>=2&&!/muscle|wall-strain|bone-injury/.test(c.id)),node.name);
+ }
+ const kidney=assessSymptoms(knowledge,{parts:['Kidney.l'],layer:'organ',feelings:['绞痛'],signs:['血尿']});
+ assert.equal(kidney.items[0].id,'renal-colic-pattern');
+ const stomach=assessSymptoms(knowledge,{parts:['Stomach'],layer:'organ',signs:['鼻塞']});assert.equal(stomach.items.length,0);
+ const heart=assessSymptoms(knowledge,{parts:['Heart'],layer:'organ',feelings:['压迫感'],signs:['气短']});
+ assert.equal(heart.items[0].id,'cardiac-ischaemia-warning');assert.ok(heart.urgent.length);
+ const signs=visibleSymptoms(knowledge,{parts:['Kidney.l'],layer:'organ',kind:'signs'}).map(t=>t.id);
+ assert.ok(signs.includes('血尿'));assert.ok(!signs.includes('鼻塞')&&!signs.includes('关节卡住')&&!signs.includes('牙龋洞'));
+});
+
 test('all assessment cards have concise bilingual descriptions, triggers and thresholds',()=>{
  for(const condition of knowledge.conditions){
   for(const field of ['shortDescription','triggers','advice','threshold']){
@@ -20,7 +39,7 @@ test('all assessment cards have concise bilingual descriptions, triggers and thr
 });
 
 test('the visible muscle resource routes every selectable muscle to a clinical region',()=>{
- assert.deepEqual(Object.keys(ANATOMY_MODELS),['skeleton','muscle']);
+ assert.deepEqual(Object.keys(ANATOMY_MODELS),['skeleton','muscle','organ']);
  assert.equal(ANATOMY_MODELS.muscle.file,'muscle-optimized.glb');
  const bytes=fs.readFileSync(new URL(`../public/anatomy/${ANATOMY_MODELS.muscle.file}`,import.meta.url));
  const atlas=JSON.parse(bytes.subarray(20,20+bytes.readUInt32LE(12)));

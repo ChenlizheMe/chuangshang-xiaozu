@@ -1,5 +1,6 @@
 import {clinicalProfile} from './clinicalRegions.js';
 import {CONDITION_REGIONS} from './clinicalEngine.js';
+import {ORGAN_CONDITIONS} from './organAtlas.js';
 
 // A selector should answer one question at a time. These overrides keep
 // unmistakably local observations out of unrelated body regions (for example,
@@ -42,6 +43,12 @@ const regionForTag=(knowledge,id)=>{
 
 export function visibleSymptoms(knowledge,{parts=[],layer='skeleton',kind='feelings'}={}){
   const tags=knowledge[kind]||[];
+  const profiles=parts.map(part=>clinicalProfile(part,layer));
+  if(profiles.length&&profiles.every(p=>p.organ)){
+    const conditions=new Set(profiles.flatMap(p=>ORGAN_CONDITIONS[p.organ]||[]));
+    const supported=new Set(knowledge.conditions.filter(c=>conditions.has(c.id)).flatMap(c=>[...c.feelings,...c.signs]));
+    return tags.filter(tag=>supported.has(tag.id));
+  }
   const selected=new Set(parts.map(part=>clinicalProfile(part,layer).region).filter(region=>region&&region!=='general'));
   if(!selected.size)return tags;
   return tags.filter(tag=>{

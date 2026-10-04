@@ -140,3 +140,11 @@ html,body,#root{background:#141614;color:var(--ink)}
  .compact-card{padding:12px}.card-heading .condition{font-size:15px}
  .card-field{grid-template-columns:48px minmax(0,1fr);gap:8px;font-size:12px}
 }
+
+/* Scene readouts must stay inside the scene stacking level; panels own the UI. */
+.part-selection{z-index:3!important;pointer-events:none!important;height:auto!important;max-width:calc(100% - 160px)!important}
+.sticker-sheet{z-index:20!important}
+.model-loading{pointer-events:none}
+.scene-loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2}
+@media(min-width:1001px){.viewer:has(.diagnosis-sheet) .part-selection{max-width:calc(100% - 620px)!important}}
+@media(max-width:700px){.model-layers{grid-template-columns:repeat(3,minmax(0,1fr))}.part-selection{max-width:none!important}.layer-dot{min-width:0}.layer-name{font-size:11px}}

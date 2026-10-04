@@ -1,15 +1,17 @@
 {
-  "source": "nervous_male.glb",
-  "output": "muscle-optimized.glb",
-  "sourceFaces": 3240138,
-  "visibleFaces": 832780,
-  "reducedFaces": 340498,
-  "selectableStructures": 274,
-  "sourceBytes": 8535424,
-  "outputBytes": 1456856,
+  "sources": [
+    "nervous_male.glb",
+    "muscular_male.glb"
+  ],
+  "layer": "muscle",
+  "file": "muscle-optimized.glb",
+  "sourceFaces": 2042488,
+  "reducedFaces": 606020,
+  "selectableStructures": 636,
+  "bytes": 3470820,
   "simplify": {
-    "ratio": 0.3,
-    "error": 0.002,
+    "ratio": 0.2,
+    "error": 0.003,
     "lockBorder": true,
     "minimumFaces": 64
   },

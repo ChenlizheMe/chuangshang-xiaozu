@@ -13,9 +13,18 @@ The anatomy assets are separate from the original WhereHurt source code. Their
 license and attribution requirements continue to apply. Refer to the upstream
 project for the complete attribution chain and source terms.
 
-muscle-optimized.glb is a modified derivative of nervous_male.glb. It removes
-non-muscle structures and simplifies and recompresses the remaining geometry
-while retaining its source anatomical names and transforms. The same
-CC BY-SA 4.0 attribution and share-alike terms apply to this derived asset.
-Regeneration instructions and optimization statistics are in README.md and
-public/anatomy/muscle-optimized.json.
+muscle-optimized.glb and muscle-mobile.glb are modified derivatives of
+nervous_male.glb and muscular_male.glb: muscle-only filtering, missing-muscle
+supplementation, decimation and recompression with original part coordinates.
+skeleton-mobile.glb is a simplified derivative of skeletal_male.glb.
+organs-optimized.glb and organs-mobile.glb derive from visceral_male.glb plus
+heart chambers from cardiovascular_male.glb and Spleen from lymphatic_male.glb.
+The chambers form one Heart mesh; lobes form one Left lung and one Right lung
+mesh. World transforms are baked before joining, then meshes are simplified.
+organ-supplement-source.glb contains the extracted original chambers and spleen.
+
+All of these male-atlas assets retain CC BY-SA 4.0 attribution and share-alike
+terms. The upstream attribution chain is included in public/anatomy/NOTICE.
+Source commit: 6f464dfec563352ea4eebd1219f4866a14e7dbf8.
+Regeneration instructions are in README.md; statistics and processing parameters
+are in public/anatomy/optimization-report.json.
