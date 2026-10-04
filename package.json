@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test:labels": "node --test tests/anatomy-labels.test.mjs",
     "test:clinical": "node --test tests/clinical-regions.test.mjs",
-    "test:engine": "node --test tests/clinical-engine.test.mjs",
+    "test:engine": "node --test tests/assessment-v2.test.mjs",
     "optimize:muscle": "node scripts/optimize-muscle.mjs",
     "test:models": "node --test tests/anatomy-models.test.mjs",
     "optimize:anatomy": "node scripts/optimize-anatomy.mjs"

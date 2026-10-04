@@ -28,7 +28,7 @@ const REGIONS=[
  ['throat',/咽|喉|舌骨|甲杓|环杓|杓|声带|甲状软骨|环状软骨|舌肌|舌下神经|舌咽神经|吞咽/i],
  ['hand',/手|掌|腕|拇指|示指|小指|中指|无名指|指骨|指伸肌|指屈肌|pollicis|carpi|metacarpal|carpal|scaphoid|lunate bone|triquetrum|trapezi[ou]m|capitate bone|hamate|pisiform/i],
  ['foot',/足|跖|趾|楔骨|骰骨|hallucis|plantar|metatarsal|navicular/i],
- ['ankle',/踝|跟腱|跟骨|距骨|calcaneal/i],
+ ['ankle',/踝|跟腱|跟骨|距骨|calcaneal|talus|ankle/i],
  ['knee',/膝|髌|腘|半月板|鹅足|patellar|cruciate/i],
  ['abdomen',/腹直肌|腹斜肌|腹外|腹内|腹横|腹肌|腹白线|^白线$|abdomin|linea alba|umbilic/i],
  ['pelvis',/会阴|盆底|肛|尿道|阴部|阴茎|睾|耻骨|坐骨海绵|球海绵|levator ani|coccygeus/i],
@@ -36,7 +36,7 @@ const REGIONS=[
  ['shoulder',/肩|锁骨|三角肌|冈上|冈下|圆肌|菱形肌|腋|supraspin|infraspin|deltoid/i],
  ['chest',/胸大肌|胸小肌|胸骨|肋|膈|pectoral|intercostal|diaphragm|serratus anterior/i],
  ['neck',/颈|项|斜角肌|胸锁乳突|头夹肌|头半棘|头长肌|头最长|sternocleido/i],
- ['spine',/椎|髓核|脊|骶|尾骨|背|腰|多裂|棘|竖脊|longissimus|multifidus/i],
+ ['spine',/椎|髓核|脊|骶|尾骨|背|腰|多裂|棘|竖脊|longissimus|multifidus|vertebra|lumbar|cervical|sacrum|coccyx/i],
  ['upper-limb',/臂|肘|肱|桡|尺|正中神经|臂丛|旋前|旋后|coracobrach|brachii/i],
  ['lower-limb',/股|胫|腓|腿|比目鱼|缝匠|收肌|薄肌|阔筋膜|坐骨神经|隐神经|sciatic/i],
  ['head',/脑|颅|额|枕|颞|顶骨|蝶骨|头皮|表情|面神经|三叉|额肌|皱眉|轮匝|口角|唇|颏|舌神经|丘|核|回|沟|蚓|穹隆|胼胝|穹窿|缰|杏仁|透明隔|壳核|苍白球|海马|橄榄|楔叶|楔前叶|岛叶|连合|脑膜|falx|gyrus|sulc|cereb|cranial|vermis|nucleus|collicul|peduncle|fasciculus/i]
@@ -67,7 +67,7 @@ const INFO={
 };
 export function clinicalProfile(raw,layer){
  const {name,side}=anatomyIdentity(raw);const label=safePartLabel(raw,layer);
- const text=`${label.zh} ${name}`;
+ const text=`${/待核验|人体骨骼|所选结构/.test(label.zh)?'':label.zh} ${name}`;
  const organ=layer==='organ'?ORGAN_ATLAS[name.toLowerCase()]:null;
  const region=organ?.region||REGIONS.find(([,pattern])=>pattern.test(text))?.[0]||'general';
  const tissue=organ?'organ':/神经|脊髓|脑|nerve|tract|nucleus|gyrus|sulc|cereb|fascicul|gangli/i.test(text)?'nerve':/肌|腱|筋膜|muscle|tendon|fascia/i.test(text)?'muscle':/骨|韧带|软骨|椎间盘|关节|bone|ligament|cartilage/i.test(text)?'skeleton':layer;

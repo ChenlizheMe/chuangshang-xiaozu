@@ -19,8 +19,8 @@ export const ORGAN_GROUPS={
 export const ORGAN_ATLAS=Object.fromEntries(entries.map(([en,zh,organ])=>[en.toLowerCase(),{en,zh,organ,region:chest.has(organ)?'chest':'abdomen',color:colors[organ]}]));
 export const ORGAN_CONDITIONS={
  heart:['cardiac-ischaemia-warning'],lung:['pleuritic-chest-pain'],airway:['pleuritic-chest-pain'],
- oesophagus:['reflux-dyspepsia-pattern'],stomach:['reflux-dyspepsia-pattern','gastroenteritis-pattern'],
- intestine:['gastroenteritis-pattern'],colon:['gastroenteritis-pattern','diverticular-left-abdominal'],appendix:['appendicitis-pattern'],
+ oesophagus:['reflux-dyspepsia-pattern'],stomach:['reflux-dyspepsia-pattern','dyspepsia-pattern','gastroenteritis-pattern'],
+ intestine:['gastroenteritis-pattern','ibs-pattern'],colon:['gastroenteritis-pattern','diverticular-left-abdominal','constipation-pattern','ibs-pattern'],appendix:['appendicitis-pattern'],
  liver:['hepatobiliary-pattern','biliary-colic-pattern'],biliary:['biliary-colic-pattern'],pancreas:['pancreatitis-pattern'],
- spleen:['splenic-injury-warning'],kidney:['renal-colic-pattern','urinary-tract-infection-pattern'],ureter:['renal-colic-pattern','urinary-tract-infection-pattern'],bladder:['urinary-tract-infection-pattern']
+ spleen:['splenic-injury-warning'],kidney:['renal-colic-pattern','pyelonephritis-pattern'],ureter:['renal-colic-pattern','urinary-tract-infection-pattern','pyelonephritis-pattern'],bladder:['urinary-tract-infection-pattern']
 };

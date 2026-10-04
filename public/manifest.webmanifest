@@ -11,7 +11,7 @@
   "display_override": ["window-controls-overlay", "standalone"],
   "orientation": "portrait-primary",
   "background_color": "#171916",
-  "theme_color": "#d4c99d",
+  "theme_color": "#24271f",
   "categories": ["health", "medical", "education"],
   "prefer_related_applications": false,
   "icons": [

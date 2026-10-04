@@ -2,7 +2,21 @@
 
 这是一个致敬《赛博朋克2077》世界观中 Trauma Team International 的交互式解剖疼痛探索与日常参考工具。
 
-页面把部位、疼痛感觉、外部表现编码为本地特征，通过 `data/knowledge.json` 中的规则输出最多六条“创伤小组评估”。每条结果至少包含两项不同依据，其中至少一项是与部位匹配的症状。卡片依次展示病症、判断依据、症状、诱因、建议和阈值。没有大模型或远程推理 API。
+页面支持跨骨骼、肌肉、内脏多选部位，再次点击取消；切换图层不会丢失已选部位。每个部位分别记录感觉、伴随表现、时间、诱因与最多 300 字的自由描述，面板顶部可以切换填写对象。页面固定一屏，只有弹出面板内部滚动。画面保留深灰黑与橙色、无边框弹性按钮及电视后处理，并加入磁带设备刻度、录音标记和工业排版。
+
+评估完全在设备本地运行，不上传身体描述，没有大模型或远程推理 API。`data/knowledge.json` 提供 75 个评估方向及中英文短文案，`src/clinicalRules.js` 定义每个方向的关键特征组合。最多输出六条“创伤小组评估”，卡片依次展示病症、判断依据、症状、诱因、建议和阈值，不显示药物信息。
+
+## 推断逻辑与知识整理
+
+- 每条卡片必须满足该病症所有必需的特征组，并有至少两类独立证据。特征组内是备选描述，组之间必须共同成立。部位名称不算症状证据，刺痛、针扎、牵扯痛等近似疼痛词也不会重复计数。没有勾选表示未知，不表示检查阴性。
+- 局部症状在各部位之间隔离；发烧、睡眠不足等明确的全身信息可以共享。相同评估方向合并，区域性具体分支优先于同部位的通用重复分支。腹部定位不符的方向不输出；定位不明时提示确认。
+- 自由描述使用小型本地词典、长词优先与明确否定识别。相近的疼痛词可以归入共同证据组，但不能替代牙髓炎的持续冷热痛、自发痛等关键特征。文字与勾选冲突时提示核对，冲突证据不用于支持卡片；急症警示仍独立展示。这是有限词典解析，不是通用自然语言理解。
+- 删除了未分型头痛、左右腹内脏不适等占位卡片，并合并重复的神经痛、关节肿痛与皮肤炎症方向。分别处理牙髓炎、龋病、牙本质敏感，牙龈炎与牙周支持组织异常，过敏性鼻炎与鼻窦炎，下尿路感染与肾感染，反流与餐后消化不良，外伤性与应力性骨损伤。变更清单见 `data/clinical-audit.json`。
+- 新增睡眠不足、久坐、久站、延迟性运动酸痛、缺水、屏幕相关眼干、便秘、反复肠易激样不适等方向。急症信号出现时不输出生活方式解释作为安抚。单条危险信号即使未达到病症卡片的证据门槛，也会优先提示处理。
+
+未引入 SVM：目前没有经过标注与外部验证的病例训练集，换一个模型名称不能保证推断质量。此版使用可检查的显式规则与语义证据分组；排序分不是置信度或患病概率，不输出“确诊”。若将来使用学习模型，需要独立训练/测试病例、敏感度与特异度评估，并保留独立急症分流。
+
+`npm run test:engine` 包含常见病症、证据不足、模糊描述、否定、跨部位隔离、多选状态及急症保留的正反例。桌面 Node 三部位推断平均约 0.1 ms；三部位推断在桌面 Chrome 6 倍 CPU 降速模拟下平均约 0.76 ms、95% 耗时约 1.3 ms。浏览器测试覆盖 320×568、390×844、844×390、768×1024、1440×900、1920×1080 的一屏布局，以及真实网格多选高亮、症状隔离和图层切换保留；模拟不等同于旧手机实机表现。
 
 ## 开发
 
@@ -54,5 +68,7 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 排序使用本地规则匹配分，不是患病概率。诱因字段列出一般相关因素，并不表示已确认使用者的病因。“阈值”列出需要进一步评估或紧急就医的具体条件，紧急信号独立于卡片匹配展示。
 
 牙痛、扭伤和腹部紧急信号的校核参考：[NHS 牙痛](https://www.nhs.uk/symptoms/toothache/)、[NHS 扭伤与拉伤](https://www.nhs.uk/conditions/sprains-and-strains/)、[NHS 阑尾炎](https://www.nhs.uk/conditions/appendicitis/)。现有规则仍需专业审阅与临床验证。
+
+本轮分支参考：[AAE 牙髓诊断术语](https://www.aae.org/specialty/wp-content/uploads/sites/2/2017/07/aaeconsensusconferencerecommendeddiagnosticterminology.pdf)、[NHS 肾感染](https://www.nhs.uk/conditions/kidney-infection/)、[NHS 反流](https://www.nhs.uk/conditions/heartburn-and-acid-reflux/)、[NHS 消化不良](https://www.nhs.uk/conditions/indigestion/)、[NHS 便秘](https://www.nhs.uk/conditions/constipation/)、[NHS IBS 症状](https://www.nhs.uk/conditions/irritable-bowel-syndrome-ibs/symptoms/)、[NHS 疲劳](https://www.nhs.uk/symptoms/tiredness-and-fatigue/)、[Moorfields 眼干](https://www.moorfields.nhs.uk/eye-conditions/dry-eye)、[NHS 关节感染](https://www.nhs.uk/conditions/septic-arthritis/)。胸骨压痛不能直接推断白血病；胸壁痛和需血液检查的异常出血、淤青组合分别参考 [NHS 肋软骨炎](https://www.nhs.uk/conditions/costochondritis/) 与 [NHS 急性髓系白血病症状](https://www.nhs.uk/conditions/acute-myeloid-leukaemia/symptoms/)。代码与文案审查不等于医师审阅或临床验证。
 
 新增内脏规则参考：[NHS 心脏病发作](https://www.nhs.uk/conditions/heart-attack/)、[UCLH 急性胰腺炎](https://www.uclh.nhs.uk/patients-and-visitors/patient-information-pages/acute-pancreatitis)、[NHS 肝炎](https://www.nhs.uk/conditions/hepatitis/)、[NHS Inform 脾脏疾病与损伤](https://www.nhsinform.scot/illnesses-and-conditions/stomach-liver-and-gastrointestinal-tract/spleen-problems-and-spleen-removal/)。这些规则表示评估方向，不通过模型点击确认病变器官。

@@ -19,7 +19,7 @@ const CANONICAL_FRAME={center:[0,0.857,0.005],height:1.7};
 const INITIAL_ZOOM=3.8,MIN_ZOOM=1.3;
 function CameraRig({layer,orbit,lift,elevation,zoom}){const {camera,invalidate}=useThree(); useEffect(()=>{const radius=(INITIAL_ZOOM*INITIAL_ZOOM)/Math.max(MIN_ZOOM,zoom)*(layer==='organ'?.65:1); const theta=orbit*Math.PI/180; const phi=elevation*Math.PI/180; const baseTargetY=layer==='organ'?.2:0; const horizontalRadius=Math.cos(phi)*radius; camera.position.set(Math.sin(theta)*horizontalRadius,baseTargetY+lift+Math.sin(phi)*radius,Math.cos(theta)*horizontalRadius);
  camera.lookAt(0,baseTargetY+lift,0); camera.updateProjectionMatrix();invalidate()},[camera,invalidate,layer,orbit,lift,elevation,zoom]); return null}
-function Model({layer,onPart,selectedObject,registerApproximatePick}){
+function Model({layer,onPart,selectedParts,registerApproximatePick}){
   const {camera,gl,scene,invalidate,raycaster:sceneRaycaster}=useThree();
   const markDirty=()=>{scene.userData.anatomyRevision=(scene.userData.anatomyRevision||0)+1;invalidate();};
   const gltf=useLoader(GLTFLoader,MODEL_URLS[layer],configureGLTF);
@@ -97,7 +97,7 @@ function Model({layer,onPart,selectedObject,registerApproximatePick}){
     };
     registerApproximatePick.current=pickNearest;
     return()=>{if(registerApproximatePick.current===pickNearest)registerApproximatePick.current=null;};
-  },[camera,gl,root,pickableMeshes,registerApproximatePick,selectedObject,onPart]);
+  },[camera,gl,root,pickableMeshes,registerApproximatePick,selectedParts,onPart]);
   // Prepare shared base materials once per asset, rather than flagging every
   // material for shader updates after each selection.
   useLayoutEffect(()=>{
@@ -134,20 +134,22 @@ function Model({layer,onPart,selectedObject,registerApproximatePick}){
     });
     markDirty();return()=>{restore.forEach(fn=>fn());palette.forEach(material=>material.dispose());markDirty();};
   },[root,layer]);
-  // Only the selected mesh gets a temporary material. Its cleanup restores the
+  // Each selected mesh gets a temporary material. Its cleanup restores the
   // original shared material without touching other meshes or their shaders.
   useLayoutEffect(()=>{
-    if(!selectedObject?.visible||!selectedObject.userData.inActiveLayer)return;
-    const original=selectedObject.material;
-    const highlighted=(Array.isArray(original)?original:[original]).map(material=>{
-      const clone=material.clone();clone.color.set('#ff6338');
-      if(clone.emissive){clone.emissive.set('#ff2e00');clone.emissiveIntensity=.65}
-      return clone;
-    });
-    const selectionMaterial=Array.isArray(original)?highlighted:highlighted[0];
-    selectedObject.material=selectionMaterial;markDirty();
-    return()=>{if(selectedObject.material===selectionMaterial)selectedObject.material=original;highlighted.forEach(material=>material.dispose());markDirty();};
-  },[root,selectedObject]);
+    const restore=[];
+    for(const object of pickableMeshes.filter(mesh=>(selectedParts||[]).includes(semanticPartName(mesh)))){
+      if(!object?.visible||!object.userData.inActiveLayer||!pickableMeshes.includes(object))continue;
+      const original=object.material;
+      const highlighted=(Array.isArray(original)?original:[original]).map(material=>{
+        const clone=material.clone();clone.color.set('#ff6338');
+        if(clone.emissive){clone.emissive.set('#ff2e00');clone.emissiveIntensity=.65}return clone;
+      });
+      const selectionMaterial=Array.isArray(original)?highlighted:highlighted[0];object.material=selectionMaterial;
+      restore.push(()=>{if(object.material===selectionMaterial)object.material=original;highlighted.forEach(m=>m.dispose());});
+    }
+    markDirty();return()=>{restore.forEach(fn=>fn());markDirty();};
+  },[root,selectedParts,pickableMeshes]);
   const meshPart=e=>decodeName(e.object?.userData?.part||e.object?.name||'general');
   const onMeshPointerDown=e=>{if(e.button!==0||clickRef.current?.pointerId===e.pointerId)return;const object=e.intersections?.find(hit=>hit.object.visible&&hit.object.userData.inActiveLayer)?.object;if(!object)return;clickRef.current={pointerId:e.pointerId,part:meshPart({object}),object,x:e.clientX,y:e.clientY,startedAt:performance.now(),moved:false};};
   const onMeshPointerMove=e=>{const candidate=clickRef.current;if(!candidate||candidate.pointerId!==e.pointerId)return;const distance=Math.hypot(e.clientX-candidate.x,e.clientY-candidate.y);if(distance>6)candidate.moved=true;};
@@ -156,6 +158,6 @@ function Model({layer,onPart,selectedObject,registerApproximatePick}){
   return <group ref={groupRef} onPointerDown={onMeshPointerDown} onPointerMove={onMeshPointerMove} onPointerUp={onMeshPointerUp} onPointerCancel={onMeshPointerCancel}><primitive object={root} onPointerDown={onMeshPointerDown} onPointerMove={onMeshPointerMove} onPointerUp={onMeshPointerUp} onPointerCancel={onMeshPointerCancel}/></group>;
 }
 export function clearAnatomyCache(layer){useLoader.clear(GLTFLoader,MODEL_URLS[layer]);}
-export default function AnatomyViewer({layer,modelNonce,loading,selectedObject,onPart,approximatePickRef,orbit,lift,elevation,zoom}){
- return <Canvas className="anatomy-canvas" frameloop="demand" onPointerMissed={event=>approximatePickRef.current?.(event)} fallback={<div className="model-error" role="alert"><p>3D preview is unavailable in this browser.</p><button type="button" onClick={()=>window.location.reload()}>RETRY VIEWER</button></div>} camera={{position:[0,0,3.8],fov:38}} gl={{antialias:!quality.light,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.setPixelRatio(Math.min(window.devicePixelRatio||1,quality.maxDpr));gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.NoToneMapping;gl.shadowMap.enabled=false;}} dpr={[1,quality.maxDpr]}><color attach="background" args={['#292c29']}/><ambientLight intensity={1.5}/><directionalLight position={[2,3,4]} intensity={2}/><Suspense fallback={<Html center zIndexRange={[4,0]} className="model-loading">{loading}</Html>}><Model layer={layer} onPart={onPart} selectedObject={selectedObject} registerApproximatePick={approximatePickRef}/></Suspense><CameraRig layer={layer} orbit={orbit} lift={lift} elevation={elevation} zoom={zoom}/><SignalDisplay signal={layer} readySignal={modelNonce} idleFps={quality.idleFps}/></Canvas>;
+export default function AnatomyViewer({layer,modelNonce,loading,selectedParts,onPart,approximatePickRef,orbit,lift,elevation,zoom}){
+ return <Canvas className="anatomy-canvas" frameloop="demand" onPointerMissed={event=>approximatePickRef.current?.(event)} fallback={<div className="model-error" role="alert"><p>3D preview is unavailable in this browser.</p><button type="button" onClick={()=>window.location.reload()}>RETRY VIEWER</button></div>} camera={{position:[0,0,3.8],fov:38}} gl={{antialias:!quality.light,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.setPixelRatio(Math.min(window.devicePixelRatio||1,quality.maxDpr));gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.NoToneMapping;gl.shadowMap.enabled=false;}} dpr={[1,quality.maxDpr]}><color attach="background" args={['#292c29']}/><ambientLight intensity={1.5}/><directionalLight position={[2,3,4]} intensity={2}/><Suspense fallback={<Html center zIndexRange={[4,0]} className="model-loading">{loading}</Html>}><Model layer={layer} onPart={onPart} selectedParts={selectedParts} registerApproximatePick={approximatePickRef}/></Suspense><CameraRig layer={layer} orbit={orbit} lift={lift} elevation={elevation} zoom={zoom}/><SignalDisplay signal={layer} readySignal={modelNonce} idleFps={quality.idleFps}/></Canvas>;
 }

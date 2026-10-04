@@ -1,0 +1,134 @@
+{
+  "version": 2,
+  "date": "2026-10-04",
+  "method": "Explicit per-condition feature gates, not a trained diagnostic model",
+  "removedOrMerged": {
+    "joint-swelling-pattern": [
+      "joint-inflammation",
+      "合并重复关节肿痛；另拆关节感染警示"
+    ],
+    "nerve-sensation-pattern": [
+      "nerve-irritation",
+      "合并通用神经受压重复分支"
+    ],
+    "lower-limb-nerve-symptoms": [
+      "sciatic-neuralgia",
+      "用放射分布区分具体分支"
+    ],
+    "visible-skin-change-pattern": [
+      "skin-irritation",
+      "合并皮肤炎症重复卡片"
+    ],
+    "headache-pattern": [
+      "head-pressure-pattern",
+      "不再输出未分型占位病名"
+    ],
+    "hip-region-pain": [
+      "muscle-strain",
+      "删除没有区分证据的髋痛占位"
+    ],
+    "knee-injury": [
+      "patellofemoral-pain",
+      "前膝负荷痛与扭伤/半月板韧带方向拆开"
+    ],
+    "abdominal-visceral-left": [
+      "diverticular-left-abdominal",
+      "删除左腹占位，采用实际病症和定位"
+    ],
+    "abdominal-visceral-right": [
+      "appendicitis-pattern",
+      "删除右腹占位，采用实际病症和定位"
+    ]
+  },
+  "split": [
+    "dental-caries / dentin-sensitivity / dental-pulpitis",
+    "gingivitis-periodontitis / periodontitis-pattern",
+    "rhinosinusitis / allergic-rhinitis",
+    "urinary-tract-infection-pattern / pyelonephritis-pattern",
+    "reflux-dyspepsia-pattern / dyspepsia-pattern",
+    "bone-injury / stress-bone-injury"
+  ],
+  "active": [
+    "muscle-strain",
+    "nerve-irritation",
+    "skin-irritation",
+    "joint-inflammation",
+    "itch-skin-pattern",
+    "minor-injury-bruise",
+    "muscle-cramp-pattern",
+    "head-pressure-pattern",
+    "dental-pulpitis",
+    "rhinosinusitis",
+    "nasal-trauma-epistaxis",
+    "vertebral-mechanical-pain",
+    "spinal-radiculopathy",
+    "rib-wall-injury",
+    "rotator-cuff-irritation",
+    "ulnar-nerve-irritation",
+    "ankle-sprain",
+    "foot-plantar-pain",
+    "cranial-nerve-pattern",
+    "spinal-cord-warning",
+    "abdominal-wall-strain",
+    "neck-muscle-tension",
+    "thoracolumbar-myofascial",
+    "dental-caries",
+    "gingivitis-periodontitis",
+    "tmj-dysfunction",
+    "dental-fracture",
+    "migraine-pattern",
+    "trigeminal-neuralgia",
+    "carpal-tunnel",
+    "sciatic-neuralgia",
+    "peripheral-neuropathy",
+    "facial-nerve-palsy",
+    "tendon-overuse",
+    "bursitis-pattern",
+    "knee-meniscus-ligament",
+    "gastroenteritis-pattern",
+    "appendicitis-pattern",
+    "renal-colic-pattern",
+    "pleuritic-chest-pain",
+    "eye-surface-irritation",
+    "ear-infection-pattern",
+    "gout-like-arthritis",
+    "deep-vein-thrombosis-warning",
+    "diverticular-left-abdominal",
+    "biliary-colic-pattern",
+    "urinary-tract-infection-pattern",
+    "reflux-dyspepsia-pattern",
+    "dental-abscess",
+    "pharyngitis",
+    "pelvic-pain",
+    "bone-injury",
+    "autonomic-assessment",
+    "cardiac-ischaemia-warning",
+    "pancreatitis-pattern",
+    "hepatobiliary-pattern",
+    "splenic-injury-warning",
+    "dentin-sensitivity",
+    "periodontitis-pattern",
+    "allergic-rhinitis",
+    "patellofemoral-pain",
+    "pyelonephritis-pattern",
+    "dyspepsia-pattern",
+    "sleep-deprivation",
+    "sitting-posture",
+    "delayed-muscle-soreness",
+    "standing-fatigue",
+    "dehydration-pattern",
+    "screen-dry-eye",
+    "constipation-pattern",
+    "ibs-pattern",
+    "costochondritis-pattern",
+    "blood-test-direction",
+    "stress-bone-injury",
+    "septic-joint-warning"
+  ],
+  "limitations": [
+    "Not externally clinically validated",
+    "No diagnostic probability or confirmed diagnosis",
+    "Absence of a selected feature is unknown, not a negative test",
+    "Anatomy selection cannot identify an internal lesion"
+  ]
+}
