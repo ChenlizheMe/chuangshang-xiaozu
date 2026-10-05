@@ -31,8 +31,24 @@ npm run dev
 
 ```bash
 npm run build
-# 将 dist 发布到 GitHub Pages（项目 Pages 设为 GitHub Actions 或上传 dist）
+# main 分支推送后，由 .github/workflows/deploy.yml 自动构建并发布 dist
 ```
+
+正式域名为 `traumateam.cn`。`public/CNAME` 会随 Vite 构建进入 `dist/CNAME`；仓库 Pages 的发布源设为 **GitHub Actions**，Custom domain 设为 `traumateam.cn`。Actions 发布时域名绑定以仓库 Pages 设置为准，单独提交 CNAME 文件不会设置该绑定。
+
+在域名平台添加以下记录，TTL 使用默认值即可：
+
+| 主机记录 | 类型 | 记录值 |
+| --- | --- | --- |
+| `@` | A | `185.199.108.153` |
+| `@` | A | `185.199.109.153` |
+| `@` | A | `185.199.110.153` |
+| `@` | A | `185.199.111.153` |
+| `www` | CNAME | `chenlizheme.github.io` |
+
+若已有 `@` 或 `www` 的停放页/旧网站记录，应替换冲突记录；保留邮箱等用途的 MX、TXT 记录。CNAME 记录值不包含 `https://` 或仓库路径。使用上述配置后，`www.traumateam.cn` 会重定向到主域名。
+
+DNS 生效与 HTTPS 证书签发可能需要最多 24 小时。解析检查通过后，在仓库 **Settings → Pages** 确认 **Enforce HTTPS** 已勾选。IPv6 可按需要增加 GitHub Pages 的四条 AAAA 记录。解析及域名配置依据：[GitHub 自定义域名文档](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)。
 
 ## 模型与许可
 
