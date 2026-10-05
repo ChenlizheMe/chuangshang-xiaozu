@@ -17,6 +17,30 @@ const readJSON=file=>{
  return JSON.parse(bytes.subarray(20,20+bytes.readUInt32LE(12)));
 };
 const io=new NodeIO().registerExtensions([KHRDracoMeshCompression]).registerDependencies({'draco3d.decoder':await draco3d.createDecoderModule()});
+const worldBounds=nodes=>{
+ const box=new THREE.Box3(),point=new THREE.Vector3();
+ for(const node of nodes)for(const primitive of node.getMesh().listPrimitives()){
+  const positions=primitive.getAttribute('POSITION').getArray(),matrix=new THREE.Matrix4().fromArray(node.getWorldMatrix());
+  for(let i=0;i<positions.length;i+=3)box.expandByPoint(point.fromArray(positions,i).applyMatrix4(matrix));
+ }
+ return box;
+};
+
+test('organs occupy the corresponding skeletal chest and pelvis frame at both detail levels',async()=>{
+ for(const [bonesFile,organsFile] of [['skeletal_male.glb','organs-optimized.glb'],['skeleton-mobile.glb','organs-mobile.glb']]){
+  const bones=await io.read(fileURLToPath(asset(bonesFile))),organs=await io.read(fileURLToPath(asset(organsFile)));
+  const boneNodes=bones.getRoot().listNodes().filter(n=>n.getMesh()),organNodes=organs.getRoot().listNodes().filter(n=>n.getMesh());
+  const organCenter=name=>worldBounds(organNodes.filter(n=>n.getName()===name)).getCenter(new THREE.Vector3());
+  const sternum=worldBounds(boneNodes.filter(n=>n.getName()==='Body of sternum'));
+  const clavicles=worldBounds(boneNodes.filter(n=>n.getName().startsWith('Clavicle.')));
+  const pelvis=worldBounds(boneNodes.filter(n=>n.getName().startsWith('Hip bone.')));
+  assert.ok(organCenter('Heart').y>sternum.min.y&&organCenter('Heart').y<sternum.max.y,organsFile+' heart level differs from sternum');
+  assert.ok(organCenter('Heart').z<sternum.getCenter(new THREE.Vector3()).z,organsFile+' heart must lie behind sternum');
+  for(const name of ['Left lung','Right lung'])assert.ok(organCenter(name).y>sternum.min.y&&organCenter(name).y<clavicles.max.y,organsFile+' '+name+' outside chest level');
+  assert.ok(pelvis.containsPoint(organCenter('Urinary bladder')),organsFile+' bladder outside bony pelvis');
+  for(const name of ['Kidney.l','Kidney.r','Liver','Stomach'])assert.ok(organCenter(name).y>pelvis.max.y&&organCenter(name).y<sternum.min.y,organsFile+' '+name+' outside upper abdominal level');
+ }
+});
 
 test('heart and each lung are single selectable meshes in their original anatomical positions',async()=>{
  const sourceNodes=new Map();
@@ -24,14 +48,6 @@ test('heart and each lung are single selectable meshes in their original anatomi
   const source=await io.read(fileURLToPath(asset(file)));
   for(const n of source.getRoot().listNodes().filter(n=>n.getMesh()))sourceNodes.set(n.getName(),n);
  }
- const worldBounds=nodes=>{
-  const box=new THREE.Box3(),point=new THREE.Vector3();
-  for(const node of nodes)for(const primitive of node.getMesh().listPrimitives()){
-   const positions=primitive.getAttribute('POSITION').getArray(),matrix=new THREE.Matrix4().fromArray(node.getWorldMatrix());
-   for(let i=0;i<positions.length;i+=3)box.expandByPoint(point.fromArray(positions,i).applyMatrix4(matrix));
-  }
-  return box;
- };
  for(const file of ['organs-optimized.glb','organs-mobile.glb']){
   const result=await io.read(fileURLToPath(asset(file))),nodes=result.getRoot().listNodes().filter(n=>n.getMesh());
   for(const [name,members] of Object.entries(ORGAN_GROUPS)){

@@ -17,8 +17,8 @@ useLoader.preload(GLTFLoader,MODEL_URLS.skeleton,configureGLTF);
 function semanticPartName(object){let current=object;while(current){const name=decodeName(current.userData?.clinicalName||current.userData?.anatomyName||current.name||'');if(name&&!/^mesh(?:[_-]|$)/i.test(name)&&!/^scene$/i.test(name))return name;current=current.parent}return ''}
 const CANONICAL_FRAME={center:[0,0.857,0.005],height:1.7};
 const INITIAL_ZOOM=3.8,MIN_ZOOM=1.3;
-function CameraRig({layer,orbit,lift,elevation,zoom}){const {camera,invalidate}=useThree(); useEffect(()=>{const radius=(INITIAL_ZOOM*INITIAL_ZOOM)/Math.max(MIN_ZOOM,zoom)*(layer==='organ'?.65:1); const theta=orbit*Math.PI/180; const phi=elevation*Math.PI/180; const baseTargetY=layer==='organ'?.2:0; const horizontalRadius=Math.cos(phi)*radius; camera.position.set(Math.sin(theta)*horizontalRadius,baseTargetY+lift+Math.sin(phi)*radius,Math.cos(theta)*horizontalRadius);
- camera.lookAt(0,baseTargetY+lift,0); camera.updateProjectionMatrix();invalidate()},[camera,invalidate,layer,orbit,lift,elevation,zoom]); return null}
+function CameraRig({orbit,lift,elevation,zoom}){const {camera,invalidate}=useThree(); useEffect(()=>{const radius=(INITIAL_ZOOM*INITIAL_ZOOM)/Math.max(MIN_ZOOM,zoom); const theta=orbit*Math.PI/180; const phi=elevation*Math.PI/180; const horizontalRadius=Math.cos(phi)*radius; camera.position.set(Math.sin(theta)*horizontalRadius,lift+Math.sin(phi)*radius,Math.cos(theta)*horizontalRadius);
+ camera.lookAt(0,lift,0); camera.updateProjectionMatrix();invalidate()},[camera,invalidate,orbit,lift,elevation,zoom]); return null}
 function Model({layer,onPart,selectedParts,registerApproximatePick}){
   const {camera,gl,scene,invalidate,raycaster:sceneRaycaster}=useThree();
   const markDirty=()=>{scene.userData.anatomyRevision=(scene.userData.anatomyRevision||0)+1;invalidate();};
@@ -54,8 +54,8 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
   useEffect(()=>{const previous=sceneRaycaster.firstHitOnly;sceneRaycaster.firstHitOnly=true;return()=>{sceneRaycaster.firstHitOnly=previous}},[sceneRaycaster]);
   const groupRef=useRef();
   const clickRef=useRef(null);
-  // Normalize every asset into the same centered, human-scale frame. The source GLBs
-  // have very different origins/scales (some otherwise render as feet only).
+  // All published atlases use the same centered, human-scale frame. Combined
+  // with the shared camera, a layer change preserves each anatomical location.
   useLayoutEffect(()=>{
     if(!groupRef.current) return;
     // Do not derive scale from whichever layer happened to load last. The source
@@ -159,5 +159,5 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
 }
 export function clearAnatomyCache(layer){useLoader.clear(GLTFLoader,MODEL_URLS[layer]);}
 export default function AnatomyViewer({layer,modelNonce,loading,selectedParts,onPart,approximatePickRef,orbit,lift,elevation,zoom}){
- return <Canvas className="anatomy-canvas" frameloop="demand" onPointerMissed={event=>approximatePickRef.current?.(event)} fallback={<div className="model-error" role="alert"><p>3D preview is unavailable in this browser.</p><button type="button" onClick={()=>window.location.reload()}>RETRY VIEWER</button></div>} camera={{position:[0,0,3.8],fov:38}} gl={{antialias:!quality.light,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.setPixelRatio(Math.min(window.devicePixelRatio||1,quality.maxDpr));gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.NoToneMapping;gl.shadowMap.enabled=false;}} dpr={[1,quality.maxDpr]}><color attach="background" args={['#292c29']}/><ambientLight intensity={1.5}/><directionalLight position={[2,3,4]} intensity={2}/><Suspense fallback={<Html center zIndexRange={[4,0]} className="model-loading">{loading}</Html>}><Model layer={layer} onPart={onPart} selectedParts={selectedParts} registerApproximatePick={approximatePickRef}/></Suspense><CameraRig layer={layer} orbit={orbit} lift={lift} elevation={elevation} zoom={zoom}/><SignalDisplay signal={layer} readySignal={modelNonce} idleFps={quality.idleFps}/></Canvas>;
+ return <Canvas className="anatomy-canvas" frameloop="demand" onPointerMissed={event=>approximatePickRef.current?.(event)} fallback={<div className="model-error" role="alert"><p>3D preview is unavailable in this browser.</p><button type="button" onClick={()=>window.location.reload()}>RETRY VIEWER</button></div>} camera={{position:[0,0,3.8],fov:38}} gl={{antialias:!quality.light,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.setPixelRatio(Math.min(window.devicePixelRatio||1,quality.maxDpr));gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.NoToneMapping;gl.shadowMap.enabled=false;}} dpr={[1,quality.maxDpr]}><color attach="background" args={['#292c29']}/><ambientLight intensity={1.5}/><directionalLight position={[2,3,4]} intensity={2}/><Suspense fallback={<Html center zIndexRange={[4,0]} className="model-loading">{loading}</Html>}><Model layer={layer} onPart={onPart} selectedParts={selectedParts} registerApproximatePick={approximatePickRef}/></Suspense><CameraRig orbit={orbit} lift={lift} elevation={elevation} zoom={zoom}/><SignalDisplay signal={layer} readySignal={modelNonce} idleFps={quality.idleFps}/></Canvas>;
 }
