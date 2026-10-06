@@ -57,7 +57,7 @@ const hasAny=(tags,ids)=>ids.some(id=>tags.has(id));
 export function basicAssessment(profile,report,urgent=[]){
  const tags=report.tags;
  if(!tags.size)return null;
- const timeOnly=new Set(['刚刚开始','持续数小时','持续1至3天','持续超过3天','持续加重','反复数月','短暂发作','突然起病','持续超过10天','新运动后1至3天','经期相关']);
+ const timeOnly=new Set(['刚刚开始','持续数小时','持续1至3天','持续超过3天','持续加重','反复数月','短暂发作','突然起病','持续超过10天','新运动后1至3天','经期相关','可能怀孕']);
  if([...tags].every(t=>timeOnly.has(t)))return null;
  // Preserve only one real selected observation per family, with symptoms
  // before timing/triggers. A broad card is visibly marked as basic.
@@ -65,7 +65,7 @@ export function basicAssessment(profile,report,urgent=[]){
  let why=[...evidence.values()].slice(0,3);
  let key=profile.region,content;
  if(urgent.length){
-  key='priority';content={name:bi(`${profile.title.zh}需优先评估`,`${profile.title.en}: priority assessment`),shortDescription:bi('当前信号需要先排除紧急原因，再进行一般疼痛或生活方式分析。','The reported signal needs assessment for urgent causes before routine pain or lifestyle interpretation.'),triggers:bi('需要结合起病、外伤和伴随变化检查，不先归因于劳累或紧张。','Assess onset, injury and associated changes before attributing symptoms to exertion or stress.'),advice:urgent[0],threshold:bi('按上方优先处理提示行动，无需等待勾选更多表现。','Follow the priority guidance above without waiting to select more findings.')};
+  key='priority';content={name:bi(`${profile.title.zh}需优先评估`,`${profile.title.en}: priority assessment`),shortDescription:bi('当前信号需要先接受相应评估，再考虑一般疼痛或生活方式解释。','The reported signal needs the indicated assessment before routine pain or lifestyle interpretation.'),triggers:bi('需要结合起病、外伤和伴随变化检查，不先归因于劳累或紧张。','Assess onset, injury and associated changes before attributing symptoms to exertion or stress.'),advice:urgent[0],threshold:bi('按上方优先处理提示行动，无需等待勾选更多表现。','Follow the priority guidance above without waiting to select more findings.')};
  }else if(['abdomen','pelvis','spine','hip'].includes(profile.region)&&hasAny(tags,['尿痛','尿频','尿急'])){key='urinary';content=profiles[key];
  }else if(['abdomen','spine','hip'].includes(profile.region)&&tags.has('侧腰痛')){key='flank';content=profiles[key];
  }else if(hasAny(tags,['牙龈出血','牙龈肿胀','牙齿松动','牙龈退缩'])&&['tooth','jaw'].includes(profile.region)){key='dental-gum';content=profiles[key];

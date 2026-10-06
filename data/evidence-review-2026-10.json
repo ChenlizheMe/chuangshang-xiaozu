@@ -1,0 +1,124 @@
+{
+  "reviewedOn": "2026-10-06",
+  "purpose": "Source-linked review of existing reference rules and safety disposition. Software decisions and synthetic tests are not clinical validation.",
+  "scope": "No new symptom options, condition IDs, anatomy models, treatment prescriptions or remote medical inference.",
+  "entries": [
+    {
+      "id": "separate-disposition-from-reference-ranking",
+      "type": "Conservative application output policy",
+      "sources": [
+        {
+          "title": "SANJO guideline: diagnostic approach, recommendations 1 and 3",
+          "url": "https://jbji.copernicus.org/articles/8/29/2023/",
+          "use": "A clinical presentation alone cannot confirm or exclude joint infection; suspected infection requires timely assessment."
+        },
+        {
+          "title": "MSD Professional: Splenic Injury",
+          "url": "https://www.msdmanuals.com/professional/injuries-poisoning/abdominal-trauma/splenic-injury",
+          "use": "Trauma assessment requires attention to potentially serious causes; a superficial reference match cannot establish stability."
+        },
+        {
+          "title": "NHS: chest pain",
+          "url": "https://www.nhs.uk/symptoms/chest-pain/",
+          "use": "The action for high-risk chest symptoms must not be reduced by a benign-looking reference match."
+        },
+        {
+          "title": "NHS: blood in urine",
+          "url": "https://www.nhs.uk/symptoms/blood-in-urine/",
+          "use": "Blood in urine warrants prompt assessment; associated fever changes the immediate evaluation context without proving obstruction."
+        },
+        {
+          "title": "NHS: ectopic pregnancy symptoms",
+          "url": "https://www.nhs.uk/conditions/ectopic-pregnancy/symptoms/",
+          "use": "Actual pain, shoulder-tip pain or fainting with possible pregnancy changes urgency. Pregnancy possibility alone does not establish pain."
+        },
+        {
+          "title": "MSD Professional: Jaundice",
+          "url": "https://www.msdmanuals.com/professional/hepatic-and-biliary-disorders/approach-to-the-patient-with-liver-disease/jaundice",
+          "use": "Fever and abdominal symptoms are important associated findings; laboratory tests and imaging are needed to distinguish causes."
+        }
+      ],
+      "decision": "Separate immediate, same-day and prompt assessment guidance from rule-match scores. When a priority warning is triggered, retained reference cards use the most urgent actual guidance instead of their routine self-care instructions. Priority cards do not display a numerical rank.",
+      "appliesTo": "Only inputs that already trigger an explicit priority rule. The ordinary no-warning path is unchanged. Coexisting warnings remain visible and are ordered by disposition.",
+      "notEstablished": [
+        "The sources do not validate this application's scores or diagnostic accuracy.",
+        "A missing checkbox is unknown, not a negative examination.",
+        "A prompt or same-day recommendation is not silently promoted to an emergency recommendation."
+      ],
+      "positiveExamples": [
+        {
+          "part": "Rectus abdominis muscle.r",
+          "layer": "muscle",
+          "tags": [
+            "疼痛",
+            "运动后",
+            "突发剧痛"
+          ],
+          "expected": "Immediate assessment remains the action on every retained card, including an abdominal-wall reference match."
+        },
+        {
+          "part": "Rectus abdominis muscle.r",
+          "layer": "muscle",
+          "location": "rlq",
+          "tags": [
+            "绞痛",
+            "排便后缓解",
+            "腹泻",
+            "反复数月",
+            "持续加重"
+          ],
+          "expected": "The bowel-reference score cannot override the same-day assessment instruction."
+        },
+        {
+          "part": "Kidney.l",
+          "layer": "organ",
+          "tags": [
+            "血尿",
+            "晕厥"
+          ],
+          "expected": "Immediate guidance precedes prompt guidance; neither warning is discarded."
+        }
+      ],
+      "negativeExamples": [
+        {
+          "part": "Lumbar vertebra L3",
+          "layer": "skeleton",
+          "tags": [
+            "酸痛",
+            "久坐后",
+            "活动后缓解"
+          ],
+          "expected": "No new priority warning; the existing ordinary reference advice is retained."
+        },
+        {
+          "part": "Kidney.l",
+          "layer": "organ",
+          "tags": [
+            "血尿"
+          ],
+          "expected": "Prompt assessment remains prompt, not an automatic emergency disposition."
+        },
+        {
+          "part": "Rectus abdominis muscle.r",
+          "layer": "muscle",
+          "location": "rlq",
+          "tags": [
+            "持续加重"
+          ],
+          "expected": "Timing and location alone do not establish abdominal pain."
+        },
+        {
+          "part": "Rectus abdominis muscle.r",
+          "layer": "muscle",
+          "tags": [
+            "可能怀孕"
+          ],
+          "expected": "A risk-context checkbox alone does not invent pain or a condition card."
+        }
+      ],
+      "tests": [
+        "tests/priority-guidance.test.mjs"
+      ]
+    }
+  ]
+}

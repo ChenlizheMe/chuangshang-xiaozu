@@ -44,3 +44,10 @@ test('English report labels have a non-overlapping narrow-screen layout',()=>{
  tree.walkAtRules('media',media=>{if(media.params==='(max-width:700px)')media.walkRules('[data-lang=en] .card-field',rule=>{rule.walkDecls('grid-template-columns',decl=>{if(decl.value==='minmax(0,1fr)')stacked=true;});});});
  assert.ok(stacked,'English labels and values must stack inside narrow report panels');
 });
+test('priority reference cards do not show a numbered diagnostic ranking',()=>{
+ const source=buildSync({entryPoints:[new URL('../src/DiagnosisCard.jsx',import.meta.url).pathname],bundle:true,platform:'node',format:'cjs',external:['react'],write:false}).outputFiles[0].text;
+ const cardModule={exports:{}};new Function('module','exports','require',source)(cardModule,cardModule.exports,require);
+ const condition={id:'reference',priority:true,name:{en:'Reference direction'},shortDescription:{en:'Observed pattern'},triggers:{en:'Context'},advice:{en:'Seek assessment today'},threshold:{en:'Follow the priority guidance'},why:['observed'],partRefs:[]};
+ const html=renderToStaticMarkup(React.createElement(cardModule.exports.default,{condition,index:0,lang:'en',copy:{basis:'Evidence',symptoms:'Symptoms',triggers:'Context',advice:'Action',threshold:'Safety'},displayWhy:x=>x,partLabel:()=>''}));
+ assert.match(html,/PRIORITY REFERENCE/);assert.doesNotMatch(html,/class="rank">01/);assert.match(html,/Seek assessment today/);
+});
