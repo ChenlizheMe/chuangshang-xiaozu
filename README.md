@@ -114,3 +114,12 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 英文结果字段补齐了33处中文占位，并用自动测试检查英文不含汉字。一般吞咽困难不再等同于已无法吞咽液体；牙齿/颌面肿胀或感染表现伴吞咽困难仍明确急诊。参考：[NHS 吞咽困难](https://www.nhs.uk/symptoms/swallowing-problems-dysphagia/)。
 
 单独勾选尿痛、尿频、尿急时，基础分析使用排尿相关宽泛提示，不会按点到的腰背/髋结构解释为劳损。单独侧腰痛仍保留肌骨与尿路多种可能；未勾发热不表示已排除发热。尿路变化伴发热/寒战、或血尿的优先处理保留。既有具体规则的证据门槛不变。依据：[NHS 尿路感染](https://www.nhs.uk/conditions/urinary-tract-infections-utis/)、[MedlinePlus 尿痛](https://medlineplus.gov/ency/article/003145.htm)、[MedlinePlus 侧腰痛](https://medlineplus.gov/ency/article/003113.htm)。
+
+
+## 界面与包体积回归（2026-10-06）
+
+按钮、平移滑块与弹层使用浏览器原生短过渡，移除仅承担界面动画的 GSAP 和逐按钮监听器。系统要求减少动态效果时，界面过渡与释放后的旋转/缩放惯性停止；原有按需3D渲染与静止后处理节流保留。Escape关闭面板并返回触发按钮，手机按钮点击区至少44px；空选择提示缩成较小面板，完整英文部位名降低字号以少遮挡模型。中文品牌统一“创伤小组”。
+
+以同一云执行器 Node 24、Vite 5.4.21 分别重建优化前提交97147f7和当前源码，HTML首屏直接引用及预加载的JS合计gzip从156,550字节降至128,729字节，约减少17.8%。口径为gzip level 9，不包含按需加载3D模块、模型或网络延迟；不是手机GPU或加载秒数实测。运行 `npm run build && npm run measure:bundle` 可重复测量。
+
+仪器化表现参考 [Sony TPS-L2](https://www.sony.com/en/SonyInfo/design/bside/01_throwback_walkman/) 与 [V&A 的 Braun / Dieter Rams 设计资料](https://www.vam.ac.uk/articles/dieter-rams-a-brave-new-world-of-product-design)：保留现有主视窗、有限成组按键和橄榄/炭黑/暖橙，资料卡减少重复投影，没有添加持续耗电特效。
