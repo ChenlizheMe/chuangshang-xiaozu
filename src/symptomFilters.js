@@ -33,7 +33,7 @@ const REGION_OVERRIDES={
   '牙龈出血':['tooth','jaw'], '口腔异味':['tooth','jaw','throat'],
   '视物模糊':['eye','head'], '畏光':['eye','head'], '流泪':['eye'],
   '耳鸣':['ear'], '听力下降':['ear'],
-  '吞咽痛':['throat','jaw'], '张口受限':['jaw'], '咬合改变':['jaw'],
+  '吞咽痛':['throat','jaw'], '张口受限':['jaw','tooth'], '咬合改变':['jaw'],
   '咳嗽':['chest','throat'], '呼吸痛':['chest'], '气短':['chest'],
   '恶心':['head','abdomen','pelvis','autonomic','chest'], '呕吐':['head','abdomen','pelvis','autonomic','chest'],
   '腹泻':['abdomen','pelvis','autonomic'], '便秘':['abdomen','pelvis','autonomic'],

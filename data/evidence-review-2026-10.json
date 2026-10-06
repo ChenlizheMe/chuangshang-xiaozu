@@ -591,6 +591,299 @@
       "tests": [
         "tests/literature-visceral.test.mjs"
       ]
+    },
+    {
+      "id": "oral-spreading-infection",
+      "rules": [
+        "oral-swelling-restricted-opening"
+      ],
+      "type": "Official/professional-source review with explicit uncertainty",
+      "sources": [
+        {
+          "title": "NHS: Dental abscess",
+          "url": "https://www.nhs.uk/conditions/dental-abscess/"
+        }
+      ],
+      "decision": "Oral/facial swelling or pus plus restricted opening receives emergency assessment without waiting for fever or pain. A simple jaw-joint explanation must not lower that action.",
+      "positiveExamples": [
+        "Mandible: 面部肿胀 + 张口受限",
+        "Lower canine.l: 牙龈肿胀 + 张口受限"
+      ],
+      "negativeExamples": [
+        "Lower canine.l: 紧绷 without infection/opening signs"
+      ],
+      "notEstablished": [
+        "No examination, lesion depth, specific diagnosis or unreported symptom duration is confirmed."
+      ],
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs"
+      ]
+    },
+    {
+      "id": "dental-infection-assessment",
+      "rules": [
+        "dental-infection-review"
+      ],
+      "type": "Official/professional-source review with explicit uncertainty",
+      "sources": [
+        {
+          "title": "NHS: Toothache and Dental abscess",
+          "url": "https://www.nhs.uk/symptoms/toothache/"
+        }
+      ],
+      "decision": "Dental pus, or local pain/swelling with fever, receives same-day urgent dental assessment. Hospital emergency escalation depends on opening, airway/swallowing or other spreading-infection signs; fever alone is not labeled severe spread.",
+      "positiveExamples": [
+        "Lower canine.l: 流脓",
+        "Lower canine.l: 牙龈肿胀 + 发热"
+      ],
+      "negativeExamples": [
+        "Simple thermal sensitivity remains a non-emergency reference"
+      ],
+      "notEstablished": [
+        "No examination, lesion depth, specific diagnosis or unreported symptom duration is confirmed."
+      ],
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs"
+      ]
+    },
+    {
+      "id": "dental-pain-and-defect-review",
+      "rules": [
+        "dental-observation-review"
+      ],
+      "type": "Official/professional-source review with explicit uncertainty",
+      "sources": [
+        {
+          "title": "AAE: Tooth Pain",
+          "url": "https://www.aae.org/patients/dental-symptoms/tooth-pain/"
+        },
+        {
+          "title": "AAE: Endodontic Diagnosis, 2013 professional education",
+          "url": "https://www.aae.org/specialty/wp-content/uploads/sites/2/2017/07/endodonticdiagnosisfall2013.pdf"
+        },
+        {
+          "title": "AAE: Cracked Teeth",
+          "url": "https://www.aae.org/patients/dental-symptoms/cracked-teeth/"
+        },
+        {
+          "title": "NHS: Tooth decay",
+          "url": "https://www.nhs.uk/conditions/tooth-decay/"
+        }
+      ],
+      "decision": "Lingering thermal/spontaneous/night pain or a reported cavity/crack prompts dental examination without waiting two days or fabricating a second finding. A short thermal-response pattern remains qualified rather than diagnosing dentin sensitivity.",
+      "positiveExamples": [
+        "Lower canine.l: 持续冷热痛",
+        "Lower canine.l: 牙龋洞 or 牙齿裂纹, without pain"
+      ],
+      "negativeExamples": [
+        "Lower canine.l: 冷热敏感 + 刺激去除即缓解 is not automatically urgent"
+      ],
+      "notEstablished": [
+        "No examination, lesion depth, specific diagnosis or unreported symptom duration is confirmed."
+      ],
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs"
+      ]
+    },
+    {
+      "id": "eye-injury-and-visual-warning",
+      "rules": [
+        "eye-injury-warning",
+        "diplopia-after-injury",
+        "eye-injury-review",
+        "red-eye-visual-warning"
+      ],
+      "type": "Official/professional-source review with explicit uncertainty",
+      "sources": [
+        {
+          "title": "NHS: Red eye",
+          "url": "https://www.nhs.uk/symptoms/red-eye/"
+        },
+        {
+          "title": "NHS: Double vision",
+          "url": "https://www.nhs.uk/symptoms/double-vision/"
+        },
+        {
+          "title": "NHS: Eye injuries",
+          "url": "https://www.nhs.uk/conditions/eye-injuries/"
+        }
+      ],
+      "decision": "Injured red eye, visual change, photophobia or reported severe pain receives emergency assessment. Less-specific post-injury discomfort receives same-day clarification without presuming severe or penetrating injury. Red eye plus visual change/light sensitivity receives emergency guidance even without injury. Ordinary eye-surface references cannot absorb a reported injury. Generic pus with a selected eye area does not prove ocular drainage; after injury use same-day source clarification with immediate eye assessment if it is from the eye itself.",
+      "positiveExamples": [
+        "Lacrimal bone.l: 异物感 + 眼红 + 外伤后",
+        "Lacrimal bone.l: 复视 + 外伤后",
+        "Lacrimal bone.l: 畏光 + 外伤后",
+        "Lacrimal bone.l: 眼红 + 视物模糊"
+      ],
+      "negativeExamples": [
+        "Lacrimal bone.l: 眼干 + 长时间看屏幕",
+        "Isolated blurred vision is not automatically an emergency; post-injury discomfort alone does not prove severe trauma."
+      ],
+      "notEstablished": [
+        "No examination, lesion depth, specific diagnosis or unreported symptom duration is confirmed."
+      ],
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs"
+      ]
+    },
+    {
+      "id": "diplopia-assessment",
+      "rules": [
+        "sudden-diplopia",
+        "diplopia-review"
+      ],
+      "type": "Official/professional-source review with explicit uncertainty",
+      "sources": [
+        {
+          "title": "NHS: Double vision",
+          "url": "https://www.nhs.uk/symptoms/double-vision/"
+        }
+      ],
+      "decision": "Diplopia warrants examination even when intermittent. Explicit sudden onset changes this to same-day urgent assessment; post-injury or additional acute neurological warning paths retain the higher level. No monocular/binocular cause is inferred.",
+      "positiveExamples": [
+        "Lacrimal bone.l: 复视 + 突然起病",
+        "Frontal bone: 复视 without unreported onset"
+      ],
+      "negativeExamples": [
+        "Ordinary eye dryness is not equated to diplopia"
+      ],
+      "notEstablished": [
+        "No examination, lesion depth, specific diagnosis or unreported symptom duration is confirmed."
+      ],
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs"
+      ]
+    },
+    {
+      "id": "sudden-hearing-assessment",
+      "rules": [
+        "sudden-hearing-combination"
+      ],
+      "type": "Official/professional-source review with explicit uncertainty",
+      "sources": [
+        {
+          "title": "NIDCD: Sudden Deafness",
+          "url": "https://www.nidcd.nih.gov/health/sudden-deafness"
+        }
+      ],
+      "decision": "Hearing reduction plus explicit sudden onset is handled consistently with the existing sudden-hearing-loss label. Same-day urgent assessment is not delayed by an ear-pain/infection reference; hearing-loss subtype and exact onset interval remain unconfirmed.",
+      "positiveExamples": [
+        "Incus.l: 听力下降 + 突然起病",
+        "Incus.l: 疼痛 + 听力下降 + 突然起病"
+      ],
+      "negativeExamples": [
+        "Incus.l: 疼痛 alone does not establish sudden hearing loss"
+      ],
+      "notEstablished": [
+        "No examination, lesion depth, specific diagnosis or unreported symptom duration is confirmed."
+      ],
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs"
+      ]
+    },
+    {
+      "id": "purulent-drainage-review",
+      "rules": [
+        "purulent-drainage-review"
+      ],
+      "type": "Official/professional-source review with explicit uncertainty",
+      "sources": [
+        {
+          "title": "NHS: Skin abscess",
+          "url": "https://www.nhs.uk/conditions/skin-abscess/"
+        }
+      ],
+      "decision": "Reported pus needs assessment rather than a musculoskeletal or uncomplicated irritation explanation. The selected bone/muscle does not establish the infection site or depth.",
+      "positiveExamples": [
+        "Anterior longitudinal ligament: 流脓",
+        "Humerus.l: 痒 + 皮疹 + 流脓"
+      ],
+      "negativeExamples": [
+        "Humerus.l: 痒 + 皮疹 without an infection warning"
+      ],
+      "notEstablished": [
+        "No examination, lesion depth, specific diagnosis or unreported symptom duration is confirmed."
+      ],
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs"
+      ]
+    },
+    {
+      "id": "skin-change-systemic-warning",
+      "rules": [
+        "skin-change-systemic-warning"
+      ],
+      "type": "Official/professional-source review with explicit uncertainty",
+      "sources": [
+        {
+          "title": "NHS: Contact dermatitis infection symptoms",
+          "url": "https://www.nhs.uk/conditions/contact-dermatitis/symptoms/"
+        }
+      ],
+      "decision": "Skin changes or pus together with fever/chills receive same-day assessment for possible infection and other causes, without naming a new skin disease.",
+      "positiveExamples": [
+        "Humerus.l: 灼烧 + 红斑 + 发热 + 持续加重"
+      ],
+      "negativeExamples": [
+        "Simple itchy rash without systemic change is not automatically escalated"
+      ],
+      "notEstablished": [
+        "No examination, lesion depth, specific diagnosis or unreported symptom duration is confirmed."
+      ],
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs"
+      ]
+    },
+    {
+      "id": "nosebleed-first-aid-and-course",
+      "rules": [
+        "nosebleed-duration-review"
+      ],
+      "type": "Official/professional-source review with explicit uncertainty",
+      "sources": [
+        {
+          "title": "NHS: Nosebleed",
+          "url": "https://www.nhs.uk/conditions/nosebleed/"
+        }
+      ],
+      "decision": "Basic guidance provides conditional forward-leaning, soft-part pressure for 10–15 minutes without requiring trauma. Coarse hours/days input prompts same-day clarification, not an assertion of continuous heavy bleeding. Persistent bleeding after correct pressure or severe associated symptoms requires emergency care.",
+      "positiveExamples": [
+        "Nasal structure: 鼻出血 alone receives conditional first aid",
+        "Nasal structure: 鼻出血 + 持续数小时 prompts review"
+      ],
+      "negativeExamples": [
+        "Unreported duration is not treated as hours of uncontrolled bleeding"
+      ],
+      "notEstablished": [
+        "No examination, lesion depth, specific diagnosis or unreported symptom duration is confirmed."
+      ],
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs"
+      ]
+    },
+    {
+      "id": "swallowing-urgency-clarification",
+      "rules": [],
+      "sources": [
+        {
+          "title": "NHS: Dysphagia",
+          "url": "https://www.nhs.uk/symptoms/swallowing-problems-dysphagia/"
+        }
+      ],
+      "decision": "General reported swallowing difficulty warrants same-day medical advice; inability to swallow liquids remains conditional, not inferred. Oral swelling/pus with swallowing difficulty retains emergency disposition.",
+      "positiveExamples": [
+        "Oesophagus: 吞咽困难"
+      ],
+      "negativeExamples": [
+        "Do not assert an unreported inability to swallow liquids or new onset."
+      ],
+      "notEstablished": [
+        "No cause or severity is established by the checkbox."
+      ],
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs",
+        "tests/localization.test.mjs"
+      ]
     }
   ]
 }

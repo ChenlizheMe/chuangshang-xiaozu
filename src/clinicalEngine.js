@@ -36,7 +36,7 @@ export function assessSymptoms(knowledge,input={}){
  if(abdominal&&(has('突发剧痛','黑便','血便','腹部僵硬','晕厥')))warn('严重或突发腹部/盆腔痛、出血、腹部僵硬或晕厥：立即急诊。','Severe or sudden abdominal/pelvic pain, bleeding, rigidity or fainting: seek emergency assessment.');
  if(profiles.some((p,i)=>p.region==='abdomen'&&(normalized[i].tags.has('腹痛迁移至右下腹')||normalized[i].location==='rlq'&&normalized[i].tags.has('持续加重')&&localHas(i,...chestPain,'局部压痛'))))warn('右下腹迁移痛或持续加重的右下腹痛：尽快急诊排查阑尾炎等原因，伴发热时更应警惕。','Migrating or worsening right-lower abdominal pain, especially with fever, needs urgent assessment for appendicitis and other causes.','same-day');
  if(has('会阴麻木','排尿困难')&&profiles.some(p=>['neck','spine','hip','pelvis','lower-limb'].includes(p.region)))warn('腰腿症状伴会阴麻木或新发排尿困难：立即急诊评估。','Back/leg symptoms with saddle numbness or new difficulty passing urine need emergency assessment.');
- if(profiles.some((p,i)=>p.region==='eye'&&localHas(i,'视物模糊','畏光')))warn('眼痛伴视力变化或畏光：尽快眼科急诊。','Eye pain with vision change or light sensitivity: seek urgent eye assessment.','same-day');
+ if(profiles.some((p,i)=>p.region==='eye'&&localHas(i,'视物模糊','畏光')))warn('报告视物模糊或畏光：今天尽快眼科评估。','Reported blurred vision or light sensitivity needs same-day eye assessment.','same-day');
  if(profiles.some((p,i)=>p.region==='lower-limb'&&localHas(i,'单侧肿胀')))warn('单侧腿部新发肿痛需要当日排查血栓；同时气短或胸痛应立即急救。','New one-sided leg swelling needs same-day assessment for a clot; associated breathlessness or chest pain is an emergency.','same-day');
  if(abdominal&&has('可能怀孕')&&has('肩尖痛','晕厥','突发剧痛'))warn('可能怀孕并出现肩尖痛、晕厥或突发剧痛：立即急诊评估，不能等待其他表现。','Possible pregnancy with shoulder-tip pain, fainting or sudden severe pain needs emergency assessment without waiting for other signs.');
  else if(abdominal&&has('可能怀孕')&&has(...chestPain,'侧腰痛','腹痛迁移至右下腹','肩尖痛','向背部放射','腰腹向腹股沟放射','局部压痛'))warn('可能怀孕且腹部/盆腔痛：尽快就医确认；单侧剧痛、出血、肩尖痛或晕厥立即急诊。','Possible pregnancy with abdominal/pelvic pain needs prompt assessment; severe one-sided pain, bleeding, shoulder-tip pain or fainting is an emergency.','same-day');
@@ -50,7 +50,7 @@ export function assessSymptoms(knowledge,input={}){
  if(has('呼吸困难','静息气短'))warn('新发呼吸困难或静息气短：立即就医；严重呼吸困难联系急救。','New breathing difficulty or breathlessness at rest needs immediate care; severe breathing difficulty is an emergency.');
  if(has('吞咽困难')){
   if(profiles.some((p,i)=>['tooth','jaw'].includes(p.region)&&localHas(i,'牙龈肿胀','面部肿胀','流脓')))warn('牙齿或颌面肿胀/感染表现伴吞咽困难：立即急诊；伴呼吸困难联系急救。','Dental or facial swelling/infection signs with difficulty swallowing need emergency assessment; call emergency services if breathing is affected.');
-  else warn('新发吞咽困难：尽快就医；如已无法吞咽液体、明显口腔肿胀或伴呼吸困难，立即急诊。','New difficulty swallowing needs prompt medical assessment. If unable to swallow liquids, the mouth is markedly swollen or breathing is affected, seek emergency care.','prompt');
+  else warn('吞咽困难：今天联系医疗机构评估；如已无法吞咽液体、明显口腔肿胀或伴呼吸困难，立即急诊。','Difficulty swallowing needs same-day medical assessment. If unable to swallow liquids, the mouth is markedly swollen or breathing is affected, seek emergency care.','same-day');
  }
  if(has('突然听力下降'))warn('突然听力下降：当日尽快耳鼻喉科评估。','Sudden hearing loss needs urgent same-day ENT assessment.','same-day');
  if(profiles.some((p,i)=>['shoulder','upper-limb','hand','hip','knee','ankle','foot'].includes(p.region)&&['红肿','局部肿胀'].some(t=>normalized[i].tags.has(t))&&has('发热','发冷')))

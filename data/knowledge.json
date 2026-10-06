@@ -1207,8 +1207,8 @@
         "en": "Deep decay, hot or cold triggers, or a tooth crack"
       },
       "threshold": {
-        "zh": "面部或颈部肿胀、发热、吞咽或呼吸困难时立即急诊。",
-        "en": "Go to urgent care now for facial or neck swelling, fever, or difficulty swallowing or breathing."
+        "zh": "牙龈/颌面肿胀、发热或流脓应尽快牙科评估；张口、吞咽或呼吸受影响，或肿胀扩至眼周/颈部时立即急诊。",
+        "en": "Gum/facial swelling, fever or pus needs urgent dental assessment. Difficulty opening the mouth, swallowing or breathing, or swelling spreading to the eye/neck needs emergency care."
       },
       "context": []
     },
@@ -1281,8 +1281,8 @@
         "淤青"
       ],
       "advice": {
-        "zh": "坐直并身体前倾，捏住鼻翼软部持续十分钟。",
-        "en": "Sit upright and lean forward while pinching the soft part of the nose for ten minutes."
+        "zh": "如果正在出血，坐直并前倾，捏住鼻子柔软部位持续10–15分钟，用口呼吸，不仰头。",
+        "en": "If bleeding now, sit upright and lean forward, pinch the soft part of the nose continuously for 10–15 minutes and breathe through the mouth; do not tilt back."
       },
       "shortDescription": {
         "zh": "鼻部疼痛、肿胀或出血，可与碰撞有关。",
@@ -1293,8 +1293,8 @@
         "en": "Nasal impact, picking, dry air or forceful nose blowing"
       },
       "threshold": {
-        "zh": "出血持续超过二十分钟、鼻形明显改变、头部受伤后嗜睡或清液流出时立即就医。",
-        "en": "Seek urgent care if bleeding lasts over twenty minutes, the nose is visibly deformed, or head injury causes drowsiness or clear fluid drainage."
+        "zh": "正在出血且正确按压鼻软部10–15分钟仍未止、出血量大、气短或明显头晕无力，应立即急诊；头伤后嗜睡、意识变化或清液流出也应立即急诊。 鼻形明显改变应及时检查。",
+        "en": "Seek emergency care if ongoing bleeding does not stop after 10–15 minutes of firm pressure on the soft nose, is heavy, or is accompanied by breathlessness or marked dizziness/weakness. Drowsiness, altered awareness or clear fluid drainage after head injury also needs emergency care. A changed nose shape needs prompt assessment."
       },
       "context": [
         "外伤后"
@@ -1886,8 +1886,8 @@
         "en": "Frequent sugar exposure, plaque build-up or enamel wear"
       },
       "threshold": {
-        "zh": "面部肿胀、发热、吞咽或呼吸困难时立即急诊。",
-        "en": "Seek emergency care for facial swelling, fever, difficulty swallowing or breathing."
+        "zh": "牙龈/颌面肿胀、发热或流脓应尽快牙科评估；张口、吞咽或呼吸受影响，或肿胀扩至眼周/颈部时立即急诊。",
+        "en": "Gum/facial swelling, fever or pus needs urgent dental assessment. Difficulty opening the mouth, swallowing or breathing, or swelling spreading to the eye/neck needs emergency care."
       },
       "context": []
     },
@@ -2804,7 +2804,7 @@
     {
       "id": "dental-abscess",
       "name": {
-        "zh": "牙源性脓肿（需尽快牙科评估）",
+        "zh": "疑似牙源性脓肿（需尽快牙科评估）",
         "en": "Possible dental abscess requiring dental assessment"
       },
       "feelings": [
@@ -2843,8 +2843,8 @@
         "en": "Arrange urgent dental care."
       },
       "shortDescription": {
-        "zh": "牙痛伴牙龈或面部肿胀、流脓或发热。",
-        "en": "Toothache with gum or facial swelling, pus or fever."
+        "zh": "牙龈/颌面肿胀或流脓，可伴牙痛或发热；需口腔检查判断是否感染与扩散。",
+        "en": "Gum/facial swelling or pus may occur with tooth pain or fever; dental examination is needed to assess infection and spread."
       },
       "triggers": {
         "zh": "龋病进展、牙裂或牙周感染",
@@ -3222,12 +3222,12 @@
     {
       "id": "dentin-sensitivity",
       "name": {
-        "zh": "牙本质敏感",
-        "en": "Dentin sensitivity"
+        "zh": "短暂冷热敏感（需牙科鉴别）",
+        "en": "Brief thermal sensitivity (needs dental assessment)"
       },
       "shortDescription": {
-        "zh": "冷热引发的短暂牙痛，刺激停止后很快缓解。",
-        "en": "Brief thermal tooth pain that settles when the trigger ends."
+        "zh": "冷热刺激后很快缓解的敏感样表现，可与牙本质暴露或牙体/牙髓刺激等重叠，需检查区分。",
+        "en": "Sensitivity that settles soon after temperature stimulation can overlap with exposed dentin or tooth/pulp irritation; examination is needed to distinguish the cause."
       },
       "triggers": {
         "zh": "牙龈退缩、牙本质暴露或牙釉质磨损。",

@@ -9,7 +9,7 @@ const cases=[
  ['emergency','Sternum','skeleton',['压迫感','气短']],
  ['same-day','Tibia.l','skeleton',['单侧肿胀']],
  ['prompt','Kidney.l','organ',['血尿']],
- ['prompt','Oesophagus','organ',['吞咽困难']],
+ ['same-day','Oesophagus','organ',['吞咽困难']],
  ['same-day','Patella.r','skeleton',['局部肿胀','发热','活动受限']],
  ['emergency','Rectus abdominis muscle.r','muscle',['疼痛','运动后','突发剧痛']],
  ['same-day','Rectus abdominis muscle.r','muscle',['绞痛','排便后缓解','腹泻','反复数月','持续加重'],'rlq']
