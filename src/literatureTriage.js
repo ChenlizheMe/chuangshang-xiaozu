@@ -10,6 +10,9 @@ const musculoskeletalRegions=['neck','spine','chest','abdomen','pelvis','lower-l
 // related review entries in data/evidence-review-2026-10.json. These predicates
 // route assessment; they do not create diagnoses or require missing checkboxes.
 const rules=[
+ {id:'unable-to-urinate',level:'emergency',matches:(p,r)=>has(r,'排尿困难'),
+  zh:'已报告尿不出来：立即就医评估，不必等待腹痛、发热或选择另一个模型部位。当前选择不能确定是否尿潴留、梗阻或神经问题。',
+  en:'Reported inability to pass urine needs immediate medical assessment. Do not wait for abdominal pain, fever or a different model selection. These inputs do not establish urinary retention, obstruction or a neurological cause.'},
  {id:'reported-strength-loss-review',level:'prompt',matches:(p,r)=>has(r,'肌力下降'),
   zh:'已报告力量下降，应尽快检查并核实起病、进展及分布；不能仅以疲劳或局部受压解释。若突然出现或快速加重，立即就医评估。',
   en:'Reported reduced strength needs prompt examination of onset, progression and distribution rather than assuming fatigue or local compression. Sudden onset or rapid worsening needs immediate assessment.'},

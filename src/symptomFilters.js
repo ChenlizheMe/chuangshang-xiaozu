@@ -80,6 +80,7 @@ export function visibleSymptoms(knowledge,{parts=[],layer='skeleton',kind='feeli
     const urgent={chest:['突发剧痛','晕厥','呼吸困难'],abdomen:['突发剧痛','晕厥','黑便','血便','呕血','腹部僵硬']};
     return tags.filter(tag=>{
       if(universalTiming(tag))return true;
+      if(tag.id==='排尿困难'&&profiles.some(p=>['kidney','ureter','bladder'].includes(p.organ)))return true;
       if(tag.id==='可能怀孕')return profiles.some(p=>p.region==='abdomen');
       return supported.has(tag.id)||SYSTEMIC_TAGS.has(tag.id)||profiles.some(p=>urgent[p.region]?.includes(tag.id));
     });

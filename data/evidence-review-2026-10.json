@@ -1142,6 +1142,34 @@
         "tests/cross-specialty-invariants.test.mjs"
       ],
       "status": "implemented-with-stated-limits"
+    },
+    {
+      "id": "inability-to-urinate-independent-of-model",
+      "status": "implemented-with-stated-limits",
+      "type": "Official-source safety disposition and restoration of an existing option",
+      "rules": [
+        "unable-to-urinate"
+      ],
+      "sources": [
+        {
+          "title": "NIDDK: Symptoms & Causes of Urinary Retention, when to seek care",
+          "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/urinary-retention/symptoms-causes"
+        }
+      ],
+      "decision": "The actual existing option reports inability to pass urine, not merely reduced volume. It needs immediate assessment independent of a bone, muscle or urinary-organ selection. Restore the same existing option for kidney, ureter and bladder profiles. Saddle numbness keeps its independent warning.",
+      "positiveExamples": [
+        "Rectus abdominis muscle.r: 排尿困难 alone",
+        "Kidney, renal pelvis, ureter, urethra and bladder: 排尿困难 alone"
+      ],
+      "negativeExamples": [
+        "尿量减少, 尿频 or 尿急 alone does not establish inability to urinate and is not automatically emergency."
+      ],
+      "notEstablished": [
+        "Do not diagnose urinary retention, obstruction, renal failure, a neurological cause, new onset or severe pain from the option."
+      ],
+      "tests": [
+        "tests/urinary-retention-disposition.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [

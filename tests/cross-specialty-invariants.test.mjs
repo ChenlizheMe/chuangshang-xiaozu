@@ -7,9 +7,9 @@ const visible=r=>new Set(fields.flatMap(kind=>visibleSymptoms(k,{parts:[r.part],
 const assertReachable=r=>{assert.ok(mesh.get(r.layer).has(r.part),r.part);const v=visible(r);for(const t of tags(r))assert.ok(v.has(t),`${r.part}: ${t}`);if(r.location&&r.location!=='unknown')assert.ok(reportLocationOptions(r).some(([id])=>id===r.location),`${r.part}: ${r.location}`);return v;};
 const danger=['面部歪斜','说话含糊','突然单侧无力','肌力下降','会阴麻木','排尿困难','呼吸困难','静息气短','吞咽困难','突然听力下降','视物模糊','复视','畏光','突发剧痛','突发最严重头痛','晕厥','冷汗','呕血','黑便','血便','腹部僵硬','发热','发冷','流脓','单侧肿胀','局部发热','无法承重','关节卡住','持续加重','血尿','黄疸','外伤后','扭伤后','体重下降'];
 test('655 independently preserved audit seeds use actual structures and selectable existing inputs',()=>{assert.equal(f.seeds.length,655);for(const {report}of f.seeds)assertReachable(report);});
-test('adding a selectable danger observation never lowers existing assessment urgency',()=>{
+test('adding a selectable danger observation never lowers existing assessment urgency',t=>{
  let count=0;for(const {name,report:r}of f.seeds){const a=assess(r),v=visible(r);for(const d of danger.filter(t=>v.has(t)&&!tags(r).includes(t))){const field=fieldByTag.get(d),rr={...r,[field]:[...(r[field]||[]),d]};assert.ok(rank(assess(rr))>=rank(a),`${name} + ${d}`);count++;}}
- assert.ok(count>=6800,`covered ${count} additions`);
+ assert.ok(count>=6800,`covered ${count} additions`);t.diagnostic(`monotonic additions checked: ${count}`);
 });
 test('complete output including displayed evidence is invariant to input order and exact repetition',()=>{
  for(const {name,report:r}of f.seeds){const a=assess(r);for(const repeat of [false,true]){const rr={...r,...Object.fromEntries(fields.map(field=>[field,repeat?[...(r[field]||[]),...(r[field]||[])]:[...(r[field]||[])].reverse()]))};assert.deepEqual(assess(rr),a,name);}}
