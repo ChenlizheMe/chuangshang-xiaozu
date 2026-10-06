@@ -1,0 +1,37 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {assessSymptoms} from '../src/clinicalEngine.js';
+import {visibleSymptoms} from '../src/symptomFilters.js';
+import {selectionReducer,emptySelection} from '../src/selectionState.js';
+const k=JSON.parse(fs.readFileSync(new URL('../data/knowledge.json',import.meta.url))),kinds=['feelings','signs','timing','triggers'];
+const field=Object.fromEntries(kinds.flatMap(f=>k[f].map(t=>[t.id,f])));
+const report=(part,layer,tags,location='unknown')=>({part,layer,location,...Object.fromEntries(kinds.map(f=>[f,tags.filter(t=>field[t]===f)]))});
+const assess=r=>assessSymptoms(k,{reports:[r]});
+const visible=(part,layer)=>new Set(kinds.flatMap(kind=>visibleSymptoms(k,{parts:[part],layer,kind}).map(t=>t.id)));
+const cases=[];
+const add=(id,priority,r,files,expected,check,source)=>cases.push({id,priority,input:r,files,expected,check,source});
+const a='Rectus abdominis muscle.r',t='Upper first molar tooth.r',s='Sternum',p='Levator ani.or',b='Lumbar vertebra L3';
+add('abdominal-severe-pain-reachable','P1',report(a,'muscle',['突发剧痛']),['src/symptomFilters.js:55-91','src/clinicalEngine.js:31'],'Existing sudden severe pain option visible; independently urgent',r=>visible(a,'muscle').has('突发剧痛')&&r.urgent.length>0,'https://www.nhs.uk/symptoms/stomach-ache/');
+for(const tag of ['呼吸困难','吞咽困难'])add('dental-'+tag+'-reachable','P1',report(t,'skeleton',['牙龈肿胀',tag]),['src/symptomFilters.js:24,55-68'],'Existing airway/swallowing option visible; urgent',r=>visible(t,'skeleton').has(tag)&&r.urgent.length>0,'https://www.nhs.uk/conditions/dental-abscess/');
+for(const tag of ['紧绷','撕裂','刀割感','针刺','疼痛','灼烧'])add('chest-'+tag+'-breathlessness','P1',report(s,'skeleton',[tag,'气短']),['src/clinicalEngine.js:29'],'Pain/tightness synonym must not remove independent emergency warning',r=>r.urgent.length>0,'https://www.nhs.uk/symptoms/chest-pain/');
+add('chest-nausea-reachable','P1',report(s,'skeleton',['灼烧','恶心']),['src/symptomFilters.js:36','src/clinicalEngine.js:29'],'Nausea visible for chest; chest pain plus nausea urgent',r=>visible(s,'skeleton').has('恶心')&&r.urgent.length>0,'https://www.nhs.uk/symptoms/chest-pain/');
+add('chest-sudden-persistent','P1',report(s,'skeleton',['疼痛','突然起病','持续数小时']),['src/clinicalEngine.js:29-30'],'Sudden ongoing chest pain should get explicit emergency warning',r=>r.urgent.length>0,'https://www.nhs.uk/symptoms/chest-pain/');
+add('pelvic-pregnancy','P1',report(p,'muscle',['疼痛','可能怀孕']),['src/clinicalEngine.js:23,36'],'Pelvic pain plus possible pregnancy gets prompt assessment independent of location/card gate',r=>r.urgent.length>0,'https://www.nhs.uk/symptoms/pelvic-pain/');
+add('pelvic-fainting','P1',report(p,'muscle',['疼痛','可能怀孕','晕厥']),['src/clinicalEngine.js:23,31,36'],'Pelvic pain plus fainting gets emergency warning, never mechanical-only reassurance',r=>r.urgent.some(u=>/立即|急诊|急救/.test(u.zh)),'https://www.nhs.uk/symptoms/pelvic-pain/');
+add('pelvic-black-stool','P1',report(p,'muscle',['疼痛','黑便']),['src/clinicalEngine.js:23,31'],'Existing black-stool warning should survive pelvic region selection',r=>r.urgent.length>0,'https://www.nhs.uk/symptoms/stomach-ache/');
+add('flank-fever-no-location','P1',report(b,'skeleton',['侧腰痛','发热']),['src/clinicalEngine.js:52-57','src/basicAssessments.js:70-71','src/ReportEditor.jsx:14'],'Urgent urinary assessment despite unavailable flank control, no mechanical-only reassurance',r=>r.urgent.length>0,'https://www.nhs.uk/conditions/kidney-infection/');
+add('colic-hematuria-no-location','P1',report(b,'skeleton',['绞痛','血尿']),['src/clinicalEngine.js:52-57','src/basicAssessments.js:70-71','src/ReportEditor.jsx:14'],'Prompt urinary assessment despite unavailable flank control, no mechanical-only reassurance',r=>r.urgent.length>0,'https://www.nhs.uk/conditions/kidney-stones/');
+add('head-nausea-reachable','P2',report('Frontal bone','skeleton',['跳痛','恶心']),['src/symptomFilters.js:36'],'Existing migraine alternative nausea is selectable',()=>visible('Frontal bone','skeleton').has('恶心'),'https://www.nhs.uk/conditions/migraine/');
+add('leg-focal-tenderness-reachable','P2',report('Tibia.l','skeleton',['局部压痛','运动后','负重加重']),['src/symptomFilters.js:49','src/clinicalRules.js:84'],'Existing focal-tenderness input reachable for lower-limb stress-bone branch',r=>visible('Tibia.l','skeleton').has('局部压痛')&&r.items.some(i=>i.id==='stress-bone-injury'),null);
+add('single-site-no-symptom','regression',report(t,'skeleton',[]),['src/clinicalEngine.js'],'Anatomy alone emits no assessment',r=>r.items.length===0&&r.needsEvidence,null);
+add('dental-synonyms','regression',report(t,'skeleton',['针刺','刺痛','牵拉痛']),['src/symptomLanguage.js','src/clinicalRules.js'],'Pain synonyms do not invent a pulpitis branch',r=>r.items.every(i=>i.basic),null);
+add('dental-independent-input','regression',report(t,'skeleton',['持续冷热痛','自发痛']),['src/clinicalRules.js'],'Existing independent dental features retain reference direction',r=>r.items.some(i=>i.id==='dental-pulpitis'),null);
+add('duration-only','regression',report(t,'skeleton',['持续数小时']),['src/basicAssessments.js:57-58'],'Duration alone must not fabricate a symptom',r=>r.items.length===0,null);
+add('stroke-lifestyle-suppressed','regression',report('Frontal bone','skeleton',['突然单侧无力','睡眠不足','疲劳乏力']),['src/clinicalEngine.js'],'Stroke flag survives and no lifestyle reassurance',r=>r.urgent.length>0&&!r.items.some(i=>i.lifestyle),null);
+for(const item of cases)test(`independent safety matrix: ${item.id}`,()=>{
+ assert.ok(item.check(assess(item.input)),item.expected);
+});
+test('independent safety matrix: switch-area-no-stale-evidence',()=>{
+let state=selectionReducer(emptySelection,{type:'toggle',part:t,layer:'skeleton'}),old=state.focusId;state=selectionReducer(state,{type:'update',id:old,patch:{feelings:['紧绷'],location:'ruq'}});state=selectionReducer(state,{type:'toggle',part:a,layer:'muscle'});state=selectionReducer(state,{type:'update',id:old,patch:{signs:['血便']}});assert.ok(state.reports.length===1&&state.reports[0].feelings.length===0&&state.reports[0].signs.length===0&&state.reports[0].location==='unknown');
+});

@@ -1,5 +1,5 @@
 import React from 'react';
-import {clinicalProfile,ABDOMEN_LOCATIONS} from './clinicalRegions.js';
+import {reportLocationOptions} from './reportLocation.js';
 import {visibleSymptoms} from './symptomFilters.js';
 export const labelFor=(tag,lang)=>tag?.[lang]||tag?.id||'';
 export default function ReportEditor({knowledge,focused,kind,lang,onUpdate}){
@@ -11,9 +11,9 @@ export default function ReportEditor({knowledge,focused,kind,lang,onUpdate}){
   onUpdate({[field]:selected.includes(id)?selected.filter(t=>t!==id):[...others,id]});
  };
  const tagButtons=field=>visibleSymptoms(knowledge,{parts:[focused.part],layer:focused.layer,kind:field}).map(tag=><button type="button" key={tag.id} aria-pressed={focused[field].includes(tag.id)} className={`sheet-sticker ${focused[field].includes(tag.id)?'selected':''}`} onClick={()=>toggle(field,tag.id)}>{labelFor(tag,lang)}</button>);
- const profile=clinicalProfile(focused.part,focused.layer);
+ const locations=reportLocationOptions(focused);
  return <>
-  {kind==='feelings'&&profile.region==='abdomen'&&<div className="location-control"><b>{lang==='zh'?'你实际感觉的位置':'WHERE YOU FEEL IT'}</b><div className="location-grid">{ABDOMEN_LOCATIONS.map(([id,zh,en])=><button type="button" key={id} aria-pressed={focused.location===id} className={`location-chip ${focused.location===id?'selected':''}`} onClick={()=>onUpdate({location:id})}>{lang==='zh'?zh:en}</button>)}</div></div>}
+  {kind==='feelings'&&locations.length>0&&<div className="location-control"><b>{lang==='zh'?'你实际感觉的位置':'WHERE YOU FEEL IT'}</b><div className="location-grid">{locations.map(([id,zh,en])=><button type="button" key={id} aria-pressed={focused.location===id} className={`location-chip ${focused.location===id?'selected':''}`} onClick={()=>onUpdate({location:id})}>{lang==='zh'?zh:en}</button>)}</div></div>}
   <div className="sticker-grid">{tagButtons(field)}</div>
   {kind==='feelings'&&<>
    <div className="editor-section"><b>{lang==='zh'?'时间':'TIMING'}</b><div className="sticker-grid">{tagButtons('timing')}</div></div>

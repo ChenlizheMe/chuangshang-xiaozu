@@ -37,3 +37,5 @@
 @media(max-height:590px){.app{padding:5px}.screen-label{top:13px}.screen-label strong{font-size:22px}.scene-controls{top:12px}.viewer::before{top:66px}.model-layers{top:79px;left:60px}.layer-dot{min-height:36px}.anatomy-canvas{top:131px;bottom:97px;left:60px}.part-selection{top:144px;left:74px}.sticker-sheet{top:131px;bottom:97px;height:auto;max-height:none}.hardware-strip{top:142px;bottom:265px;left:19px}.vertical-control{left:19px;bottom:112px;height:126px}.vertical-track{height:81px}.sticker-dock{left:60px;bottom:24px}.sticker-card{min-height:43px}.console-footer{left:60px;bottom:80px}}
 @media(max-height:590px) and (max-width:700px){.model-layers{left:17px}.anatomy-canvas{left:45px}.part-selection{left:57px;font-size:25px}.part-selection.multiple{font-size:18px}.sticker-dock{left:17px}.console-footer{left:45px}.hardware-strip{left:15px;bottom:255px}.vertical-control{left:13px}.sticker-sheet{top:131px;bottom:86px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+.location-reminder{margin-bottom:13px}

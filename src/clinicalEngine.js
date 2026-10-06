@@ -33,7 +33,7 @@ export function assessSymptoms(knowledge,input={}){
  else if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,'压迫感')))warn('新发胸部压迫感应尽快就医；突然发生或持续不缓解时立即联系急救。','New chest pressure needs prompt assessment; sudden or persistent pressure needs emergency care.');
  if(abdominal&&(has('突发剧痛','黑便','血便','呕血','腹部僵硬','晕厥')))warn('严重或突发腹部/盆腔痛、出血、腹部僵硬或晕厥：立即急诊。','Severe or sudden abdominal/pelvic pain, bleeding, rigidity or fainting: seek emergency assessment.');
  if(profiles.some((p,i)=>p.region==='abdomen'&&(normalized[i].tags.has('腹痛迁移至右下腹')||normalized[i].location==='rlq'&&normalized[i].tags.has('持续加重'))))warn('右下腹迁移痛或持续加重的右下腹痛伴发热：尽快急诊排查阑尾炎等原因。','Migrating or worsening right-lower abdominal pain, especially with fever, needs urgent assessment for appendicitis and other causes.');
- if(has('会阴麻木','排尿困难')&&profiles.some(p=>['spine','hip','pelvis','lower-limb'].includes(p.region)))warn('腰腿症状伴会阴麻木或新发排尿困难：立即急诊评估。','Back/leg symptoms with saddle numbness or new difficulty passing urine need emergency assessment.');
+ if(has('会阴麻木','排尿困难')&&profiles.some(p=>['neck','spine','hip','pelvis','lower-limb'].includes(p.region)))warn('腰腿症状伴会阴麻木或新发排尿困难：立即急诊评估。','Back/leg symptoms with saddle numbness or new difficulty passing urine need emergency assessment.');
  if(profiles.some((p,i)=>p.region==='eye'&&localHas(i,'视物模糊','畏光')))warn('眼痛伴视力变化或畏光：尽快眼科急诊。','Eye pain with vision change or light sensitivity: seek urgent eye assessment.');
  if(profiles.some((p,i)=>p.region==='lower-limb'&&localHas(i,'单侧肿胀')))warn('单侧腿部新发肿痛需要当日排查血栓；同时气短或胸痛应立即急救。','New one-sided leg swelling needs same-day assessment for a clot; associated breathlessness or chest pain is an emergency.');
  if(abdominal&&has('可能怀孕'))warn('可能怀孕且腹部/盆腔痛：尽快就医确认；单侧剧痛、出血、肩尖痛或晕厥立即急诊。','Possible pregnancy with abdominal/pelvic pain needs prompt assessment; severe one-sided pain, bleeding, shoulder-tip pain or fainting is an emergency.');
@@ -56,14 +56,15 @@ export function assessSymptoms(knowledge,input={}){
    const rule=CLINICAL_RULES[condition.id];if(!rule||!fits(profile,rule,condition.id))continue;
    if(rule.lifestyle&&urgent.length||rule.exclude?.some(t=>tags.has(t)))continue;
    const location=report.location!=='unknown'&&report.location?report.location:DEFAULT_ORGAN_LOCATION[profile.organ]||'unknown';
-   if(rule.locations&&location!=='diffuse'&&location!=='unknown'&&!rule.locations.includes(location))continue;
+   const locations=(!rule.locationRegions||rule.locationRegions.includes(profile.region))?rule.locations:null;
+   if(locations&&location!=='diffuse'&&location!=='unknown'&&!locations.includes(location))continue;
    const groups=rule.required.map(group=>group.filter(tag=>tags.has(tag)));
    const unmatched=rule.required.filter((_,index)=>!groups[index].length);
    const matched=[...new Set([...groups.flat(),...rule.optional.filter(t=>tags.has(t))])];
    const families=new Set(matched.map(evidenceFamily));
-   const unknownLocation=rule.locations&&['unknown','diffuse'].includes(location)&&!tags.has('腹痛迁移至右下腹');
+   const unknownLocation=locations&&['unknown','diffuse'].includes(location)&&!(condition.id==='appendicitis-pattern'&&tags.has('腹痛迁移至右下腹'));
    if(unmatched.length||families.size<2||unknownLocation){
-    if(matched.length)missing.push({id:condition.id,part:report.part,layer:report.layer,matched:matched.length,groups:unmatched,location:unknownLocation});
+    if(matched.length)missing.push({id:condition.id,part:report.part,layer:report.layer,matched:matched.length,groups:unmatched,location:!!unknownLocation&&!unmatched.length&&families.size>=2});
     continue;
    }
    // One representative per independent family. Anatomy and synonyms never

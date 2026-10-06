@@ -1,0 +1,1197 @@
+{
+  "metadata": {
+    "purpose": "Software UI-to-rule reachability only. Generated from existing rule alternatives, existing GLB mesh names and current UI filters. Not independent clinical truth, diagnostic validation or medical performance evidence.",
+    "generated": "2026-10-06",
+    "sourceBaseCommit": "e4feabe",
+    "sourceState": "Working tree with reviewed report-pathways changes; integrate only with the matching changes.",
+    "conditionCount": 75,
+    "reachableCount": 74
+  },
+  "unavailable": [
+    {
+      "id": "autonomic-assessment",
+      "reason": "No selectable autonomic region exists in the three current anatomy models; do not add a model or force unrelated anatomy to make the rule reachable."
+    }
+  ],
+  "cases": [
+    {
+      "id": "muscle-strain",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "反复用力"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "nerve-irritation",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [
+          "麻木",
+          "电击"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "skin-irritation",
+      "report": {
+        "part": "Anterior cells of ethmoid bone.l",
+        "layer": "skeleton",
+        "feelings": [
+          "灼烧"
+        ],
+        "signs": [
+          "皮疹"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "joint-inflammation",
+      "report": {
+        "part": "Calcaneus.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "红肿",
+          "局部发热"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "itch-skin-pattern",
+      "report": {
+        "part": "Anterior cells of ethmoid bone.l",
+        "layer": "skeleton",
+        "feelings": [
+          "痒"
+        ],
+        "signs": [
+          "皮疹"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "minor-injury-bruise",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "淤青"
+        ],
+        "timing": [],
+        "triggers": [
+          "外伤后"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "muscle-cramp-pattern",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "抽筋"
+        ],
+        "signs": [],
+        "timing": [
+          "短暂发作"
+        ],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "head-pressure-pattern",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "feelings": [
+          "紧箍感",
+          "双侧头痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "dental-pulpitis",
+      "report": {
+        "part": "Lower canine.l",
+        "layer": "skeleton",
+        "feelings": [
+          "持续冷热痛",
+          "放射痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "rhinosinusitis",
+      "report": {
+        "part": "Anterior cells of ethmoid bone.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "鼻塞",
+          "脓性鼻涕"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "nasal-trauma-epistaxis",
+      "report": {
+        "part": "Anterior cells of ethmoid bone.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "鼻出血"
+        ],
+        "timing": [],
+        "triggers": [
+          "外伤后"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "vertebral-mechanical-pain",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "活动诱发"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "spinal-radiculopathy",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [
+          "放射痛"
+        ],
+        "signs": [
+          "感觉减退"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "rib-wall-injury",
+      "report": {
+        "part": "Body of sternum",
+        "layer": "skeleton",
+        "feelings": [
+          "呼吸痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "外伤后"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "rotator-cuff-irritation",
+      "report": {
+        "part": "Clavicle.l",
+        "layer": "skeleton",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "抬臂加重"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "ulnar-nerve-irritation",
+      "report": {
+        "part": "Capitate bone.l",
+        "layer": "skeleton",
+        "feelings": [
+          "无名小指麻木"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "屈肘加重"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "ankle-sprain",
+      "report": {
+        "part": "Calcaneus.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "局部肿胀"
+        ],
+        "timing": [],
+        "triggers": [
+          "扭伤后"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "foot-plantar-pain",
+      "report": {
+        "part": "Calcaneus.l",
+        "layer": "skeleton",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [
+          "晨起第一步痛"
+        ],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "cranial-nerve-pattern",
+      "report": {
+        "part": "Arytenoid cartilage.l",
+        "layer": "skeleton",
+        "feelings": [
+          "面部麻木"
+        ],
+        "signs": [
+          "吞咽困难"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "spinal-cord-warning",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [
+          "会阴麻木"
+        ],
+        "signs": [
+          "肌力下降"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "abdominal-wall-strain",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "转身牵拉痛"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "neck-muscle-tension",
+      "report": {
+        "part": "Sternocleidomastoid muscle.l",
+        "layer": "muscle",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "久坐后"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "thoracolumbar-myofascial",
+      "report": {
+        "part": "Dorsal parts of lateral intertransversarii lumborum muscles.l",
+        "layer": "muscle",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "久坐后"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "dental-caries",
+      "report": {
+        "part": "Lower canine.l",
+        "layer": "skeleton",
+        "feelings": [
+          "冷热敏感"
+        ],
+        "signs": [
+          "牙龋洞"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "gingivitis-periodontitis",
+      "report": {
+        "part": "Lower canine.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "牙龈出血",
+          "牙龈肿胀"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "tmj-dysfunction",
+      "report": {
+        "part": "Mandible",
+        "layer": "skeleton",
+        "feelings": [
+          "咬合痛"
+        ],
+        "signs": [
+          "张口受限"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "dental-fracture",
+      "report": {
+        "part": "Lower canine.l",
+        "layer": "skeleton",
+        "feelings": [
+          "咬合痛"
+        ],
+        "signs": [
+          "牙齿裂纹"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "migraine-pattern",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "feelings": [
+          "跳痛"
+        ],
+        "signs": [
+          "畏光"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "trigeminal-neuralgia",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "feelings": [
+          "电击"
+        ],
+        "signs": [],
+        "timing": [
+          "短暂发作"
+        ],
+        "triggers": [
+          "触碰诱发"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "carpal-tunnel",
+      "report": {
+        "part": "Capitate bone.l",
+        "layer": "skeleton",
+        "feelings": [
+          "拇食中指麻木"
+        ],
+        "signs": [],
+        "timing": [
+          "夜间麻木"
+        ],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "sciatic-neuralgia",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [
+          "放射痛",
+          "沿腿向下"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "peripheral-neuropathy",
+      "report": {
+        "part": "Capitate bone.l",
+        "layer": "skeleton",
+        "feelings": [
+          "麻木"
+        ],
+        "signs": [
+          "双侧手足对称"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "facial-nerve-palsy",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "面部歪斜",
+          "闭眼困难"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "tendon-overuse",
+      "report": {
+        "part": "Calcaneus.l",
+        "layer": "skeleton",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "反复用力",
+          "活动诱发"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "bursitis-pattern",
+      "report": {
+        "part": "Calcaneus.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "局部肿胀",
+          "局部压痛"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "knee-meniscus-ligament",
+      "report": {
+        "part": "Patella.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "关节卡住"
+        ],
+        "timing": [],
+        "triggers": [
+          "扭伤后"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "gastroenteritis-pattern",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [],
+        "signs": [
+          "腹泻",
+          "呕吐"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "appendicitis-pattern",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "腹痛迁移至右下腹"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "renal-colic-pattern",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [
+          "绞痛"
+        ],
+        "signs": [
+          "血尿"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "flank"
+      }
+    },
+    {
+      "id": "pleuritic-chest-pain",
+      "report": {
+        "part": "Body of sternum",
+        "layer": "skeleton",
+        "feelings": [
+          "呼吸痛"
+        ],
+        "signs": [
+          "咳嗽"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "eye-surface-irritation",
+      "report": {
+        "part": "Lacrimal bone.l",
+        "layer": "skeleton",
+        "feelings": [
+          "眼干"
+        ],
+        "signs": [
+          "流泪"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "ear-infection-pattern",
+      "report": {
+        "part": "Incus.l",
+        "layer": "skeleton",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "耳道流液"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "gout-like-arthritis",
+      "report": {
+        "part": "Calcaneus.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "红肿",
+          "局部发热"
+        ],
+        "timing": [
+          "突然起病"
+        ],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "deep-vein-thrombosis-warning",
+      "report": {
+        "part": "Femur.l",
+        "layer": "skeleton",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "单侧肿胀"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "diverticular-left-abdominal",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "发热"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "llq"
+      }
+    },
+    {
+      "id": "biliary-colic-pattern",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "油腻餐后痛"
+        ],
+        "location": "ruq"
+      }
+    },
+    {
+      "id": "urinary-tract-infection-pattern",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [
+          "尿痛"
+        ],
+        "signs": [
+          "尿频"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "reflux-dyspepsia-pattern",
+      "report": {
+        "part": "Body of sternum",
+        "layer": "skeleton",
+        "feelings": [
+          "反酸",
+          "灼烧"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "dental-abscess",
+      "report": {
+        "part": "Lower canine.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "牙龈肿胀",
+          "发热"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "pharyngitis",
+      "report": {
+        "part": "Arytenoid cartilage.l",
+        "layer": "skeleton",
+        "feelings": [
+          "吞咽痛"
+        ],
+        "signs": [
+          "发热"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "pelvic-pain",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [
+          "经期相关"
+        ],
+        "triggers": [],
+        "location": "rlq"
+      }
+    },
+    {
+      "id": "bone-injury",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "局部压痛"
+        ],
+        "timing": [],
+        "triggers": [
+          "外伤后"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "cardiac-ischaemia-warning",
+      "report": {
+        "part": "Body of sternum",
+        "layer": "skeleton",
+        "feelings": [
+          "压迫感"
+        ],
+        "signs": [
+          "气短"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "pancreatitis-pattern",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "疼痛",
+          "向背部放射"
+        ],
+        "signs": [
+          "呕吐"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "epigastric"
+      }
+    },
+    {
+      "id": "hepatobiliary-pattern",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [],
+        "signs": [
+          "黄疸",
+          "尿色深"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "splenic-injury-warning",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "肩尖痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "外伤后"
+        ],
+        "location": "luq"
+      }
+    },
+    {
+      "id": "dentin-sensitivity",
+      "report": {
+        "part": "Lower canine.l",
+        "layer": "skeleton",
+        "feelings": [
+          "冷热敏感",
+          "刺激去除即缓解"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "periodontitis-pattern",
+      "report": {
+        "part": "Lower canine.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "牙齿松动",
+          "牙龈出血"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "allergic-rhinitis",
+      "report": {
+        "part": "Anterior cells of ethmoid bone.l",
+        "layer": "skeleton",
+        "feelings": [
+          "鼻痒"
+        ],
+        "signs": [
+          "清水鼻涕"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "patellofemoral-pain",
+      "report": {
+        "part": "Patella.l",
+        "layer": "skeleton",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "上下楼加重"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "pyelonephritis-pattern",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [
+          "侧腰痛"
+        ],
+        "signs": [
+          "发热"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "flank"
+      }
+    },
+    {
+      "id": "dyspepsia-pattern",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "早饱"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "进食后加重"
+        ],
+        "location": "luq"
+      }
+    },
+    {
+      "id": "sleep-deprivation",
+      "report": {
+        "part": "Anterior cells of ethmoid bone.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "疲劳乏力"
+        ],
+        "timing": [],
+        "triggers": [
+          "睡眠不足"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "sitting-posture",
+      "report": {
+        "part": "Anterior longitudinal ligament",
+        "layer": "skeleton",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "久坐后",
+          "休息后缓解"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "delayed-muscle-soreness",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "酸痛"
+        ],
+        "signs": [],
+        "timing": [
+          "新运动后1至3天"
+        ],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "standing-fatigue",
+      "report": {
+        "part": "Calcaneus.l",
+        "layer": "skeleton",
+        "feelings": [
+          "酸痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "久站后",
+          "休息后缓解"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "dehydration-pattern",
+      "report": {
+        "part": "Anterior cells of ethmoid bone.l",
+        "layer": "skeleton",
+        "feelings": [
+          "口渴口干"
+        ],
+        "signs": [
+          "尿色深"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "screen-dry-eye",
+      "report": {
+        "part": "Lacrimal bone.l",
+        "layer": "skeleton",
+        "feelings": [
+          "眼干"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "长时间看屏幕"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "constipation-pattern",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [],
+        "signs": [
+          "便秘",
+          "干硬便"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "ibs-pattern",
+      "report": {
+        "part": "(Abdominal part of pectoralis major muscle).l",
+        "layer": "muscle",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "腹泻"
+        ],
+        "timing": [
+          "反复数月"
+        ],
+        "triggers": [
+          "排便后缓解"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "costochondritis-pattern",
+      "report": {
+        "part": "Body of sternum",
+        "layer": "skeleton",
+        "feelings": [
+          "呼吸痛"
+        ],
+        "signs": [
+          "局部压痛"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "blood-test-direction",
+      "report": {
+        "part": "Anterior cells of ethmoid bone.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "无故淤青",
+          "疲劳乏力"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "stress-bone-injury",
+      "report": {
+        "part": "Cuboid bone.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "局部压痛"
+        ],
+        "timing": [],
+        "triggers": [
+          "反复用力",
+          "负重加重"
+        ],
+        "location": "unknown"
+      }
+    },
+    {
+      "id": "septic-joint-warning",
+      "report": {
+        "part": "Calcaneus.l",
+        "layer": "skeleton",
+        "feelings": [],
+        "signs": [
+          "红肿",
+          "发热",
+          "活动受限"
+        ],
+        "timing": [],
+        "triggers": [],
+        "location": "unknown"
+      }
+    }
+  ]
+}

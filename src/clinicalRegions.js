@@ -11,7 +11,7 @@ const REGIONS=[
  ['jaw',/腭骨|颧骨|颊神经/],
  ['hand',/小多角骨|屈肌总腱鞘|指纤维鞘|指深屈肌|指浅屈肌/],
  ['upper-limb',/伸肌总腱|屈肌总腱|前骨间神经|肌皮神经/],
- ['hip',/髂耻|孖肌|转子/],
+ ['hip',/髂耻|孖肌|转子|耻骨肌|pectineus/i],
  ['shoulder',/斜方肌|结节间腱鞘/],
  ['neck',/头斜肌|头前直肌|头外侧直肌|头后.*直肌|副神经/],
  ['chest',/剑突|锯肌|胸横肌|胸长神经/],
@@ -70,7 +70,7 @@ export function clinicalProfile(raw,layer){
  const text=`${/待核验|人体骨骼|所选结构/.test(label.zh)?'':label.zh} ${name}`;
  const organ=layer==='organ'?ORGAN_ATLAS[name.toLowerCase()]:null;
  const region=organ?.region||REGIONS.find(([,pattern])=>pattern.test(text))?.[0]||'general';
- const tissue=organ?'organ':/神经|脊髓|脑|nerve|tract|nucleus|gyrus|sulc|cereb|fascicul|gangli/i.test(text)?'nerve':/肌|腱|筋膜|muscle|tendon|fascia/i.test(text)?'muscle':/骨|韧带|软骨|椎间盘|关节|bone|ligament|cartilage/i.test(text)?'skeleton':layer;
+ const tissue=organ?'organ':/髓核|椎间盘|nucleus pulposus|intervertebral disc/i.test(text)?'skeleton':/神经|脊髓|脑|nerve|tract|nucleus|gyrus|sulc|cereb|fascicul|gangli/i.test(text)?'nerve':/肌|腱|筋膜|muscle|tendon|fascia/i.test(text)?'muscle':/骨|韧带|软骨|椎间盘|关节|bone|ligament|cartilage/i.test(text)?'skeleton':layer;
  const [zh,en,summary,summaryEn,question,questionEn]=INFO[region];
  const sideZh=side?`${side==='left'?'左侧':'右侧'}${zh}`:zh;
  const sideEn=side?`${side==='left'?'Left ':'Right '}${en}`:en;
