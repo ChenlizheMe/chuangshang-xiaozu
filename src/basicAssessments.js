@@ -1,4 +1,4 @@
-import {evidenceFamily,SYSTEMIC_TAGS} from './symptomLanguage.js';
+import {evidenceFamily,SYSTEMIC_TAGS,hasReportedPain} from './symptomLanguage.js';
 
 const bi=(zh,en)=>({zh,en});
 const dentalThreshold=bi('持续超过2天、咬合痛或牙龈肿胀应看牙医；肿胀影响呼吸、吞咽，立即急诊。','See a dentist for symptoms lasting over 2 days, bite pain or gum swelling. Swelling affecting breathing or swallowing needs emergency care.');
@@ -74,6 +74,8 @@ export function basicAssessment(profile,report,urgent=[]){
  }else if(hasAny(tags,['痒','灼痒','皮疹','红斑','水泡','脱皮','渗液','破皮'])){key='skin';content=profiles[key];
  }else if(hasAny(tags,['麻木','麻刺','感觉减退','电击','拇食中指麻木','无名小指麻木','夜间麻木'])){key='sensory';content=profiles[key];
  }else if([...tags].every(t=>SYSTEMIC_TAGS.has(t))){key=[...tags].every(t=>['疲劳乏力','白天困倦','睡眠不足','失眠'].includes(t))?'fatigue':'systemic';content=profiles[key];
+ }else if(['neck','spine'].includes(key)&&hasAny(tags,['外伤后','扭伤后'])&&hasReportedPain(tags)){
+  content={name:bi('受伤后的颈背不适','Neck/back discomfort after injury'),shortDescription:bi('受伤后的颈背疼痛需要结合受伤经过和功能变化判断，不能仅按姿势或肌肉紧张解释。','Neck/back pain after injury needs assessment of the mechanism and functional changes rather than a posture-only explanation.'),triggers:bi('核实碰撞或扭转的经过、起病及活动能力；当前信息不能确认受损组织。','Clarify the impact or twisting mechanism, onset and function; the affected tissue is not established.'),advice:bi('先保护受伤部位，避免加重动作或强行拉伸；疼痛持续、反复或影响功能时及时就医评估。','Protect the injured area and avoid provoking movements or forced stretching. Arrange assessment for persistent, recurrent or function-limiting pain.'),threshold:bi('明显外伤、剧痛、麻木无力或不能正常活动需尽快评估；新发排尿困难、会阴麻木或突然力量下降立即急诊。','Significant trauma, severe pain, numbness, weakness or inability to move normally needs urgent assessment. New difficulty urinating, saddle numbness or sudden strength loss needs emergency care.')};
  }else if(movementDirections[key]){
   content={name:bi(...movementDirections[key]),shortDescription:bi('局部痛、紧绷或活动不适，可从软组织负荷和关节方向观察；有外伤、骨点压痛时也需排查骨损伤。','Local pain, tightness or movement discomfort can involve soft-tissue load or joints. Injury with focal bone tenderness also needs assessment for bone damage.'),triggers:bi('固定姿势、反复用力、运动负荷或扭伤碰撞可能相关。','Fixed posture, repeated strain, exercise load or twisting/impact may be relevant.'),advice:movementCare,threshold:movementThreshold};
  }else{content=profiles[key]||profiles.general;}

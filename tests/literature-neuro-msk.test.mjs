@@ -30,7 +30,6 @@ for(const [name,part,layer,tags,level] of cases)test(`literature-derived warning
 });
 for(const [name,part,layer,tags] of [
  ['isolated swelling','Patella.r','skeleton',['局部肿胀']],['isolated fever','Patella.r','skeleton',['发热']],
- ['motor onset not supplied','Scaphoid bone.r','skeleton',['拇食中指麻木','肌力下降']],
  ['fatigue is not motor weakness','Scaphoid bone.r','skeleton',['疲劳乏力','突然起病']],
  ['ordinary delayed soreness','Rectus femoris muscle.r','muscle',['酸痛','新运动后1至3天']],
  ['ordinary postural pain','Lumbar vertebra L3','skeleton',['酸痛','久坐后','活动后缓解']],

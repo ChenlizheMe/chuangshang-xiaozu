@@ -884,6 +884,108 @@
         "tests/literature-dental-ent-skin.test.mjs",
         "tests/localization.test.mjs"
       ]
+    },
+    {
+      "id": "strength-loss-with-unknown-onset",
+      "rules": [
+        "reported-strength-loss-review"
+      ],
+      "type": "Professional-source review with conservative attribution constraints",
+      "sources": [
+        {
+          "title": "MSD Professional: Weakness",
+          "url": "https://www.msdmanuals.com/professional/neurologic-disorders/symptoms-of-neurologic-disorders/weakness"
+        }
+      ],
+      "decision": "Reduced strength warrants prompt examination even without onset information. It is not synonymous with fatigue. Higher sudden/systemic warning paths still take precedence.",
+      "positiveExamples": [
+        "Scaphoid bone.r: 拇食中指麻木 + 肌力下降"
+      ],
+      "negativeExamples": [
+        "Scaphoid bone.r: 疲劳乏力 + 突然起病 is not motor weakness"
+      ],
+      "notEstablished": [
+        "No sudden onset, objectively measured motor deficit or progressive weakness is assumed."
+      ],
+      "tests": [
+        "tests/literature-followthrough.test.mjs"
+      ]
+    },
+    {
+      "id": "back-pain-weight-change",
+      "rules": [
+        "neck-back-weight-change-review"
+      ],
+      "type": "Professional-source review with conservative attribution constraints",
+      "sources": [
+        {
+          "title": "MSD Professional: Overview of Neck and Back Pain",
+          "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/neck-and-back-pain/overview-of-neck-and-back-pain"
+        }
+      ],
+      "decision": "Conditional prompt clarification addresses the source red flag of unexplained weight loss. The existing weight-loss input does not establish whether it was intentional. This is an information-gap safety policy, not a literal clinical diagnosis criterion.",
+      "positiveExamples": [
+        "Lumbar vertebra L3: 酸痛 + 久坐后 + 体重下降"
+      ],
+      "negativeExamples": [
+        "Body weight change alone does not establish back pain or automatically require emergency care."
+      ],
+      "notEstablished": [
+        "Do not infer cancer, unintentional weight loss or serious disease from the checkbox."
+      ],
+      "tests": [
+        "tests/literature-followthrough.test.mjs"
+      ]
+    },
+    {
+      "id": "trauma-before-postural-attribution",
+      "rules": [],
+      "type": "Professional-source review with conservative attribution constraints",
+      "sources": [
+        {
+          "title": "MSD Professional: Overview of Neck and Back Pain",
+          "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/neck-and-back-pain/overview-of-neck-and-back-pain"
+        }
+      ],
+      "decision": "Withhold three posture/myofascial-specific reference displays when trauma/twist is reported. This is a conservative attribution policy, not a claim that trauma excludes mechanical pain. Retain appropriate injury/strain directions.",
+      "positiveExamples": [
+        "Back/neck pain with posture clues and 外伤后"
+      ],
+      "negativeExamples": [
+        "Uninjured postural pain retains its existing reference."
+      ],
+      "notEstablished": [
+        "Mechanism severity, fracture and need for imaging are not established; no blanket mechanical-family exclusion."
+      ],
+      "tests": [
+        "tests/literature-followthrough.test.mjs"
+      ]
+    },
+    {
+      "id": "trigeminal-pattern-sensory-change",
+      "rules": [
+        "facial-neuralgic-sensory-review"
+      ],
+      "type": "Professional-source review with conservative attribution constraints",
+      "sources": [
+        {
+          "title": "ICHD-3: Trigeminal neuralgia, clinical sensory deficits comments",
+          "url": "https://ichd-3.org/13-painful-cranial-neuropathies-and-other-facial-pains/13-1-trigeminal-neuralgia/"
+        }
+      ],
+      "decision": "A selected neuralgic facial pain pattern with reduced sensation prompts neurological assessment while retaining the qualified reference. Sensory change can occur in trigeminal neuralgia and must not be used to categorically exclude it.",
+      "positiveExamples": [
+        "Frontal bone: 电击 + 触碰诱发 + 短暂发作 + 感觉减退"
+      ],
+      "negativeExamples": [
+        "Same pain pattern without sensory change is not automatically an acute neurological emergency."
+      ],
+      "notEstablished": [
+        "Actual trigeminal distribution, examination, onset, cause or imaging result is not known."
+      ],
+      "tests": [
+        "tests/literature-followthrough.test.mjs"
+      ]
     }
   ]
 }
