@@ -10,6 +10,8 @@ const movementThreshold=bi('持续加重、明显肿胀或麻木无力应就医�
 // A single reported feeling can support a broad direction, never a diagnosis
 // or an invented second finding. Field order matches the six-field card.
 const profiles={
+ urinary:{name:bi('排尿相关不适','Urinary-symptom assessment'),shortDescription:bi('排尿疼痛、次数或急迫感变化可有多种原因；单个表现不能确认感染，需要结合伴随变化和检查判断。','Painful urination or changes in frequency or urgency can have several causes. One symptom cannot confirm infection; associated changes and examination help distinguish them.'),triggers:bi('留意排尿前后、饮水与症状变化的关系。','Note how symptoms relate to urination and fluid intake.'),advice:bi('记录起病、排尿和尿液变化，尽快安排评估；不要仅按腰背劳损处理。','Record onset, urination and urine changes, and arrange prompt assessment. Do not assume ordinary back strain.'),threshold:bi('伴发热寒战、血尿或侧腰痛应当日就医；无法排尿或突然剧痛立即急诊。','Fever or chills, blood in urine or flank pain needs same-day assessment. Inability to urinate or sudden severe pain needs emergency care.')},
+ flank:{name:bi('侧腰不适：肌骨与尿路方向','Flank discomfort: musculoskeletal and urinary directions'),shortDescription:bi('侧腰痛可来自腰背肌肉、脊柱或泌尿系统等，仅凭位置不能区分。','Flank pain may involve back muscles, the spine or urinary tract, among other causes. Location alone cannot distinguish them.'),triggers:bi('留意动作、姿势、排尿与疼痛的关系。','Note how pain relates to movement, posture and urination.'),advice:bi('确认实际疼痛位置，记录起病和变化；原因不明且持续、反复或加重时及时就医。','Confirm the actual site and record onset and changes. Seek assessment for unexplained pain that persists, recurs or worsens.'),threshold:bi('伴发热寒战、血尿、反复呕吐或排尿变化应尽快就医；剧痛、晕厥或无法排尿立即急诊。','Fever or chills, blood in urine, repeated vomiting or urinary changes needs prompt care. Severe pain, fainting or inability to urinate needs emergency care.')},
  general:{name:bi('局部不适评估方向','Local-discomfort assessment direction'),shortDescription:bi('先分辨实际区域以及疼痛、感觉变化或皮肤表现；单个描述可以提供观察方向，尚不能确定病因。','Distinguish the actual region and pain, sensory or skin changes. One description can guide observation without identifying the cause.'),triggers:bi('留意动作、姿势、接触刺激和症状发生的关系。','Observe the relation to movement, posture, contact irritation and onset.'),advice:bi('确认实际不适区域，选择符合的感觉或表现；持续、加重或影响功能时安排检查。','Confirm the actual area and select matching feelings or signs. Arrange assessment if persistent, worsening or affecting function.'),threshold:bi('突发剧痛、呼吸困难、晕厥或新发无力应立即处理。','Sudden severe pain, breathing difficulty, fainting or new weakness needs immediate care.')},
  systemic:{name:bi('全身表现相关评估','Systemic-symptom assessment'),shortDescription:bi('发热、乏力、口渴或其他全身变化，需结合感染、饮水、睡眠及身体状态区分原因。','Fever, fatigue, thirst or other systemic changes need assessment in relation to infection, hydration, sleep and overall health.'),triggers:bi('感染、作息变化、饮水不足或其他身体问题可能相关。','Infection, sleep changes, low fluid intake or other health problems may be relevant.'),advice:bi('观察体温、饮水排尿及持续时间；持续、反复或影响日常生活时安排检查。','Observe temperature, hydration, urination and duration. Arrange assessment if persistent, recurrent or affecting daily life.'),threshold:bi('明显乏力、持续高热、异常出血、体重下降或反复感染及时就医；气短、晕厥立即处理。','Marked weakness, persistent high fever, abnormal bleeding, weight loss or recurrent infections needs prompt assessment. Breathlessness or fainting needs immediate care.')},
  'dental-load':{
@@ -60,10 +62,12 @@ export function basicAssessment(profile,report,urgent=[]){
  // Preserve only one real selected observation per family, with symptoms
  // before timing/triggers. A broad card is visibly marked as basic.
  const evidence=new Map();for(const tag of tags)if(!evidence.has(evidenceFamily(tag)))evidence.set(evidenceFamily(tag),tag);
- const why=[...evidence.values()].slice(0,3);
+ let why=[...evidence.values()].slice(0,3);
  let key=profile.region,content;
  if(urgent.length){
   key='priority';content={name:bi(`${profile.title.zh}需优先评估`,`${profile.title.en}: priority assessment`),shortDescription:bi('当前信号需要先排除紧急原因，再进行一般疼痛或生活方式分析。','The reported signal needs assessment for urgent causes before routine pain or lifestyle interpretation.'),triggers:bi('需要结合起病、外伤和伴随变化检查，不先归因于劳累或紧张。','Assess onset, injury and associated changes before attributing symptoms to exertion or stress.'),advice:urgent[0],threshold:bi('按上方优先处理提示行动，无需等待勾选更多表现。','Follow the priority guidance above without waiting to select more findings.')};
+ }else if(['abdomen','pelvis','spine','hip'].includes(profile.region)&&hasAny(tags,['尿痛','尿频','尿急'])){key='urinary';content=profiles[key];
+ }else if(['abdomen','spine','hip'].includes(profile.region)&&tags.has('侧腰痛')){key='flank';content=profiles[key];
  }else if(hasAny(tags,['牙龈出血','牙龈肿胀','牙齿松动','牙龈退缩'])&&['tooth','jaw'].includes(profile.region)){key='dental-gum';content=profiles[key];
  }else if(profile.region==='tooth'&&hasAny(tags,['紧绷','酸胀','压迫感','磨牙'])){key='dental-load';content=profiles[key];
  }else if(hasAny(tags,['痒','灼痒','皮疹','红斑','水泡','脱皮','渗液','破皮'])){key='skin';content=profiles[key];
@@ -72,7 +76,14 @@ export function basicAssessment(profile,report,urgent=[]){
  }else if(movementDirections[key]){
   content={name:bi(...movementDirections[key]),shortDescription:bi('局部痛、紧绷或活动不适，可从软组织负荷和关节方向观察；有外伤、骨点压痛时也需排查骨损伤。','Local pain, tightness or movement discomfort can involve soft-tissue load or joints. Injury with focal bone tenderness also needs assessment for bone damage.'),triggers:bi('固定姿势、反复用力、运动负荷或扭伤碰撞可能相关。','Fixed posture, repeated strain, exercise load or twisting/impact may be relevant.'),advice:movementCare,threshold:movementThreshold};
  }else{content=profiles[key]||profiles.general;}
- if(!urgent.length&&!['fatigue','systemic','sensory','skin'].includes(key)&&profile.organ&&organDescriptions[profile.organ])content={...profiles.abdomen,name:bi(`${profile.label.zh}区域不适方向`,`${profile.label.en} area discomfort`),shortDescription:organDescriptions[profile.organ]};
+ // Keep the observation that actually selected this broad direction visible.
+ if(['urinary','flank'].includes(key)){
+  const anchors=key==='urinary'?['尿痛','尿频','尿急']:['侧腰痛'];
+  const ordered=new Map();
+  for(const tag of [...anchors.filter(tag=>tags.has(tag)),...tags])if(!ordered.has(evidenceFamily(tag)))ordered.set(evidenceFamily(tag),tag);
+  why=[...ordered.values()].slice(0,3);
+ }
+ if(!urgent.length&&!['fatigue','systemic','sensory','skin','urinary','flank'].includes(key)&&profile.organ&&organDescriptions[profile.organ])content={...profiles.abdomen,name:bi(`${profile.label.zh}区域不适方向`,`${profile.label.en} area discomfort`),shortDescription:organDescriptions[profile.organ]};
  // The organ-specific wording must never replace urgency or a selected
  // systemic/sensory/skin direction.
  return {...content,id:`basic-${key}-${profile.organ||profile.region}`,basic:true,why,evidenceFamilies:why.map(evidenceFamily),matchedSymptoms:[...tags],partRefs:[{part:report.part,layer:report.layer}]};

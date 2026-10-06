@@ -39,7 +39,7 @@ export function assessSymptoms(knowledge,input={}){
  if(abdominal&&has('可能怀孕'))warn('可能怀孕且腹部/盆腔痛：尽快就医确认；单侧剧痛、出血、肩尖痛或晕厥立即急诊。','Possible pregnancy with abdominal/pelvic pain needs prompt assessment; severe one-sided pain, bleeding, shoulder-tip pain or fainting is an emergency.');
 
  // Selected urinary warning signs must not fall through to mechanical back care.
- if(profiles.some((p,i)=>['abdomen','pelvis','spine','hip'].includes(p.region)&&localHas(i,'侧腰痛')&&localHas(i,'发热','发冷')))warn('侧腰痛伴发热或寒战：当日尽快就医排查肾脏/尿路感染，不按普通腰背劳损处理。','Flank pain with fever or chills needs urgent same-day assessment for kidney/urinary infection; do not treat it as ordinary back strain.');
+ if(profiles.some((p,i)=>['abdomen','pelvis','spine','hip'].includes(p.region)&&localHas(i,'侧腰痛','尿痛','尿频','尿急')&&localHas(i,'发热','发冷')))warn('侧腰痛或排尿变化伴发热、寒战：当日尽快就医排查肾脏/尿路感染，不按普通腰背劳损处理。','Flank pain or urinary changes with fever or chills need urgent same-day assessment for kidney/urinary infection; do not treat it as ordinary back strain.');
  if(has('血尿'))warn('出现血尿：尽快就医检查；伴剧痛、发热或排尿困难时应急诊。','Blood in urine needs prompt medical assessment; severe pain, fever or difficulty passing urine needs urgent care.');
 
  if(has('突发最严重头痛'))warn('突发最严重头痛：立即急诊，记录开始时间。','Sudden worst-ever headache: seek emergency care and note onset time.');
@@ -59,6 +59,8 @@ export function assessSymptoms(knowledge,input={}){
   for(const condition of knowledge.conditions){
    const rule=CLINICAL_RULES[condition.id];if(!rule||!fits(profile,rule,condition.id))continue;
    if(rule.lifestyle&&urgent.length||rule.exclude?.some(t=>tags.has(t)))continue;
+   // Urinary observations are not explained by a mechanical-only reference card.
+   if(rule.family==='mechanical'&&['abdomen','pelvis','spine','hip'].includes(profile.region)&&['尿痛','尿频','尿急','侧腰痛','血尿'].some(t=>tags.has(t)))continue;
    const location=report.location!=='unknown'&&report.location?report.location:DEFAULT_ORGAN_LOCATION[profile.organ]||'unknown';
    const locations=(!rule.locationRegions||rule.locationRegions.includes(profile.region))?rule.locations:null;
    if(locations&&location!=='diffuse'&&location!=='unknown'&&!locations.includes(location))continue;

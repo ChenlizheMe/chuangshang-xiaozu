@@ -112,3 +112,5 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 可达性夹具还覆盖当前模型对应的74条现有规则：测试逐字段按钮可见性、位置可选性和最终分支。第75条自主神经规则没有当前模型入口，单独记录为未启用而非伪造可达；这些由规则生成的夹具仅验证软件路径，不能代替独立病例或临床评估。
 
 英文结果字段补齐了33处中文占位，并用自动测试检查英文不含汉字。一般吞咽困难不再等同于已无法吞咽液体；牙齿/颌面肿胀或感染表现伴吞咽困难仍明确急诊。参考：[NHS 吞咽困难](https://www.nhs.uk/symptoms/swallowing-problems-dysphagia/)。
+
+单独勾选尿痛、尿频、尿急时，基础分析使用排尿相关宽泛提示，不会按点到的腰背/髋结构解释为劳损。单独侧腰痛仍保留肌骨与尿路多种可能；未勾发热不表示已排除发热。尿路变化伴发热/寒战、或血尿的优先处理保留。既有具体规则的证据门槛不变。依据：[NHS 尿路感染](https://www.nhs.uk/conditions/urinary-tract-infections-utis/)、[MedlinePlus 尿痛](https://medlineplus.gov/ency/article/003145.htm)、[MedlinePlus 侧腰痛](https://medlineplus.gov/ency/article/003113.htm)。
