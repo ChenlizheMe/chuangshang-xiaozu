@@ -21,9 +21,10 @@ const families={
 const groupByTag=Object.fromEntries(Object.entries(families).flatMap(([group,tags])=>tags.map(tag=>[tag,group])));
 export const evidenceFamily=tag=>groupByTag[tag]||tag;
 export const PAIN_TAGS=new Set(pain);
+export const LOCAL_PAIN_TAGS=new Set([...PAIN_TAGS,'放射痛','局部压痛','突发剧痛','新运动后1至3天','转身牵拉痛']);
 export const SYSTEMIC_TAGS=new Set(['发热','发冷','疲劳乏力','白天困倦','睡眠不足','失眠','喝水少','口渴口干','尿色深','无故淤青','异常出血','反复感染','体重下降','可能怀孕']);
 
 // These existing labels themselves report pain/discomfort. Recognizing that
 // meaning for triage does not make related labels independent disease evidence.
-export const REPORTED_PAIN_TAGS=new Set([...PAIN_TAGS,'放射痛','侧腰痛','突发剧痛','单侧头痛','双侧头痛','局部压痛','向背部放射','腰腹向腹股沟放射','腹痛迁移至右下腹','运动诱发胸闷']);
+export const REPORTED_PAIN_TAGS=new Set([...LOCAL_PAIN_TAGS,'放射痛','侧腰痛','突发剧痛','单侧头痛','双侧头痛','局部压痛','向背部放射','腰腹向腹股沟放射','腹痛迁移至右下腹','运动诱发胸闷']);
 export const hasReportedPain=tags=>[...REPORTED_PAIN_TAGS].some(tag=>tags.has(tag));

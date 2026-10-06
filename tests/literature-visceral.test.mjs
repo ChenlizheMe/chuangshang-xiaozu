@@ -80,3 +80,13 @@ test('pain at a named remote site is not silently relabeled as local upper abdom
   assert.ok(!r.urgent.some(w=>w.id==='upper-abdominal-pain-vomiting'));
  }
 });
+
+test('pain already expressed by a timing or trigger label is not erased from triage',()=>{
+ for(const pain of ['油腻餐后痛','进食后腹痛']){
+  const r=assess('Rectus abdominis muscle.r','muscle','ruq',[pain,'发热']);assert.equal(r.triageLevel,'same-day');
+  assert.equal(assess('Rectus abdominis muscle.r','muscle','ruq',[pain]).triageLevel,null);
+ }
+ assert.equal(assess('Rectus abdominis muscle.l','muscle','luq',['转身牵拉痛','外伤后']).triageLevel,'same-day');
+ assert.equal(assess('Sternum','skeleton','unknown',['新运动后1至3天','气短']).triageLevel,'emergency');
+ assert.equal(assess('Sternum','skeleton','unknown',['新运动后1至3天']).triageLevel,null);
+});

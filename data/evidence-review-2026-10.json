@@ -118,7 +118,8 @@
       ],
       "tests": [
         "tests/priority-guidance.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "hot-swollen-joint",
@@ -145,7 +146,8 @@
       ],
       "rules": [
         "hot-swollen-joint"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "headache-and-motor-warning",
@@ -179,7 +181,8 @@
         "headache-systemic-progressive",
         "headache-neurological-change",
         "sudden-motor-or-head-neurological-change"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "neck-back-pain-fever",
@@ -205,7 +208,8 @@
       ],
       "rules": [
         "neck-back-pain-fever"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "exercise-muscle-urine-warning",
@@ -232,7 +236,8 @@
       ],
       "rules": [
         "exercise-muscle-urine-warning"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "injury-with-functional-loss",
@@ -263,7 +268,8 @@
       ],
       "rules": [
         "injury-with-functional-loss"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "tension-headache-conflicting-vomiting",
@@ -290,7 +296,8 @@
       ],
       "tests": [
         "tests/literature-neuro-msk.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "sensory-distribution-not-invented",
@@ -313,7 +320,8 @@
       ],
       "tests": [
         "tests/literature-neuro-msk.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "radiation-evidence-not-double-counted",
@@ -336,7 +344,8 @@
       ],
       "tests": [
         "tests/literature-neuro-msk.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "ulnar-and-cord-description-scope",
@@ -362,7 +371,8 @@
       ],
       "tests": [
         "tests/literature-neuro-msk.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "reported-haematemesis",
@@ -388,7 +398,8 @@
       ],
       "tests": [
         "tests/literature-visceral.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "upper-left-abdominal-trauma",
@@ -416,7 +427,8 @@
       ],
       "tests": [
         "tests/literature-visceral.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "renal-colic-fever",
@@ -443,7 +455,8 @@
       ],
       "tests": [
         "tests/literature-visceral.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "right-upper-inflammatory-warning",
@@ -475,7 +488,8 @@
       ],
       "tests": [
         "tests/literature-visceral.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "upper-abdominal-vomiting-warning",
@@ -503,7 +517,8 @@
       ],
       "tests": [
         "tests/literature-visceral.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "constipation-alarm-features",
@@ -530,7 +545,8 @@
       ],
       "tests": [
         "tests/literature-visceral.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "epigastric-cardiac-equivalent",
@@ -558,7 +574,8 @@
       ],
       "tests": [
         "tests/literature-visceral.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "existing-pain-wording-semantic-normalization",
@@ -573,24 +590,30 @@
           "url": "https://www.nhs.uk/conditions/costochondritis/"
         }
       ],
-      "decision": "The existing exertional chest-pressure label counts as chest discomfort for triage. Related radiation labels are recognized as reported pain where their displayed text explicitly says pain, without adding an independent evidence family or diagnosing a cardiac condition.",
+      "decision": "The existing exertional chest-pressure label counts as chest discomfort for triage. Related radiation labels are recognized as reported pain where their displayed text explicitly says pain, without adding an independent evidence family or diagnosing a cardiac condition. A final audit checked every visible bilingual label rather than IDs alone: the delayed-exercise label already reports soreness; meal-related abdominal pain and twisting/stretching pain already report pain. These observations can satisfy existing triage pain semantics without another generic-pain checkbox, but their evidence families and condition gates are not expanded. Shoulder-tip, flank and groin-radiating pain are still not relabeled upper-abdominal pain.",
       "positiveExamples": [
         "Heart: 运动诱发胸闷 + 冷汗",
         "Sternum: 运动诱发胸闷 + 气短",
-        "Sternum: 局部压痛 + 活动诱发 + 气短"
+        "Sternum: 局部压痛 + 活动诱发 + 气短",
+        "Rectus femoris: 新运动后1至3天 + 尿色深 + 肌力下降",
+        "Actual RUQ: 油腻餐后痛 or 进食后腹痛 + 发热",
+        "Sternum: 新运动后1至3天 + 气短"
       ],
       "negativeExamples": [
         "Heart: 运动诱发胸闷 alone does not produce a cardiac diagnosis card",
         "Timing alone does not establish pain",
         "Sternum: 局部压痛 + 活动诱发 remains non-emergency",
-        "Shoulder-tip or flank pain is not relabeled as local upper abdominal pain solely from a model location"
+        "Shoulder-tip or flank pain is not relabeled as local upper abdominal pain solely from a model location",
+        "Delayed exercise soreness without the dark-urine/strength-or-progression combination is not automatically an emergency."
       ],
       "notEstablished": [
         "Neither cardiac disease nor a specific organ lesion is confirmed."
       ],
       "tests": [
-        "tests/literature-visceral.test.mjs"
-      ]
+        "tests/literature-visceral.test.mjs",
+        "tests/literature-neuro-msk.test.mjs"
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "oral-spreading-infection",
@@ -617,7 +640,8 @@
       ],
       "tests": [
         "tests/literature-dental-ent-skin.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "dental-infection-assessment",
@@ -644,7 +668,8 @@
       ],
       "tests": [
         "tests/literature-dental-ent-skin.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "dental-pain-and-defect-review",
@@ -683,7 +708,8 @@
       ],
       "tests": [
         "tests/literature-dental-ent-skin.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "eye-injury-and-visual-warning",
@@ -724,7 +750,8 @@
       ],
       "tests": [
         "tests/literature-dental-ent-skin.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "diplopia-assessment",
@@ -752,7 +779,8 @@
       ],
       "tests": [
         "tests/literature-dental-ent-skin.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "sudden-hearing-assessment",
@@ -779,7 +807,8 @@
       ],
       "tests": [
         "tests/literature-dental-ent-skin.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "purulent-drainage-review",
@@ -806,7 +835,8 @@
       ],
       "tests": [
         "tests/literature-dental-ent-skin.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "skin-change-systemic-warning",
@@ -832,7 +862,8 @@
       ],
       "tests": [
         "tests/literature-dental-ent-skin.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "nosebleed-first-aid-and-course",
@@ -859,7 +890,8 @@
       ],
       "tests": [
         "tests/literature-dental-ent-skin.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "swallowing-urgency-clarification",
@@ -883,7 +915,8 @@
       "tests": [
         "tests/literature-dental-ent-skin.test.mjs",
         "tests/localization.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "strength-loss-with-unknown-onset",
@@ -909,7 +942,8 @@
       ],
       "tests": [
         "tests/literature-followthrough.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "back-pain-weight-change",
@@ -923,7 +957,7 @@
           "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/neck-and-back-pain/overview-of-neck-and-back-pain"
         }
       ],
-      "decision": "Conditional prompt clarification addresses the source red flag of unexplained weight loss. The existing weight-loss input does not establish whether it was intentional. This is an information-gap safety policy, not a literal clinical diagnosis criterion.",
+      "decision": "The actual option label in both languages says unintentional weight loss. With neck/back pain it prompts assessment of the cause and prevents posture-only advice; neither a specific cause nor cancer is established. An earlier field-ID-only interpretation was corrected by checking the visible label.",
       "positiveExamples": [
         "Lumbar vertebra L3: 酸痛 + 久坐后 + 体重下降"
       ],
@@ -931,11 +965,12 @@
         "Body weight change alone does not establish back pain or automatically require emergency care."
       ],
       "notEstablished": [
-        "Do not infer cancer, unintentional weight loss or serious disease from the checkbox."
+        "Unintentionality is reported by the actual option; its cause and any serious disease remain unconfirmed."
       ],
       "tests": [
         "tests/literature-followthrough.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "trauma-before-postural-attribution",
@@ -959,7 +994,8 @@
       ],
       "tests": [
         "tests/literature-followthrough.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "trigeminal-pattern-sensory-change",
@@ -985,7 +1021,8 @@
       ],
       "tests": [
         "tests/literature-followthrough.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "anatomical-identity-before-component-words",
@@ -1026,7 +1063,8 @@
       ],
       "tests": [
         "tests/anatomical-routing-regression.test.mjs"
-      ]
+      ],
+      "status": "implemented-with-stated-limits"
     },
     {
       "id": "hearing-semantics-and-bilingual-action-consistency",
@@ -1050,7 +1088,129 @@
       ],
       "tests": [
         "tests/anatomical-routing-regression.test.mjs"
+      ],
+      "status": "implemented-with-stated-limits"
+    },
+    {
+      "id": "reference-descriptions-and-headache-course",
+      "type": "Faithful input description and conservative reference display",
+      "rules": [],
+      "sources": [
+        {
+          "title": "ICHD-3: migraine without aura diagnostic criteria, pages 18–19",
+          "url": "https://www.ichd-3.org/wp-content/uploads/2018/01/The-International-Classification-of-Headache-Disorders-3rd-Edition-2018.pdf"
+        },
+        {
+          "title": "ICHD-3: Trigeminal neuralgia",
+          "url": "https://ichd-3.org/13-painful-cranial-neuropathies-and-other-facial-pains/13-1-trigeminal-neuralgia/"
+        },
+        {
+          "title": "MSD Professional: Lumbosacral Radiculopathy",
+          "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/neck-and-back-pain/lumbosacral-radiculopathy"
+        },
+        {
+          "title": "MSD Professional: Plantar Fasciitis",
+          "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/foot-and-ankle-disorders/plantar-fasciitis"
+        },
+        {
+          "title": "AOSSM: Stress Fractures",
+          "url": "https://www.sportsmed.org/stress-fractures"
+        },
+        {
+          "title": "ICHD-3: Infrequent episodic tension-type headache",
+          "url": "https://ichd-3.org/2-tension-type-headache/2-1-infrequent-episodic-tension-type-headache/"
+        },
+        {
+          "title": "ICHD-3: Chronic tension-type headache",
+          "url": "https://ichd-3.org/2-tension-type-headache/2-3-chronic-tension-type-headache/"
+        }
+      ],
+      "decision": "Descriptions separate possible patterns from uncollected starting point, actual pain location, laterality, aura, bone tenderness or increased load. Explicit seconds-to-minutes episodes with migraine-like features are shown as a broad headache direction, not a typical migraine reference; the existing English duration label now matches Chinese. Canonical input ordering stabilizes evidence rendering. The same explicit seconds-to-minutes conflict also withholds the typical tension-type reference, preserving a broad direction and all danger actions. The existing urine option English now matches its Chinese wording (unable to pass urine); neither the ID nor its rule is expanded. Actual visible wording is authoritative: the first-step option already reports heel pain, so that location is retained; the particular heel tissue remains unconfirmed.",
+      "positiveExamples": [
+        "Frontal bone: 跳痛 + 畏光 + 短暂发作 returns broad headache direction",
+        "Equivalent reordered canonical reports return identical output.",
+        "Frontal bone: 紧箍感 + 双侧头痛 + 短暂发作 returns a broad direction, without clinical exclusion."
+      ],
+      "negativeExamples": [
+        "Frontal bone: 跳痛 + 畏光 without reported brief episodes retains a qualified migraine-like reference."
+      ],
+      "notEstablished": [
+        "This is a conservative display constraint, not medical exclusion of migraine: age, treatment, episode count and full course are missing. No diagnosis is established by a reference match."
+      ],
+      "tests": [
+        "tests/reference-facts.test.mjs",
+        "tests/cross-specialty-invariants.test.mjs"
+      ],
+      "status": "implemented-with-stated-limits"
+    }
+  ],
+  "retainedBoundaries": [
+    {
+      "id": "full-diagnostic-criteria",
+      "status": "input-limited",
+      "reason": "Age, full episode frequency/duration, treatment response, objective neurological/joint/eye/hearing examination, laboratories and imaging are not collected. Do not claim complete ICHD, Ottawa imaging, stone obstruction or organ diagnosis.",
+      "tests": [
+        "tests/reference-facts.test.mjs",
+        "tests/literature-neuro-msk.test.mjs"
       ]
+    },
+    {
+      "id": "unreported-negative-findings",
+      "status": "input-limited",
+      "reason": "Unticked symptoms are unknown. Cannot infer no fever/infection, no pregnancy, no neurological finding, stable bleeding, confirmed side or absence of serious disease.",
+      "tests": [
+        "tests/priority-guidance.test.mjs",
+        "tests/literature-visceral.test.mjs"
+      ]
+    },
+    {
+      "id": "hearing-eye-and-nose-severity",
+      "status": "input-limited",
+      "reason": "No hearing subtype, monocular/binocular diplopia, eye versus periocular pus origin, bleed volume, continuous active bleeding or completed pressure trial is known. Preserve explicit conditional safety-net instructions.",
+      "tests": [
+        "tests/literature-dental-ent-skin.test.mjs"
+      ]
+    },
+    {
+      "id": "weakness-weight-loss-and-anatomy",
+      "status": "input-limited",
+      "reason": "Checkbox weakness is not an examination. The actual weight-loss label reports unintentional loss, but does not establish a cause. Model anatomy cannot prove the symptomatic tissue or source.",
+      "tests": [
+        "tests/literature-followthrough.test.mjs",
+        "tests/reference-facts.test.mjs",
+        "tests/anatomical-routing-regression.test.mjs"
+      ]
+    },
+    {
+      "id": "partial-standards-or-conflicting-guidance",
+      "status": "evidence-insufficient-for-expansion",
+      "reason": "Do not add hard diagnostic gates from inaccessible complete sources, historical disease mechanisms, conflicting rest/activity advice, or superficial resemblance. No new medication, imaging decision or diagnosis model was introduced.",
+      "tests": [
+        "tests/assessment-v2.test.mjs",
+        "tests/rule-reachability.test.mjs"
+      ]
+    },
+    {
+      "id": "similar-pain-word-replacement",
+      "status": "retained-with-reason",
+      "reason": "Pin-prick and stinging words are not established as interchangeable in every condition. They share a general pain evidence family, but no unsupported blanket synonym substitution was added. Exact duplication and ordering are stable.",
+      "tests": [
+        "tests/cross-specialty-invariants.test.mjs"
+      ]
+    },
+    {
+      "id": "unused-autonomic-entry",
+      "status": "model-limited",
+      "reason": "The existing autonomic-assessment condition has no selectable structure in the current three layers. It remains explicitly unavailable; no model was added to make a test pass.",
+      "tests": [
+        "tests/rule-reachability.test.mjs"
+      ]
+    },
+    {
+      "id": "clinical-performance",
+      "status": "unvalidated",
+      "reason": "Public-source review and synthetic software tests cannot estimate diagnostic accuracy, sensitivity, specificity or patient safety. No patient dataset or clinician validation is claimed.",
+      "tests": []
     }
   ]
 }

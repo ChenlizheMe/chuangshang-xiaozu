@@ -820,7 +820,7 @@
     {
       "id": "排尿困难",
       "zh": "尿不出来",
-      "en": "Difficulty passing urine"
+      "en": "Unable to pass urine"
     }
   ],
   "conditions": [
@@ -1373,8 +1373,8 @@
         "en": "Avoid prolonged pressure and repeated heavy lifting, and note the spread and any strength changes."
       },
       "shortDescription": {
-        "zh": "颈背痛向肢体放射，可伴麻刺或无力。",
-        "en": "Pain radiating from the neck or back into a limb, with possible tingling or weakness."
+        "zh": "放射性不适伴感觉或力量变化可涉及神经根；实际起点、分布和受累组织仍需检查确认。",
+        "en": "Radiating discomfort with sensory or strength changes may involve a nerve root. The actual origin, distribution and affected tissue require examination."
       },
       "triggers": {
         "zh": "椎间盘负荷、咳嗽用力或长时间弯腰",
@@ -1598,8 +1598,8 @@
         "en": "Reduce high-impact activity, use supportive footwear, and try gentle calf and foot mobility."
       },
       "shortDescription": {
-        "zh": "晨起第一步或久站后足跟、足底疼痛。",
-        "en": "Heel or sole pain on the first steps or after prolonged standing."
+        "zh": "已报告起床第一步脚跟痛，可涉及足底筋膜或其他足跟组织；具体来源和原因仍需检查，不能仅凭这些选择确诊。",
+        "en": "Reported first-step heel pain can involve the plantar fascia or other heel tissues. The specific source and cause need examination; these selections do not establish a diagnosis."
       },
       "triggers": {
         "zh": "久站、跑跳、鞋底支撑不足或活动量增加",
@@ -2009,8 +2009,8 @@
         "en": "Rest in a quiet, dark place and record duration and triggers."
       },
       "shortDescription": {
-        "zh": "搏动性头痛，伴恶心、畏光或视觉先兆。",
-        "en": "Throbbing headache with nausea, light sensitivity or visual aura."
+        "zh": "所选头痛与伴随表现可呈偏头痛样模式；完整发作时程和其他原因仍需核实，不能据视觉变化认定先兆。",
+        "en": "The selected headache and associated features may form a migraine-like pattern. The full attack history and other causes need assessment; visual changes alone do not establish aura."
       },
       "triggers": {
         "zh": "睡眠不足、压力、漏餐、酒精或强光",
@@ -2040,8 +2040,8 @@
         "en": "Record triggering actions and the pain distribution. Do not increase painkiller doses yourself; arrange assessment promptly."
       },
       "shortDescription": {
-        "zh": "单侧面部短促电击样痛，轻触或咀嚼可诱发。",
-        "en": "Brief electric-shock facial pain, triggered by light touch or chewing."
+        "zh": "短暂、触碰诱发的电击或刀割样痛可呈三叉神经痛样线索；实际面部分布、侧别及原因需检查确认。",
+        "en": "Brief touch-triggered electric or cutting pain can resemble a trigeminal-neuralgia pattern. The actual facial distribution, side and cause need examination."
       },
       "triggers": {
         "zh": "触碰面部、咀嚼、刷牙或冷风",
@@ -3328,8 +3328,8 @@
         "en": "Patellofemoral pain pattern"
       },
       "shortDescription": {
-        "zh": "前膝负荷痛，在上下楼或蹲起时加重。",
-        "en": "Anterior knee load pain worsened by stairs or squatting."
+        "zh": "上下楼或蹲起相关的膝部负荷痛可涉及髌股区域；实际痛点和其他膝部原因需检查确认。",
+        "en": "Knee pain related to stairs or squatting can involve the patellofemoral area. The actual painful site and other knee causes need examination."
       },
       "triggers": {
         "zh": "近期跑跳增多、负荷变化或肌力不足。",
@@ -3862,8 +3862,8 @@
         "en": "Bone stress injury pattern"
       },
       "shortDescription": {
-        "zh": "增加负荷后局部骨点压痛，负重时加重。",
-        "en": "Focal bony tenderness after increased load, worse with weight-bearing."
+        "zh": "负荷相关局部压痛及负重加重需要评估骨应力和软组织等原因；目前不能确认是骨点压痛或近期增加了负荷。",
+        "en": "Load-related focal tenderness and worsening with weight-bearing need assessment for bone stress and soft-tissue causes. Focal bone tenderness or a recent increase in load is not established."
       },
       "triggers": {
         "zh": "跑跳量快速增加、反复负荷或骨强度下降。",
@@ -3965,7 +3965,7 @@
     {
       "id": "新运动后1至3天",
       "zh": "新运动后隔1–3天酸痛",
-      "en": "1–3 days after unfamiliar exercise"
+      "en": "Soreness 1–3 days after unfamiliar exercise"
     },
     {
       "id": "持续加重",
@@ -3980,7 +3980,7 @@
     {
       "id": "短暂发作",
       "zh": "每次几秒到几分钟",
-      "en": "Brief episodes"
+      "en": "Seconds to minutes per episode"
     },
     {
       "id": "晨起第一步痛",

@@ -75,3 +75,11 @@ test('a swollen purulent joint area does not need an extra selected heat or feve
  assert.equal(r.triageLevel,'same-day');assert.ok(r.urgent.some(w=>w.id==='hot-swollen-joint'));
  assert.ok(r.items.every(item=>item.priority));
 });
+
+test('the exercise-timing label itself reports soreness, without a redundant feeling checkbox',()=>{
+ for(const [part,layer]of [['Rectus femoris muscle.r','muscle'],['Tibia.l','skeleton']]){
+  assert.equal(assess(part,layer,['新运动后1至3天','尿色深','肌力下降']).triageLevel,'emergency');
+  assert.equal(assess(part,layer,['新运动后1至3天','肌力下降']).triageLevel,'prompt');
+  assert.equal(assess(part,layer,['新运动后1至3天','尿色深']).triageLevel,null);
+ }
+});

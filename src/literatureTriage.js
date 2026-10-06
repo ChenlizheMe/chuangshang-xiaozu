@@ -1,8 +1,8 @@
-import {hasReportedPain,PAIN_TAGS} from './symptomLanguage.js';
+import {hasReportedPain,LOCAL_PAIN_TAGS} from './symptomLanguage.js';
 import {referenceLocation} from './reportLocation.js';
 const has=(report,...tags)=>tags.some(tag=>report.tags.has(tag));
 const pain=report=>hasReportedPain(report.tags);
-const upperAbdominalPain=report=>[...PAIN_TAGS,'放射痛','局部压痛','突发剧痛','向背部放射'].some(tag=>report.tags.has(tag));
+const upperAbdominalPain=report=>[...LOCAL_PAIN_TAGS,'向背部放射','进食后腹痛','油腻餐后痛'].some(tag=>report.tags.has(tag));
 const jointRegions=['shoulder','upper-limb','hand','hip','knee','ankle','foot'];
 const musculoskeletalRegions=['neck','spine','chest','abdomen','pelvis','lower-limb',...jointRegions];
 
@@ -14,11 +14,11 @@ const rules=[
   zh:'已报告力量下降，应尽快检查并核实起病、进展及分布；不能仅以疲劳或局部受压解释。若突然出现或快速加重，立即就医评估。',
   en:'Reported reduced strength needs prompt examination of onset, progression and distribution rather than assuming fatigue or local compression. Sudden onset or rapid worsening needs immediate assessment.'},
  {id:'neck-back-weight-change-review',level:'prompt',matches:(p,r)=>['neck','spine'].includes(p.region)&&pain(r)&&has(r,'体重下降'),
-  zh:'已报告颈背痛和体重下降：若不是主动减重或原因不明，请尽快就医核实，不能仅按姿势问题解释；当前选择尚未说明减重原因。',
-  en:'Neck/back pain and weight loss have been reported. If weight loss is unintentional or unexplained, arrange prompt assessment rather than assuming posture alone. The reason for weight loss has not been established.'},
+  zh:'已报告颈背痛和无意中体重下降：请尽快就医核实原因，不能仅按姿势问题解释；这些选择不能确定具体疾病。',
+  en:'Neck/back pain and unintentional weight loss have been reported. Arrange prompt assessment of the cause rather than assuming posture alone. These selections do not establish a specific disease.'},
  {id:'facial-neuralgic-sensory-review',level:'prompt',matches:(p,r)=>['head','jaw','tooth'].includes(p.region)&&has(r,'电击','刀割感')&&has(r,'触碰诱发')&&has(r,'短暂发作')&&has(r,'感觉减退'),
-  zh:'短暂、触碰诱发的面部电击或刀割样痛伴感觉减退：尽快接受神经专科评估查明原因，不能仅按常见神经痛自行处理；这也不等于排除三叉神经痛。',
-  en:'Brief, touch-triggered electric or cutting facial pain with reduced sensation needs prompt neurological assessment of its cause rather than routine neuralgia self-care. Reduced sensation does not itself rule out trigeminal neuralgia.'},
+  zh:'所选头面区域短暂、触碰诱发的电击或刀割样痛伴感觉减退：尽快接受神经专科评估查明原因，不能仅按常见神经痛自行处理；这也不等于排除三叉神经痛。',
+  en:'Brief, touch-triggered electric or cutting pain in the selected head/facial area with reduced sensation needs prompt neurological assessment of its cause rather than routine neuralgia self-care. Reduced sensation does not itself rule out trigeminal neuralgia.'},
  {id:'oral-swelling-restricted-opening',level:'emergency',matches:(p,r)=>['tooth','jaw'].includes(p.region)&&has(r,'牙龈肿胀','面部肿胀','流脓')&&has(r,'张口受限'),
   zh:'牙龈/颌面肿胀或流脓伴张口受限：立即急诊评估可能的感染扩散；不要等出现发烧或再按普通颞下颌关节不适处理。',
   en:'Gum/facial swelling or pus with restricted mouth opening needs emergency assessment for possible spreading infection. Do not wait for fever or treat it only as a routine jaw-joint problem.'},

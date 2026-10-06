@@ -17,9 +17,9 @@ test('reported motor loss warrants examination without assuming acute onset or m
  assert.equal(assess('Scaphoid bone.r','skeleton',['拇食中指麻木','肌力下降','突然起病']).triageLevel,'emergency');
  assert.equal(assess('Scaphoid bone.r','skeleton',['疲劳乏力','突然起病']).triageLevel,null);
 });
-for(const [part,layer] of [['Lumbar vertebra L3','skeleton'],['Longissimus colli muscle.l','muscle']])test(`weight loss with regional pain remains conditional: ${part}`,()=>{
+for(const [part,layer] of [['Lumbar vertebra L3','skeleton'],['Longissimus colli muscle.l','muscle']])test(`reported unintentional weight loss with regional pain warrants review: ${part}`,()=>{
  const r=assess(part,layer,['酸痛','久坐后','体重下降']);assert.equal(r.triageLevel,'prompt');
- assert.match(r.urgent[0].zh,/若不是主动减重或原因不明/);assert.match(r.urgent[0].en,/If weight loss is unintentional or unexplained/);
+ assert.match(r.urgent[0].zh,/无意中体重下降/);assert.match(r.urgent[0].en,/unintentional weight loss have been reported/);
  assert.equal(assess(part,layer,['体重下降']).triageLevel,null);
  assert.equal(assess(part,layer,['酸痛','久坐后']).triageLevel,null);
  assert.equal(assess(part,layer,['酸痛','体重下降','发热']).triageLevel,'same-day');
