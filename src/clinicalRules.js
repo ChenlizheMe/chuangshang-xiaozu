@@ -49,7 +49,7 @@ export const CLINICAL_RULES={
  'renal-colic-pattern':r(['abdomen','spine','hip'],'urinary-stone',[['绞痛','腰腹向腹股沟放射'],['血尿','腰腹向腹股沟放射']],{locations:['flank'],priority:4}),
  'pleuritic-chest-pain':r(['chest'],'respiratory',[['呼吸痛'],['咳嗽','气短','发热']],{priority:2}),
  'eye-surface-irritation':r(['eye'],'eye-surface',[['眼干','异物感','酸涩','灼烧'],['流泪','眼红']],{exclude:['视物模糊','畏光','外伤后']}),
- 'ear-infection-pattern':r(['ear'],'ear',[P,['耳道流液','听力下降','发热']],{optional:['耳屏牵拉痛']}),
+ 'ear-infection-pattern':r(['ear'],'ear',[P,['耳道流液','听力下降','突然听力下降','发热']],{optional:['耳屏牵拉痛']}),
  'gout-like-arthritis':r(['hand','knee','ankle','foot'],'joint',[['红肿','局部肿胀'],['局部发热'],['突然起病']],{optional:['活动受限'],priority:3}),
  'deep-vein-thrombosis-warning':r(['lower-limb'],'vascular',[['单侧肿胀'],[...P,'局部发热','红肿']],{priority:6}),
  'diverticular-left-abdominal':r(['abdomen'],'bowel-left',[P,['发热','排便改变','血便']],{locations:['llq'],priority:3}),

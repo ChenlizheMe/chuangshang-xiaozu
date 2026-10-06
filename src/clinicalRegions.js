@@ -4,6 +4,14 @@ import {ORGAN_ATLAS} from './organAtlas.js';
 // Anatomical identity is independent of the visible layer: the nervous GLB
 // contains muscles and sense organs as well as nerves.
 const REGIONS=[
+ // Resolve complete anatomical identities before generic component words
+ // (e.g. abdominal pectoral fibres are not abdominal-wall muscles).
+ ['chest',/胸大肌|pectoralis major/i],
+ ['neck',/髂肋肌颈部|iliocostalis (?:colli|cervicis)/i],
+ ['spine',/髂肋肌(?:腰|胸)部|iliocostalis (?:lumborum|thoracis)/i],
+ ['throat',/二腹肌|胸骨甲状肌|digastric|sternothyroid/i],
+ ['upper-limb',/旋前圆肌|pronator teres/i],
+ ['foot',/opponens digiti minimi muscle of foot|小趾对掌肌/i],
  ['eye',/总腱环|上斜肌|上直肌|玻璃体|睫状|视交叉|视束/],
  ['ear',/鼓索/],
  ['nose',/筛骨|大翼软骨/],

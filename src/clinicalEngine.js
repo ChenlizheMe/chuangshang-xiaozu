@@ -37,7 +37,7 @@ export function assessSymptoms(knowledge,input={}){
  if(profiles.some((p,i)=>p.region==='abdomen'&&(normalized[i].tags.has('腹痛迁移至右下腹')||normalized[i].location==='rlq'&&normalized[i].tags.has('持续加重')&&localHas(i,...chestPain,'局部压痛'))))warn('右下腹迁移痛或持续加重的右下腹痛：尽快急诊排查阑尾炎等原因，伴发热时更应警惕。','Migrating or worsening right-lower abdominal pain, especially with fever, needs urgent assessment for appendicitis and other causes.','same-day');
  if(has('会阴麻木','排尿困难')&&profiles.some(p=>['neck','spine','hip','pelvis','lower-limb'].includes(p.region)))warn('腰腿症状伴会阴麻木或新发排尿困难：立即急诊评估。','Back/leg symptoms with saddle numbness or new difficulty passing urine need emergency assessment.');
  if(profiles.some((p,i)=>p.region==='eye'&&localHas(i,'视物模糊','畏光')))warn('报告视物模糊或畏光：今天尽快眼科评估。','Reported blurred vision or light sensitivity needs same-day eye assessment.','same-day');
- if(profiles.some((p,i)=>p.region==='lower-limb'&&localHas(i,'单侧肿胀')))warn('单侧腿部新发肿痛需要当日排查血栓；同时气短或胸痛应立即急救。','New one-sided leg swelling needs same-day assessment for a clot; associated breathlessness or chest pain is an emergency.','same-day');
+ if(profiles.some((p,i)=>p.region==='lower-limb'&&localHas(i,'单侧肿胀')))warn('单侧腿部肿胀需要当日排查血栓；同时气短或胸痛应立即急救。','One-sided leg swelling needs same-day assessment for a clot; associated breathlessness or chest pain is an emergency.','same-day');
  if(abdominal&&has('可能怀孕')&&has('肩尖痛','晕厥','突发剧痛'))warn('可能怀孕并出现肩尖痛、晕厥或突发剧痛：立即急诊评估，不能等待其他表现。','Possible pregnancy with shoulder-tip pain, fainting or sudden severe pain needs emergency assessment without waiting for other signs.');
  else if(abdominal&&has('可能怀孕')&&has(...chestPain,'侧腰痛','腹痛迁移至右下腹','肩尖痛','向背部放射','腰腹向腹股沟放射','局部压痛'))warn('可能怀孕且腹部/盆腔痛：尽快就医确认；单侧剧痛、出血、肩尖痛或晕厥立即急诊。','Possible pregnancy with abdominal/pelvic pain needs prompt assessment; severe one-sided pain, bleeding, shoulder-tip pain or fainting is an emergency.','same-day');
 
@@ -54,7 +54,7 @@ export function assessSymptoms(knowledge,input={}){
  }
  if(has('突然听力下降'))warn('突然听力下降：当日尽快耳鼻喉科评估。','Sudden hearing loss needs urgent same-day ENT assessment.','same-day');
  if(profiles.some((p,i)=>['shoulder','upper-limb','hand','hip','knee','ankle','foot'].includes(p.region)&&['红肿','局部肿胀'].some(t=>normalized[i].tags.has(t))&&has('发热','发冷')))
-  warn('关节新发肿痛伴发烧或寒战：当日急诊排查关节感染。','New swollen joint with fever or chills needs same-day urgent assessment for infection.','same-day');
+  warn('关节区域肿胀伴发烧或寒战：当日急诊排查关节感染。','Swelling around a joint with fever or chills needs same-day urgent assessment for infection.','same-day');
  if(has('黄疸')&&has('发热','发冷'))warn('黄疸伴发热或寒战：当天尽快就医检查肝胆；如明显腹痛、意识变化或晕厥，立即急诊。','Jaundice with fever or chills needs same-day liver/biliary assessment; significant abdominal pain, altered awareness or fainting needs emergency care.','same-day');
  else if(has('黄疸'))warn('新出现眼白或皮肤发黄：尽快就医检查肝胆；伴发热或明显腹痛应急诊。','New yellow eyes or skin needs prompt liver/biliary assessment; fever or significant abdominal pain needs urgent care.','prompt');
  urgent.push(...literatureWarnings(profiles,normalized));

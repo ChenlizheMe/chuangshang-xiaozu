@@ -2794,7 +2794,7 @@
       },
       "threshold": {
         "zh": "胸部压迫伴气短、冷汗、晕厥，或呕血、黑便、进行性吞咽困难时立即急诊。",
-        "en": "Urgent care is needed for pressure-like chest pain with breathlessness, sweating or fainting, or for vomiting blood, black stool or progressive swallowing difficulty."
+        "en": "Emergency care is needed for pressure-like chest pain with breathlessness, sweating or fainting, or for vomiting blood, black stool or progressive swallowing difficulty."
       },
       "context": [
         "进食后加重",
@@ -3396,7 +3396,7 @@
       },
       "threshold": {
         "zh": "意识改变、虚弱晕厥、持续呕吐或可能怀孕应立即急诊。",
-        "en": "Confusion, fainting, persistent vomiting or possible pregnancy needs urgent care."
+        "en": "Confusion, fainting, persistent vomiting or possible pregnancy needs emergency care."
       },
       "sources": [
         "https://www.nhs.uk/conditions/kidney-infection/"

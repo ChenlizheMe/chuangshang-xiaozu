@@ -5,7 +5,8 @@
     "sourceBaseCommit": "e4feabe",
     "sourceState": "Reviewed conservative gates; software reachability only, not clinical truth.",
     "conditionCount": 75,
-    "reachableCount": 74
+    "reachableCount": 74,
+    "anatomyCorrection": "2026-10-06: abdominal condition paths now use actual Rectus abdominis muscle.l, replacing pectoralis major abdominal fibres that had been incorrectly categorized as abdominal wall. Symptoms/expected rule IDs unchanged."
   },
   "unavailable": [
     {
@@ -332,7 +333,7 @@
     {
       "id": "abdominal-wall-strain",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [
           "疼痛"
@@ -588,7 +589,7 @@
     {
       "id": "gastroenteritis-pattern",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [],
         "signs": [
@@ -603,7 +604,7 @@
     {
       "id": "appendicitis-pattern",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [
           "疼痛"
@@ -716,7 +717,7 @@
     {
       "id": "diverticular-left-abdominal",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [
           "疼痛"
@@ -732,7 +733,7 @@
     {
       "id": "biliary-colic-pattern",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [
           "疼痛"
@@ -810,7 +811,7 @@
     {
       "id": "pelvic-pain",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [
           "疼痛"
@@ -858,7 +859,7 @@
     {
       "id": "pancreatitis-pattern",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [
           "疼痛",
@@ -875,7 +876,7 @@
     {
       "id": "hepatobiliary-pattern",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [],
         "signs": [
@@ -890,7 +891,7 @@
     {
       "id": "splenic-injury-warning",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [
           "肩尖痛"
@@ -984,7 +985,7 @@
     {
       "id": "dyspepsia-pattern",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [
           "早饱"
@@ -1098,7 +1099,7 @@
     {
       "id": "constipation-pattern",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [],
         "signs": [
@@ -1113,7 +1114,7 @@
     {
       "id": "ibs-pattern",
       "report": {
-        "part": "(Abdominal part of pectoralis major muscle).l",
+        "part": "Rectus abdominis muscle.l",
         "layer": "muscle",
         "feelings": [
           "疼痛"

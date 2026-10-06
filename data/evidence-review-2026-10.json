@@ -986,6 +986,71 @@
       "tests": [
         "tests/literature-followthrough.test.mjs"
       ]
+    },
+    {
+      "id": "anatomical-identity-before-component-words",
+      "type": "Anatomical mapping correction, not localization of a patient lesion",
+      "rules": [],
+      "sources": [
+        {
+          "title": "Elsevier Complete Anatomy: Pectoralis Major",
+          "url": "https://www.elsevier.com/resources/anatomy/muscular-system/muscles-of-upper-limb/pectoralis-major-muscle/18194"
+        },
+        {
+          "title": "UAMS: Muscles of the Back Region",
+          "url": "https://medicine.uams.edu/neuroscience/education/medical-school-courses/human-structure-module/anatomy-tables/muscle-tables/muscles-of-the-back-region/"
+        },
+        {
+          "title": "UAMS: Muscles of the Head and Neck",
+          "url": "https://medicine.uams.edu/neuroscience/education/medical-school-courses/human-structure-module/anatomy-tables/muscle-tables/muscles-of-the-head-and-neck/"
+        },
+        {
+          "title": "UW Radiology: Pronator Teres",
+          "url": "https://rad.uw.edu/muscle-atlas/pronator-teres"
+        },
+        {
+          "title": "Elsevier Complete Anatomy: Flexor Digiti Minimi of Foot, opponens variant",
+          "url": "https://www.elsevier.com/resources/anatomy/muscular-system/muscles-of-lower-limb/flexor-digiti-minimi-of-foot/16610"
+        }
+      ],
+      "decision": "Specific full identities take precedence over abdominal, clavicular, rib, teres or palm fragments: pectoralis major subdivisions map to chest; iliocostalis cervical to neck and thoracic/lumbar to back; digastric/sternothyroid to hyoid-throat; pronator teres to upper limb; the explicitly named foot opponens to foot. Same-area warning inputs then follow existing safety routing.",
+      "positiveExamples": [
+        "Abdominal pectoralis major: 压迫感 + 冷汗 receives chest warning",
+        "Iliocostalis colli/lumborum: 疼痛 + 发热 receives neck/back warning"
+      ],
+      "negativeExamples": [
+        "True rectus abdominis, deltoid/teres, hand opponens and sternum retain their own regions."
+      ],
+      "notEstablished": [
+        "Model anatomy and side do not confirm symptom origin or diseased tissue."
+      ],
+      "tests": [
+        "tests/anatomical-routing-regression.test.mjs"
+      ]
+    },
+    {
+      "id": "hearing-semantics-and-bilingual-action-consistency",
+      "type": "Software semantic consistency and faithful translation",
+      "rules": [],
+      "sources": [
+        {
+          "title": "NIDCD: Sudden Deafness",
+          "url": "https://www.nidcd.nih.gov/health/sudden-deafness"
+        }
+      ],
+      "decision": "Sudden hearing reduction includes hearing reduction, so either explicit form can satisfy the existing hearing observation gate while duplicate hearing terms count once. Generic reduction never implies sudden onset. Existing bilingual safety actions and selected swelling facts are aligned without inventing pain or new onset.",
+      "positiveExamples": [
+        "Ear pain + sudden hearing reduction, with/without the redundant general hearing term, has the same reference and disposition."
+      ],
+      "negativeExamples": [
+        "General hearing reduction alone does not establish sudden loss."
+      ],
+      "notEstablished": [
+        "No infection, hearing subtype or new-onset finding is diagnosed by semantic normalization."
+      ],
+      "tests": [
+        "tests/anatomical-routing-regression.test.mjs"
+      ]
     }
   ]
 }

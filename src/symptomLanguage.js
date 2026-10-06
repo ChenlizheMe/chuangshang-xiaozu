@@ -14,7 +14,7 @@ const families={
  timing:['持续加重','突发','反复数月','突然起病','刚刚开始','持续数小时','持续1至3天','持续超过3天'], bleeding:['无故淤青','异常出血'],
  fatigue:['疲劳乏力','白天困倦'], hydration:['喝水少','口渴口干'],
  screen:['长时间看屏幕'], fever:['发热','发冷'],
- localHeat:['局部发热'], toothLesion:['牙龋洞','牙齿裂纹'],
+ hearing:['听力下降','突然听力下降'], localHeat:['局部发热'], toothLesion:['牙龋洞','牙齿裂纹'],
  respiratory:['气短','静息气短'], bowelRelief:['排便后缓解'],
  meal:['进食后加重','进食后腹痛','油腻餐后痛'], radiation:['放射痛','沿腿向下','腰腹向腹股沟放射']
 };
