@@ -14,10 +14,12 @@ const glb=()=>new Response(binary,{headers:{'content-type':'application/octet-st
 function browserCache(){
  const stores=new Map(),listeners={},calls=[];
  const key=request=>new URL(typeof request==='string'?request:request.url,origin+'/').href;
- const state={online:true,invalid:false,unavailable:false,quotaExceeded:false,status:200};
+ const state={online:true,invalid:false,unavailable:false,quotaExceeded:false,status:200,responses:new Map()};
  const fetch=async request=>{
   const url=key(request);calls.push(url);
   if(!state.online)throw new TypeError('Network unavailable');
+  if(state.responses.has(new URL(url).pathname))return state.responses.get(new URL(url).pathname).clone();
+  if(!state.invalid&&/\.(?:js|css)$/.test(new URL(url).pathname))return new Response('/* valid runtime */',{headers:{'content-type':url.endsWith('.css')?'text/css':'application/javascript'}});
   return url.includes('.glb')&&!state.invalid?glb():new Response('<html>App shell</html>',{status:state.status,headers:{'content-type':'text/html'}});
  };
  const caches={
@@ -117,4 +119,29 @@ test('offline navigation with no usable cache returns a real response',async()=>
 test('offline navigation tolerates inaccessible cache storage',async()=>{
  const browser=browserCache();browser.state.online=false;browser.state.unavailable=true;
  assert.equal((await browser.request('/', 'navigate')).status,503);
+});
+
+
+const script=(text='export const ready=true')=>new Response(text,{headers:{'content-type':'application/javascript'}});
+test('a worker upgrade keeps downloaded hashed runtime assets usable offline',async()=>{
+ const browser=browserCache(),old=await browser.caches.open('trauma-team-international-shell-v8');
+ await old.put('/assets/app-current.js',script());await old.put('./index.html',new Response('Old page'));
+ await browser.lifecycle('install');await browser.lifecycle('activate');browser.state.online=false;
+ const response=await browser.request('/assets/app-current.js');assert.equal(response.status,200);assert.match(await response.text(),/ready/);
+ const page=await browser.request('/','navigate');assert.match(await page.text(),/App shell/,'offline navigation must use the current shell, not the retained old page');
+});
+test('only the newest earlier shell with runtime assets is retained',async()=>{
+ const browser=browserCache();
+ for(const version of [6,8]){const old=await browser.caches.open(`trauma-team-international-shell-v${version}`);await old.put(`/assets/app-v${version}.js`,script());}
+ await browser.lifecycle('install');await browser.lifecycle('activate');
+ const keys=await browser.caches.keys();assert.ok(keys.includes('trauma-team-international-shell-v8'));assert.ok(!keys.includes('trauma-team-international-shell-v6'));
+});
+test('an HTML fallback never poisons a JavaScript or stylesheet cache',async()=>{
+ const browser=browserCache();browser.state.invalid=true;
+ for(const path of ['/assets/app.js','/assets/app.css']){
+  assert.equal((await browser.request(path)).status,502);
+  browser.state.responses.set(path,new Response(path.endsWith('.css')?'body{}':'export {}',{headers:{'content-type':path.endsWith('.css')?'text/css':'application/javascript'}}));
+  assert.equal((await browser.request(path)).status,200);
+ }
+ browser.state.online=false;assert.equal((await browser.request('/assets/app.js')).status,200);
 });

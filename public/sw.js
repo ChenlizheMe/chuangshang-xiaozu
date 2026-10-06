@@ -1,8 +1,9 @@
 /* Keep model downloads across UI releases; new geometry uses a new version. */
 const PREFIX = 'trauma-team-international-';
-const CACHE = PREFIX + 'shell-v9';
+const CACHE = PREFIX + 'shell-v10';
 const MODEL_VERSION = '5';
 const MODEL_CACHE = PREFIX + 'models-v' + MODEL_VERSION;
+const isRuntimeAsset = url => url.pathname.includes('/assets/') && /\.(?:js|mjs|css)$/.test(url.pathname);
 const isModelAsset = url => (url.pathname.includes('/anatomy/') && url.pathname.endsWith('.glb')) || url.pathname.includes('/draco/');
 const canReuseModel = url => isModelAsset(url) && (!url.pathname.endsWith('.glb') || url.searchParams.get('v') === MODEL_VERSION);
 const validModelResponse = response => response.ok && !/text\/html|application\/xhtml\+xml/i.test(response.headers.get('content-type') || '');
@@ -31,7 +32,22 @@ self.addEventListener('activate', event => {
         if (response && validModelResponse(response)) await models.put(request, response);
       }
     }
-    await Promise.all(keys.filter(key => key.startsWith(PREFIX) && key !== CACHE && key !== MODEL_CACHE).map(key => caches.delete(key)));
+    // Requests during an upgrade can still be controlled by the old worker.
+    // Retain one earlier runtime cache for open tabs and offline reloads; the
+    // current index is used for navigation, and older generations are retired.
+    let previousShell;
+    const earlierShells = keys.filter(key => key.startsWith(PREFIX + 'shell-') && key !== CACHE)
+      .sort((a, b) => Number(b.match(/v(\d+)$/)?.[1] || 0) - Number(a.match(/v(\d+)$/)?.[1] || 0));
+    for (const key of earlierShells) {
+      const previous = await caches.open(key);
+      for (const request of await previous.keys()) {
+        if (!isRuntimeAsset(new URL(request.url))) continue;
+        const response = await previous.match(request);
+        if (response && validModelResponse(response)) { previousShell = key; break; }
+      }
+      if (previousShell) break;
+    }
+    await Promise.all(keys.filter(key => key.startsWith(PREFIX) && key !== CACHE && key !== MODEL_CACHE && key !== previousShell).map(key => caches.delete(key)));
     await self.clients.claim();
   })());
 });
@@ -71,7 +87,7 @@ self.addEventListener('fetch', event => {
         }
         return response;
       } catch {
-        const cached = await caches.match('./index.html').catch(() => undefined);
+        const cached = await caches.open(CACHE).then(cache => cache.match('./index.html')).catch(() => undefined);
         return cached || new Response('Page unavailable offline', { status: 503 });
       }
     })());
@@ -80,10 +96,13 @@ self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     // Private browsing, exhausted storage and evicted caches are all optional
     // enhancements: they must not stop a successful network response.
-    const cached = await caches.match(request).catch(() => undefined);
-    if (cached) return cached;
+    const runtime = isRuntimeAsset(new URL(request.url));
+    const current = await caches.open(CACHE).then(cache => cache.match(request)).catch(() => undefined);
+    const cached = current || await caches.match(request).catch(() => undefined);
+    if (cached && (!runtime || validModelResponse(cached))) return cached;
     try {
       const response = await fetch(request);
+      if (runtime && response.ok && !validModelResponse(response)) return new Response('Invalid script or stylesheet resource', { status: 502 });
       if (response.ok) {
         const copy = response.clone();
         await caches.open(CACHE).then(cache => cache.put(request, copy)).catch(() => {});

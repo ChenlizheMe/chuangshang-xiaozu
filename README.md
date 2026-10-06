@@ -95,7 +95,7 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 
 基础牙齿负荷分支参考：[NIDCR 磨牙与咬紧牙](https://www.nidcr.nih.gov/health-info/bruxism/)、[NHS 牙痛](https://www.nhs.uk/symptoms/toothache/)。紧绷只是一个可用观察线索，磨牙与牙体病变仍需要口腔检查区分。
 
-模型与 Draco 解码器使用独立的 `models-v5` 缓存，页面使用 `shell-v9` 缓存。更新界面时保留已下载的模型，并迁移旧页面缓存中的当前模型，减少重复下载；没有缓存的模型断网时返回资源错误，不用 HTML 页面冒充 GLB。`npm run test:cache` 覆盖升级、缓存命中、断网和错误响应；生产浏览器验证已缓存的手机版骨骼可断网重载。模型更新时需同步修改运行时 URL 的版本和 `public/sw.js` 中的 `MODEL_VERSION`；解码器更新时也应调整缓存版本。这改善回访和页面更新时的加载，首次下载仍由实际网络线路决定。
+模型与 Draco 解码器使用独立的 `models-v5` 缓存，页面使用 `shell-v10` 缓存。更新界面时保留已下载的模型，并迁移旧页面缓存中的当前模型，减少重复下载；没有缓存的模型断网时返回资源错误，不用 HTML 页面冒充 GLB。`npm run test:cache` 覆盖升级、缓存命中、断网和错误响应；生产浏览器验证已缓存的手机版骨骼可断网重载。模型更新时需同步修改运行时 URL 的版本和 `public/sw.js` 中的 `MODEL_VERSION`；解码器更新时也应调整缓存版本。这改善回访和页面更新时的加载，首次下载仍由实际网络线路决定。
 
 
 ## 回归验证
@@ -123,3 +123,6 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 以同一云执行器 Node 24、Vite 5.4.21 分别重建优化前提交97147f7和当前源码，HTML首屏直接引用及预加载的JS合计gzip从156,550字节降至128,729字节，约减少17.8%。口径为gzip level 9，不包含按需加载3D模块、模型或网络延迟；不是手机GPU或加载秒数实测。运行 `npm run build && npm run measure:bundle` 可重复测量。
 
 仪器化表现参考 [Sony TPS-L2](https://www.sony.com/en/SonyInfo/design/bside/01_throwback_walkman/) 与 [V&A 的 Braun / Dieter Rams 设计资料](https://www.vam.ac.uk/articles/dieter-rams-a-brave-new-world-of-product-design)：保留现有主视窗、有限成组按键和橄榄/炭黑/暖橙，资料卡减少重复投影，没有添加持续耗电特效。
+
+
+缓存升级回归额外覆盖“新页面资源仍被旧Worker下载”的交接期。升级后保留最近一代含运行时资源的页面缓存供旧标签页/断网资源使用，但离线导航只取当前首页；更旧页面缓存继续回收，模型仍独立保留。脚本或样式收到上游200 HTML也会被拒绝，避免把错误首页缓存为JS/CSS。
