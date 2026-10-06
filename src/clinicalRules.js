@@ -62,7 +62,7 @@ export const CLINICAL_RULES={
  'bone-injury':r(limb,'injury',[['外伤后'],['无法承重','局部压痛','局部肿胀']],{tissues:['skeleton'],priority:3}),
  'autonomic-assessment':r(['autonomic'],'autonomic',[['心悸','眩晕'],['出汗','体位改变诱发']],{priority:0}),
  'cardiac-ischaemia-warning':r(['chest'],'cardiac',[['压迫感','灼烧','放射痛'],['气短','静息气短','冷汗','晕厥','恶心','运动诱发胸闷']],{priority:6}),
- 'pancreatitis-pattern':r(['abdomen'],'pancreas',[P,['向背部放射'],['呕吐','持续加重']],{locations:['epigastric'],priority:4}),
+ 'pancreatitis-pattern':r(['abdomen'],'pancreas',[P,['向背部放射'],['呕吐','持续加重']],{locations:['epigastric','luq'],priority:4}),
  'hepatobiliary-pattern':r(['abdomen'],'liver',[['黄疸'],['尿色深','苍白便','疲劳乏力',...P]],{priority:3}),
  'splenic-injury-warning':r(['abdomen'],'splenic',[['外伤后'],['肩尖痛','局部压痛',...P]],{locations:['luq'],priority:5}),
  'dentin-sensitivity':r(['tooth'],'sensitivity',[['冷热敏感'],['刺激去除即缓解']],{exclude:['持续冷热痛','自发痛','夜间痛']}),

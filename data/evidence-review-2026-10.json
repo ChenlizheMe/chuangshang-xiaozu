@@ -363,6 +363,234 @@
       "tests": [
         "tests/literature-neuro-msk.test.mjs"
       ]
+    },
+    {
+      "id": "reported-haematemesis",
+      "rules": [
+        "reported-haematemesis"
+      ],
+      "type": "Professional/official-source review with bounded disposition mapping",
+      "sources": [
+        {
+          "title": "NHS: Vomiting blood",
+          "url": "https://www.nhs.uk/symptoms/vomiting-blood/"
+        }
+      ],
+      "decision": "Reported haematemesis requires immediate contact for medical assessment independently of selected anatomy. Current inputs do not confirm that bleeding has stopped or that the person is stable. The emergency-care conditions remain explicit.",
+      "positiveExamples": [
+        "Sternum: 呕血"
+      ],
+      "negativeExamples": [
+        "Sternum: 灼烧 alone"
+      ],
+      "notEstablished": [
+        "No condition, stability, obstruction or exact pain origin is confirmed by selecting anatomy. Unchecked signs remain unknown."
+      ],
+      "tests": [
+        "tests/literature-visceral.test.mjs"
+      ]
+    },
+    {
+      "id": "upper-left-abdominal-trauma",
+      "rules": [
+        "upper-left-trauma",
+        "upper-left-trauma-shoulder-warning"
+      ],
+      "type": "Professional/official-source review with bounded disposition mapping",
+      "sources": [
+        {
+          "title": "MSD Professional: Splenic Injury",
+          "url": "https://www.msdmanuals.com/professional/injuries-poisoning/abdominal-trauma/splenic-injury"
+        }
+      ],
+      "decision": "Actual pain/tenderness after trauma in a left upper reference area needs same-day evaluation; shoulder-tip pain, fainting or sudden severe pain increases immediacy. Anatomy selection does not confirm splenic injury or haemodynamic stability.",
+      "positiveExamples": [
+        "LUQ abdominal muscle: 疼痛 + 外伤后",
+        "Spleen: 肩尖痛 + 外伤后"
+      ],
+      "negativeExamples": [
+        "Spleen: 外伤后 without a selected pain/tenderness observation"
+      ],
+      "notEstablished": [
+        "No condition, stability, obstruction or exact pain origin is confirmed by selecting anatomy. Unchecked signs remain unknown."
+      ],
+      "tests": [
+        "tests/literature-visceral.test.mjs"
+      ]
+    },
+    {
+      "id": "renal-colic-fever",
+      "rules": [
+        "renal-colic-fever"
+      ],
+      "type": "Professional/official-source review with bounded disposition mapping",
+      "sources": [
+        {
+          "title": "EAU Urolithiasis: sections 3.3.1 and 3.4.2",
+          "url": "https://uroweb.org/guidelines/urolithiasis/chapter/guidelines"
+        }
+      ],
+      "decision": "Flank colic or flank-to-groin radiation with fever/chills receives immediate assessment. Haematuria is not required; neither stones nor infected obstruction are diagnosed by these selections.",
+      "positiveExamples": [
+        "Kidney.l: 绞痛 + 腰腹向腹股沟放射 + 发热",
+        "Ureter.l: 绞痛 + 腰腹向腹股沟放射 + 发冷"
+      ],
+      "negativeExamples": [
+        "Lumbar vertebra L3/flank: 绞痛 without fever"
+      ],
+      "notEstablished": [
+        "No condition, stability, obstruction or exact pain origin is confirmed by selecting anatomy. Unchecked signs remain unknown."
+      ],
+      "tests": [
+        "tests/literature-visceral.test.mjs"
+      ]
+    },
+    {
+      "id": "right-upper-inflammatory-warning",
+      "rules": [
+        "right-upper-pain-fever",
+        "right-upper-pain-fever-jaundice"
+      ],
+      "type": "Professional/official-source review with bounded disposition mapping",
+      "sources": [
+        {
+          "title": "MSD Professional: Acute Cholecystitis",
+          "url": "https://www.msdmanuals.com/professional/hepatic-and-biliary-disorders/gallbladder-and-bile-duct-disorders/acute-cholecystitis"
+        },
+        {
+          "title": "MSD Professional: Jaundice, interpretation and red flags",
+          "url": "https://www.msdmanuals.com/professional/hepatic-and-biliary-disorders/approach-to-the-patient-with-liver-disease/jaundice"
+        }
+      ],
+      "decision": "Right upper pain with fever/chills needs same-day assessment without requiring fatty meals or high fever. The combined pain/fever/jaundice signal is escalated for possible biliary infection or obstruction; not a confirmed diagnosis.",
+      "positiveExamples": [
+        "Gallbladder: 疼痛 + 发热",
+        "RUQ abdominal muscle: 疼痛 + 发热 + 黄疸"
+      ],
+      "negativeExamples": [
+        "RUQ location with 发热 alone does not invent local pain"
+      ],
+      "notEstablished": [
+        "No condition, stability, obstruction or exact pain origin is confirmed by selecting anatomy. Unchecked signs remain unknown."
+      ],
+      "tests": [
+        "tests/literature-visceral.test.mjs"
+      ]
+    },
+    {
+      "id": "upper-abdominal-vomiting-warning",
+      "rules": [
+        "upper-abdominal-pain-vomiting"
+      ],
+      "type": "Professional/official-source review with bounded disposition mapping",
+      "sources": [
+        {
+          "title": "MSD Professional: Acute Pancreatitis, Symptoms and Diagnosis",
+          "url": "https://www.msdmanuals.com/professional/gastrointestinal-disorders/pancreatitis/acute-pancreatitis"
+        }
+      ],
+      "decision": "Worsening upper/left-upper pain with vomiting warrants assessment even without reported back radiation. The existing multi-feature pancreatic reference also accepts LUQ, but no pancreatic diagnosis is made without examination, enzymes/imaging. The existing back-radiation label explicitly describes pain and does not require a redundant generic pain checkbox for triage; disease-card gates are unchanged.",
+      "positiveExamples": [
+        "Pancreas: 疼痛 + 呕吐 + 持续加重",
+        "LUQ abdominal muscle: 疼痛 + 向背部放射 + 呕吐",
+        "Pancreas: 向背部放射 + 呕吐, without an extra 疼痛 checkbox"
+      ],
+      "negativeExamples": [
+        "Stomach: 餐后饱胀 + 恶心 without the reviewed warning combination"
+      ],
+      "notEstablished": [
+        "No condition, stability, obstruction or exact pain origin is confirmed by selecting anatomy. Unchecked signs remain unknown."
+      ],
+      "tests": [
+        "tests/literature-visceral.test.mjs"
+      ]
+    },
+    {
+      "id": "constipation-alarm-features",
+      "rules": [
+        "constipation-alarm-features"
+      ],
+      "type": "Professional/official-source review with bounded disposition mapping",
+      "sources": [
+        {
+          "title": "NIDDK: Symptoms and Causes of Constipation",
+          "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/constipation/symptoms-causes"
+        }
+      ],
+      "decision": "Constipation with fever/chills or vomiting needs same-day medical assessment; removing a constipation card alone must not leave routine fibre/observation advice.",
+      "positiveExamples": [
+        "Descending colon: 便秘 + 干硬便 + 发热",
+        "Descending colon: 便秘 + 干硬便 + 呕吐"
+      ],
+      "negativeExamples": [
+        "Descending colon: 便秘 + 干硬便"
+      ],
+      "notEstablished": [
+        "No condition, stability, obstruction or exact pain origin is confirmed by selecting anatomy. Unchecked signs remain unknown."
+      ],
+      "tests": [
+        "tests/literature-visceral.test.mjs"
+      ]
+    },
+    {
+      "id": "epigastric-cardiac-equivalent",
+      "rules": [
+        "epigastric-pressure-cold-sweat",
+        "acute-epigastric-pressure-cold-sweat"
+      ],
+      "type": "Professional/official-source review with bounded disposition mapping",
+      "sources": [
+        {
+          "title": "AHA/ACC: 2021 Chest Pain Guideline, anginal equivalents",
+          "url": "https://professional.heart.org/en/science-news/2021-guideline-for-the-evaluation-and-diagnosis-of-chest-pain"
+        }
+      ],
+      "decision": "Upper abdominal pressure with cold sweat is not assigned solely to a gastric cause. The app conservatively maps unspecified onset to same-day assessment and explicit sudden/ongoing symptoms to immediate assessment. This combination-specific mapping is an application safety inference, not a validated clinical score.",
+      "positiveExamples": [
+        "Epigastric abdominal muscle: 压迫感 + 冷汗",
+        "Epigastric abdominal muscle: 压迫感 + 冷汗 + 突然起病"
+      ],
+      "negativeExamples": [
+        "Epigastric abdominal muscle: 压迫感 + 恶心 without cold sweat"
+      ],
+      "notEstablished": [
+        "No condition, stability, obstruction or exact pain origin is confirmed by selecting anatomy. Unchecked signs remain unknown."
+      ],
+      "tests": [
+        "tests/literature-visceral.test.mjs"
+      ]
+    },
+    {
+      "id": "existing-pain-wording-semantic-normalization",
+      "type": "Input-fidelity engineering decision grounded in the existing label meanings",
+      "sources": [
+        {
+          "title": "AHA/ACC Chest Pain Guideline: pressure/tightness terminology",
+          "url": "https://professional.heart.org/en/science-news/2021-guideline-for-the-evaluation-and-diagnosis-of-chest-pain"
+        },
+        {
+          "title": "NHS: Costochondritis, emergency symptoms",
+          "url": "https://www.nhs.uk/conditions/costochondritis/"
+        }
+      ],
+      "decision": "The existing exertional chest-pressure label counts as chest discomfort for triage. Related radiation labels are recognized as reported pain where their displayed text explicitly says pain, without adding an independent evidence family or diagnosing a cardiac condition.",
+      "positiveExamples": [
+        "Heart: 运动诱发胸闷 + 冷汗",
+        "Sternum: 运动诱发胸闷 + 气短",
+        "Sternum: 局部压痛 + 活动诱发 + 气短"
+      ],
+      "negativeExamples": [
+        "Heart: 运动诱发胸闷 alone does not produce a cardiac diagnosis card",
+        "Timing alone does not establish pain",
+        "Sternum: 局部压痛 + 活动诱发 remains non-emergency",
+        "Shoulder-tip or flank pain is not relabeled as local upper abdominal pain solely from a model location"
+      ],
+      "notEstablished": [
+        "Neither cardiac disease nor a specific organ lesion is confirmed."
+      ],
+      "tests": [
+        "tests/literature-visceral.test.mjs"
+      ]
     }
   ]
 }

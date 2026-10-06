@@ -12,3 +12,8 @@ export function reportLocationOptions(report){
   return ABDOMEN_LOCATIONS.filter(([id])=>['unknown','flank','diffuse'].includes(id));
  return [];
 }
+
+// Anatomy provides a reference area, never a confirmed diseased organ. An
+// explicitly selected actual location takes precedence over that reference.
+const ORGAN_REFERENCE_LOCATIONS={heart:'unknown',stomach:'epigastric',pancreas:'epigastric',appendix:'rlq',liver:'ruq',biliary:'ruq',spleen:'luq',kidney:'flank',ureter:'flank',bladder:'suprapubic'};
+export const referenceLocation=(profile,report)=>report.location&&report.location!=='unknown'?report.location:ORGAN_REFERENCE_LOCATIONS[profile.organ]||'unknown';

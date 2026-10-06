@@ -1,6 +1,8 @@
-import {PAIN_TAGS} from './symptomLanguage.js';
+import {hasReportedPain,PAIN_TAGS} from './symptomLanguage.js';
+import {referenceLocation} from './reportLocation.js';
 const has=(report,...tags)=>tags.some(tag=>report.tags.has(tag));
-const pain=report=>[...PAIN_TAGS,'放射痛','侧腰痛','突发剧痛','单侧头痛','双侧头痛'].some(tag=>report.tags.has(tag));
+const pain=report=>hasReportedPain(report.tags);
+const upperAbdominalPain=report=>[...PAIN_TAGS,'放射痛','局部压痛','突发剧痛','向背部放射'].some(tag=>report.tags.has(tag));
 const jointRegions=['shoulder','upper-limb','hand','hip','knee','ankle','foot'];
 const musculoskeletalRegions=['neck','spine','chest','abdomen','pelvis','lower-limb',...jointRegions];
 
@@ -8,6 +10,36 @@ const musculoskeletalRegions=['neck','spine','chest','abdomen','pelvis','lower-l
 // related review entries in data/evidence-review-2026-10.json. These predicates
 // route assessment; they do not create diagnoses or require missing checkboxes.
 const rules=[
+ {id:'reported-haematemesis',level:'emergency',matches:(p,r)=>has(r,'呕血'),
+  zh:'报告呕血时应立即联系医疗机构评估；如仍在出血，或伴晕厥、冷汗、气短、腹痛或黑便，立即急诊。未勾伴随表现不能证明出血已停或情况稳定。',
+  en:'Vomiting blood needs immediate medical assessment. Ongoing bleeding, fainting, cold sweat, breathlessness, abdominal pain or black stools needs emergency care. Unreported associated symptoms do not establish that bleeding has stopped or that you are stable.'},
+ {id:'upper-left-trauma',level:'same-day',matches:(p,r)=>p.region==='abdomen'&&referenceLocation(p,r)==='luq'&&has(r,'外伤后')&&upperAbdominalPain(r),
+  zh:'左上腹/脾区受伤后出现疼痛或压痛：今天尽快到医疗机构评估内脏损伤，不能只按表面挫伤处理；部分问题可延迟出现。',
+  en:'Pain or tenderness after injury in the left upper abdominal/splenic area needs same-day assessment for internal injury. Do not assume a surface bruise; some problems can appear later.'},
+ {id:'upper-left-trauma-shoulder-warning',level:'emergency',matches:(p,r)=>p.region==='abdomen'&&referenceLocation(p,r)==='luq'&&has(r,'外伤后')&&has(r,'肩尖痛','晕厥','突发剧痛'),
+  zh:'左上腹/脾区受伤后伴肩尖痛、晕厥或突发剧痛：立即急诊评估可能的内脏损伤，不等待其他表现。',
+  en:'Shoulder-tip pain, fainting or sudden severe pain after injury in the left upper abdominal/splenic area needs emergency assessment for possible internal injury without waiting for other signs.'},
+ {id:'renal-colic-fever',level:'emergency',matches:(p,r)=>['abdomen','spine','hip'].includes(p.region)&&has(r,'发热','发冷')&&(has(r,'腰腹向腹股沟放射')||has(r,'绞痛')&&referenceLocation(p,r)==='flank'),
+  zh:'侧腰绞痛或腰腹向腹股沟放射，并伴发热/寒战：立即就医评估感染或排尿通路受阻等原因，不需等出现血尿。不能凭选择确诊结石。',
+  en:'Flank colic or pain radiating toward the groin with fever or chills needs immediate assessment for infection or urinary obstruction. Do not wait for blood in urine; these selections do not diagnose a stone.'},
+ {id:'right-upper-pain-fever',level:'same-day',matches:(p,r)=>p.region==='abdomen'&&referenceLocation(p,r)==='ruq'&&upperAbdominalPain(r)&&has(r,'发热','发冷'),
+  zh:'右上腹/肝胆区域疼痛伴发热或寒战：当天尽快就医检查，不需要等油腻餐后发作或出现黄疸才评估。',
+  en:'Right upper abdominal/liver-biliary area pain with fever or chills needs same-day assessment. Do not wait for fatty-meal association or jaundice.'},
+ {id:'right-upper-pain-fever-jaundice',level:'emergency',matches:(p,r)=>p.region==='abdomen'&&referenceLocation(p,r)==='ruq'&&upperAbdominalPain(r)&&has(r,'发热','发冷')&&has(r,'黄疸'),
+  zh:'右上腹疼痛、发热/寒战和黄疸同时出现：立即急诊检查胆道感染或阻塞等原因，不能只按普通胆绞痛观察。',
+  en:'Right upper abdominal pain together with fever/chills and jaundice needs emergency assessment for biliary infection or obstruction rather than observation as ordinary biliary colic.'},
+ {id:'upper-abdominal-pain-vomiting',level:'same-day',matches:(p,r)=>p.region==='abdomen'&&['epigastric','luq'].includes(referenceLocation(p,r))&&upperAbdominalPain(r)&&has(r,'呕吐')&&has(r,'持续加重','向背部放射'),
+  zh:'上腹或左上腹疼痛伴呕吐，且持续加重或向背部放射：当天尽快就医检查；未报告背部放射不能作为继续观察的理由。',
+  en:'Upper or left upper abdominal pain with vomiting and worsening or back radiation needs same-day assessment. Lack of reported back radiation is not a reason to keep observing worsening symptoms.'},
+ {id:'constipation-alarm-features',level:'same-day',matches:(p,r)=>['abdomen','pelvis'].includes(p.region)&&has(r,'便秘')&&has(r,'发热','发冷','呕吐'),
+  zh:'便秘同时伴发热、寒战或呕吐：当天尽快就医检查，先不要仅靠增加纤维或自行观察处理。',
+  en:'Constipation with fever, chills or vomiting needs same-day assessment before relying only on extra fibre or observation.'},
+ {id:'epigastric-pressure-cold-sweat',level:'same-day',matches:(p,r)=>p.region==='abdomen'&&referenceLocation(p,r)==='epigastric'&&has(r,'压迫感')&&has(r,'冷汗'),
+  zh:'上腹压迫感伴冷汗：当天立即联系医疗机构评估，不能仅按胃部问题解释；需考虑包括心脏在内的其他原因。',
+  en:'Upper abdominal pressure with cold sweat needs same-day medical assessment. Do not attribute it solely to the stomach; cardiac and other causes need consideration.'},
+ {id:'acute-epigastric-pressure-cold-sweat',level:'emergency',matches:(p,r)=>p.region==='abdomen'&&referenceLocation(p,r)==='epigastric'&&has(r,'压迫感')&&has(r,'冷汗')&&has(r,'突然起病','持续数小时','持续1至3天','持续超过3天','持续加重'),
+  zh:'突然或持续的上腹压迫感伴冷汗：立即急诊评估。上腹不适也可能是心脏警讯，不能先用胃病解释排除。',
+  en:'Sudden or ongoing upper abdominal pressure with cold sweat needs emergency assessment. Upper abdominal discomfort can be a cardiac warning and cannot be excluded by a stomach explanation.'},
  {id:'hot-swollen-joint',level:'same-day',matches:(p,r)=>jointRegions.includes(p.region)&&has(r,'红肿','局部肿胀')&&has(r,'局部发热','流脓'),
   zh:'局部肿胀或发红伴热感或流脓：当天尽快就医评估关节及周围组织，不能仅按痛风或滑囊劳损处理；未报告发烧也不能排除感染。',
   en:'Swelling or redness with local heat or purulent drainage needs same-day assessment of the joint and nearby tissues. Do not assume gout or bursal strain; unreported fever does not rule out infection.'},

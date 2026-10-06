@@ -5,8 +5,8 @@ import {evidenceFamily,PAIN_TAGS} from './symptomLanguage.js';
 import {basicAssessment} from './basicAssessments.js';
 import {orderPriorityGuidance,applyPriorityGuidance} from './priorityGuidance.js';
 import {literatureWarnings} from './literatureTriage.js';
+import {referenceLocation} from './reportLocation.js';
 export const CONDITION_REGIONS=Object.fromEntries(Object.entries(CLINICAL_RULES).map(([id,r])=>[id,r.regions]));
-const DEFAULT_ORGAN_LOCATION={heart:'unknown',stomach:'epigastric',pancreas:'epigastric',appendix:'rlq',liver:'ruq',biliary:'ruq',spleen:'luq',kidney:'flank',ureter:'flank',bladder:'suprapubic'};
 export function normalizeReport(report){
  // Only explicitly selected tags are clinical inputs. context remains an API
  // compatibility alias; the interface records timing and triggers separately.
@@ -23,7 +23,7 @@ export function assessSymptoms(knowledge,input={}){
  const symptoms=new Set(normalized.flatMap(r=>[...r.tags]));
  const has=(...tags)=>tags.some(t=>symptoms.has(t));
  const abdominal=profiles.some(p=>['abdomen','pelvis'].includes(p.region));
- const chestPain=[...PAIN_TAGS,'放射痛','突发剧痛'];
+ const chestPain=[...PAIN_TAGS,'放射痛','突发剧痛','运动诱发胸闷','局部压痛'];
  const localHas=(index,...tags)=>tags.some(t=>normalized[index].tags.has(t));
  const urgent=[];
  const warn=(zh,en,level='emergency')=>urgent.push({zh,en,level});
@@ -32,8 +32,8 @@ export function assessSymptoms(knowledge,input={}){
  if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,...chestPain)&&localHas(i,'气短','静息气短','呼吸困难','冷汗','出汗','晕厥','恶心','呕吐')))warn('胸部疼痛或不适伴气短、出汗、恶心或晕厥：立即急诊，不要用胃药试验排除心脏原因。','Chest pain or discomfort with breathlessness, sweating, nausea or fainting needs emergency assessment; an antacid response cannot exclude a cardiac cause.');
  else if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,...chestPain)&&localHas(i,'突然起病')&&localHas(i,'持续数小时','持续1至3天','持续超过3天')))warn('突然发生且持续不缓解的胸部疼痛或不适：立即联系急救，不要等待气短或其他表现。','Sudden chest pain or discomfort that persists needs emergency care; do not wait for breathlessness or other signs.');
  else if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,'突发剧痛')))warn('突发严重胸痛：立即联系急救，不要等待更多症状。','Sudden severe chest pain: call emergency services without waiting for more symptoms.');
- else if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,'压迫感')))warn('新发胸部压迫感应尽快就医；持续不缓解或伴气短、冷汗时立即联系急救。','New chest pressure needs prompt assessment; persistent pressure or associated breathlessness or cold sweat needs emergency care.','same-day');
- if(abdominal&&(has('突发剧痛','黑便','血便','呕血','腹部僵硬','晕厥')))warn('严重或突发腹部/盆腔痛、出血、腹部僵硬或晕厥：立即急诊。','Severe or sudden abdominal/pelvic pain, bleeding, rigidity or fainting: seek emergency assessment.');
+ else if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,'压迫感','运动诱发胸闷')))warn('胸部压迫感或活动时胸闷应当天尽快就医；持续不缓解或伴气短、冷汗时立即联系急救。','Chest pressure or exertional chest tightness needs same-day assessment; persistent pressure or associated breathlessness or cold sweat needs emergency care.','same-day');
+ if(abdominal&&(has('突发剧痛','黑便','血便','腹部僵硬','晕厥')))warn('严重或突发腹部/盆腔痛、出血、腹部僵硬或晕厥：立即急诊。','Severe or sudden abdominal/pelvic pain, bleeding, rigidity or fainting: seek emergency assessment.');
  if(profiles.some((p,i)=>p.region==='abdomen'&&(normalized[i].tags.has('腹痛迁移至右下腹')||normalized[i].location==='rlq'&&normalized[i].tags.has('持续加重')&&localHas(i,...chestPain,'局部压痛'))))warn('右下腹迁移痛或持续加重的右下腹痛：尽快急诊排查阑尾炎等原因，伴发热时更应警惕。','Migrating or worsening right-lower abdominal pain, especially with fever, needs urgent assessment for appendicitis and other causes.','same-day');
  if(has('会阴麻木','排尿困难')&&profiles.some(p=>['neck','spine','hip','pelvis','lower-limb'].includes(p.region)))warn('腰腿症状伴会阴麻木或新发排尿困难：立即急诊评估。','Back/leg symptoms with saddle numbness or new difficulty passing urine need emergency assessment.');
  if(profiles.some((p,i)=>p.region==='eye'&&localHas(i,'视物模糊','畏光')))warn('眼痛伴视力变化或畏光：尽快眼科急诊。','Eye pain with vision change or light sensitivity: seek urgent eye assessment.','same-day');
@@ -68,7 +68,7 @@ export function assessSymptoms(knowledge,input={}){
    if(rule.lifestyle&&urgent.length||rule.exclude?.some(t=>tags.has(t)))continue;
    // Urinary observations are not explained by a mechanical-only reference card.
    if(rule.family==='mechanical'&&['abdomen','pelvis','spine','hip'].includes(profile.region)&&['尿痛','尿频','尿急','侧腰痛','血尿'].some(t=>tags.has(t)))continue;
-   const location=report.location!=='unknown'&&report.location?report.location:DEFAULT_ORGAN_LOCATION[profile.organ]||'unknown';
+   const location=referenceLocation(profile,report);
    const locations=(!rule.locationRegions||rule.locationRegions.includes(profile.region))?rule.locations:null;
    if(locations&&location!=='diffuse'&&location!=='unknown'&&!locations.includes(location))continue;
    const groups=rule.required.map(group=>group.filter(tag=>tags.has(tag)));

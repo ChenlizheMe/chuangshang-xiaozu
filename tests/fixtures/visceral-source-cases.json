@@ -1,0 +1,732 @@
+{
+  "scope": "Independently authored synthetic source-review cases; not clinical validation. Insufficient evidence is not clinical exclusion.",
+  "sourceBaseline": "69ff448",
+  "cases": [
+    {
+      "name": "rib-wall-injury positive",
+      "report": {
+        "part": "Sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [
+          "呼吸痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "conditionId": "rib-wall-injury",
+      "shouldMatch": true
+    },
+    {
+      "name": "rib-wall-injury insufficient evidence",
+      "report": {
+        "part": "Sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [
+          "呼吸痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "rib-wall-injury",
+      "shouldMatch": false
+    },
+    {
+      "name": "abdominal-wall-strain positive",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "转身牵拉痛"
+        ]
+      },
+      "conditionId": "abdominal-wall-strain",
+      "shouldMatch": true
+    },
+    {
+      "name": "abdominal-wall-strain insufficient evidence",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "abdominal-wall-strain",
+      "shouldMatch": false
+    },
+    {
+      "name": "gastroenteritis-pattern positive",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "diffuse",
+        "feelings": [
+          "绞痛"
+        ],
+        "signs": [
+          "腹泻"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "gastroenteritis-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "gastroenteritis-pattern insufficient evidence",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "diffuse",
+        "feelings": [],
+        "signs": [
+          "恶心",
+          "呕吐"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "gastroenteritis-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "appendicitis-pattern positive",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "rlq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [
+          "持续加重"
+        ],
+        "triggers": []
+      },
+      "conditionId": "appendicitis-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "appendicitis-pattern insufficient evidence",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "rlq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "appendicitis-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "renal-colic-pattern positive",
+      "report": {
+        "part": "Kidney.l",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "绞痛"
+        ],
+        "signs": [
+          "血尿"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "renal-colic-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "renal-colic-pattern insufficient evidence",
+      "report": {
+        "part": "Kidney.l",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "绞痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "renal-colic-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "pleuritic-chest-pain positive",
+      "report": {
+        "part": "Sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [
+          "呼吸痛"
+        ],
+        "signs": [
+          "咳嗽"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "pleuritic-chest-pain",
+      "shouldMatch": true
+    },
+    {
+      "name": "pleuritic-chest-pain insufficient evidence",
+      "report": {
+        "part": "Sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [
+          "呼吸痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "pleuritic-chest-pain",
+      "shouldMatch": false
+    },
+    {
+      "name": "diverticular-left-abdominal positive",
+      "report": {
+        "part": "Rectus abdominis muscle.l",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "排便改变"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "diverticular-left-abdominal",
+      "shouldMatch": true
+    },
+    {
+      "name": "diverticular-left-abdominal insufficient evidence",
+      "report": {
+        "part": "Rectus abdominis muscle.l",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "diverticular-left-abdominal",
+      "shouldMatch": false
+    },
+    {
+      "name": "biliary-colic-pattern positive",
+      "report": {
+        "part": "Gallbladder",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "油腻餐后痛"
+        ]
+      },
+      "conditionId": "biliary-colic-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "biliary-colic-pattern insufficient evidence",
+      "report": {
+        "part": "Gallbladder",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "biliary-colic-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "urinary-tract-infection-pattern positive",
+      "report": {
+        "part": "Urinary bladder",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "尿痛"
+        ],
+        "signs": [
+          "尿频"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "urinary-tract-infection-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "urinary-tract-infection-pattern insufficient evidence",
+      "report": {
+        "part": "Urinary bladder",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿频",
+          "尿急"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "urinary-tract-infection-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "reflux-dyspepsia-pattern positive",
+      "report": {
+        "part": "Oesophagus",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "反酸",
+          "灼烧"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "reflux-dyspepsia-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "reflux-dyspepsia-pattern insufficient evidence",
+      "report": {
+        "part": "Oesophagus",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "灼烧"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "reflux-dyspepsia-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "pelvic-pain positive",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "suprapubic",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [
+          "经期相关"
+        ],
+        "triggers": []
+      },
+      "conditionId": "pelvic-pain",
+      "shouldMatch": true
+    },
+    {
+      "name": "pelvic-pain insufficient evidence",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "suprapubic",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "经期相关"
+        ],
+        "triggers": []
+      },
+      "conditionId": "pelvic-pain",
+      "shouldMatch": false
+    },
+    {
+      "name": "cardiac-ischaemia-warning positive",
+      "report": {
+        "part": "Heart",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "压迫感"
+        ],
+        "signs": [
+          "气短"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "cardiac-ischaemia-warning",
+      "shouldMatch": true
+    },
+    {
+      "name": "cardiac-ischaemia-warning insufficient evidence",
+      "report": {
+        "part": "Heart",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "压迫感"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "cardiac-ischaemia-warning",
+      "shouldMatch": false
+    },
+    {
+      "name": "pancreatitis-pattern positive",
+      "report": {
+        "part": "Pancreas",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "疼痛",
+          "向背部放射"
+        ],
+        "signs": [
+          "呕吐"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "pancreatitis-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "pancreatitis-pattern insufficient evidence",
+      "report": {
+        "part": "Pancreas",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "呕吐"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "pancreatitis-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "hepatobiliary-pattern positive",
+      "report": {
+        "part": "Liver",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "黄疸",
+          "尿色深"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "hepatobiliary-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "hepatobiliary-pattern insufficient evidence",
+      "report": {
+        "part": "Liver",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿色深"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "hepatobiliary-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "splenic-injury-warning positive",
+      "report": {
+        "part": "Spleen",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "肩尖痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "conditionId": "splenic-injury-warning",
+      "shouldMatch": true
+    },
+    {
+      "name": "splenic-injury-warning insufficient evidence",
+      "report": {
+        "part": "Spleen",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "conditionId": "splenic-injury-warning",
+      "shouldMatch": false
+    },
+    {
+      "name": "pyelonephritis-pattern positive",
+      "report": {
+        "part": "Kidney.l",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "侧腰痛"
+        ],
+        "signs": [
+          "发热"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "pyelonephritis-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "pyelonephritis-pattern insufficient evidence",
+      "report": {
+        "part": "Kidney.l",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "侧腰痛"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "pyelonephritis-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "dyspepsia-pattern positive",
+      "report": {
+        "part": "Stomach",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "早饱"
+        ],
+        "signs": [
+          "恶心"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "dyspepsia-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "dyspepsia-pattern insufficient evidence",
+      "report": {
+        "part": "Stomach",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "早饱"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "dyspepsia-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "dehydration-pattern positive",
+      "report": {
+        "part": "Kidney.l",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "口渴口干"
+        ],
+        "signs": [
+          "尿色深"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "dehydration-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "dehydration-pattern insufficient evidence",
+      "report": {
+        "part": "Kidney.l",
+        "layer": "organ",
+        "location": "unknown",
+        "feelings": [
+          "口渴口干"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "喝水少"
+        ]
+      },
+      "conditionId": "dehydration-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "constipation-pattern positive",
+      "report": {
+        "part": "Descending colon",
+        "layer": "organ",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "便秘",
+          "干硬便"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "constipation-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "constipation-pattern insufficient evidence",
+      "report": {
+        "part": "Descending colon",
+        "layer": "organ",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "便秘"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "constipation-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "ibs-pattern positive",
+      "report": {
+        "part": "Sigmoid colon",
+        "layer": "organ",
+        "location": "llq",
+        "feelings": [
+          "绞痛"
+        ],
+        "signs": [
+          "便秘"
+        ],
+        "timing": [
+          "反复数月"
+        ],
+        "triggers": [
+          "排便后缓解"
+        ]
+      },
+      "conditionId": "ibs-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "ibs-pattern insufficient evidence",
+      "report": {
+        "part": "Sigmoid colon",
+        "layer": "organ",
+        "location": "llq",
+        "feelings": [
+          "绞痛"
+        ],
+        "signs": [
+          "便秘"
+        ],
+        "timing": [],
+        "triggers": [
+          "排便后缓解"
+        ]
+      },
+      "conditionId": "ibs-pattern",
+      "shouldMatch": false
+    },
+    {
+      "name": "costochondritis-pattern positive",
+      "report": {
+        "part": "Sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [
+          "呼吸痛"
+        ],
+        "signs": [
+          "局部压痛"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "costochondritis-pattern",
+      "shouldMatch": true
+    },
+    {
+      "name": "costochondritis-pattern insufficient evidence",
+      "report": {
+        "part": "Sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "局部压痛"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "conditionId": "costochondritis-pattern",
+      "shouldMatch": false
+    }
+  ]
+}
