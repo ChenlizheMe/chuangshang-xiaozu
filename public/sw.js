@@ -1,6 +1,6 @@
 /* Keep model downloads across UI releases; new geometry uses a new version. */
 const PREFIX = 'trauma-team-international-';
-const CACHE = PREFIX + 'shell-v8';
+const CACHE = PREFIX + 'shell-v9';
 const MODEL_VERSION = '5';
 const MODEL_CACHE = PREFIX + 'models-v' + MODEL_VERSION;
 const isModelAsset = url => (url.pathname.includes('/anatomy/') && url.pathname.endsWith('.glb')) || url.pathname.includes('/draco/');
@@ -61,15 +61,38 @@ self.addEventListener('fetch', event => {
     return;
   }
   if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).then(response => {
-      const copy = response.clone();
-      caches.open(CACHE).then(cache => cache.put('./index.html', copy));
-      return response;
-    }).catch(() => caches.match('./index.html')));
+    event.respondWith((async () => {
+      try {
+        const response = await fetch(request);
+        // A transient 404/5xx must never replace the last usable offline page.
+        if (response.ok && /text\/html/i.test(response.headers.get('content-type') || '')) {
+          const copy = response.clone();
+          await caches.open(CACHE).then(cache => cache.put('./index.html', copy)).catch(() => {});
+        }
+        return response;
+      } catch {
+        const cached = await caches.match('./index.html').catch(() => undefined);
+        return cached || new Response('Page unavailable offline', { status: 503 });
+      }
+    })());
     return;
   }
-  event.respondWith(caches.match(request).then(cached => cached || fetch(request).then(response => {
-    if (response.ok) { const copy = response.clone(); caches.open(CACHE).then(cache => cache.put(request, copy)); }
-    return response;
-  }).catch(() => caches.match('./'))));
+  event.respondWith((async () => {
+    // Private browsing, exhausted storage and evicted caches are all optional
+    // enhancements: they must not stop a successful network response.
+    const cached = await caches.match(request).catch(() => undefined);
+    if (cached) return cached;
+    try {
+      const response = await fetch(request);
+      if (response.ok) {
+        const copy = response.clone();
+        await caches.open(CACHE).then(cache => cache.put(request, copy)).catch(() => {});
+      }
+      return response;
+    } catch {
+      // Returning index.html for JS/CSS hides the actual outage behind parse
+      // and MIME errors, and can poison the next cached resource response.
+      return new Response('Resource unavailable offline', { status: 503 });
+    }
+  })());
 });

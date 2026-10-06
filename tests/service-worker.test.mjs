@@ -14,11 +14,11 @@ const glb=()=>new Response(binary,{headers:{'content-type':'application/octet-st
 function browserCache(){
  const stores=new Map(),listeners={},calls=[];
  const key=request=>new URL(typeof request==='string'?request:request.url,origin+'/').href;
- const state={online:true,invalid:false,unavailable:false,quotaExceeded:false};
+ const state={online:true,invalid:false,unavailable:false,quotaExceeded:false,status:200};
  const fetch=async request=>{
   const url=key(request);calls.push(url);
   if(!state.online)throw new TypeError('Network unavailable');
-  return url.includes('.glb')&&!state.invalid?glb():new Response('<html>App shell</html>',{headers:{'content-type':'text/html'}});
+  return url.includes('.glb')&&!state.invalid?glb():new Response('<html>App shell</html>',{status:state.status,headers:{'content-type':'text/html'}});
  };
  const caches={
   async open(name){
@@ -27,7 +27,7 @@ function browserCache(){
    return {match:async request=>store.get(key(request))?.clone(),put:async(request,response)=>{if(state.quotaExceeded)throw new Error('Storage full');store.set(key(request),response.clone());},keys:async()=>[...store.keys()].map(url=>new Request(url)),addAll:async paths=>{for(const path of paths)store.set(key(path),await fetch(path));}};
   },
   keys:async()=>[...stores.keys()],delete:async name=>stores.delete(name),
-  async match(request){for(const store of stores.values()){const response=store.get(key(request));if(response)return response.clone();}}
+  async match(request){if(state.unavailable)throw new Error('Storage unavailable');for(const store of stores.values()){const response=store.get(key(request));if(response)return response.clone();}}
  };
  const self={location:{origin},clients:{claim:async()=>{}},skipWaiting:async()=>{},addEventListener:(type,handler)=>{listeners[type]=handler;}};
  vm.runInNewContext(source,{self,caches,fetch,URL,Response});
@@ -85,4 +85,36 @@ test('unavailable cache storage does not prevent an online model from loading',a
 test('a full storage quota does not discard a successful model download',async()=>{
  const browser=browserCache();browser.state.quotaExceeded=true;
  const response=await browser.request(model);assert.equal(response.status,200);assert.deepEqual(new Uint8Array(await response.arrayBuffer()),binary);
+});
+
+
+test('failed navigation responses do not replace the last usable offline page',async()=>{
+ const browser=browserCache();await browser.lifecycle('install');
+ browser.state.status=503;assert.equal((await browser.request('/', 'navigate')).status,503);
+ await new Promise(resolve=>setImmediate(resolve));browser.state.online=false;
+ const offline=await browser.request('/', 'navigate');assert.equal(offline.status,200);
+});
+
+test('an uncached script or stylesheet never receives the offline HTML shell',async()=>{
+ const browser=browserCache();await browser.lifecycle('install');browser.state.online=false;
+ for(const path of ['/assets/lazy-missing.js','/assets/missing.css']){
+  const response=await browser.request(path);assert.equal(response.status,503);
+  assert.doesNotMatch(response.headers.get('content-type')||'',/html/);
+  assert.doesNotMatch(await response.text(),/App shell/);
+ }
+});
+
+test('cache storage failures do not prevent online static assets loading',async()=>{
+ const browser=browserCache();browser.state.unavailable=true;
+ assert.equal((await browser.request('/assets/app.js')).status,200);
+});
+
+test('offline navigation with no usable cache returns a real response',async()=>{
+ const browser=browserCache();browser.state.online=false;
+ assert.equal((await browser.request('/', 'navigate')).status,503);
+});
+
+test('offline navigation tolerates inaccessible cache storage',async()=>{
+ const browser=browserCache();browser.state.online=false;browser.state.unavailable=true;
+ assert.equal((await browser.request('/', 'navigate')).status,503);
 });
