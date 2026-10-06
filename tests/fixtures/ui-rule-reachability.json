@@ -3,7 +3,7 @@
     "purpose": "Software UI-to-rule reachability only. Generated from existing rule alternatives, existing GLB mesh names and current UI filters. Not independent clinical truth, diagnostic validation or medical performance evidence.",
     "generated": "2026-10-06",
     "sourceBaseCommit": "e4feabe",
-    "sourceState": "Working tree with reviewed report-pathways changes; integrate only with the matching changes.",
+    "sourceState": "Reviewed conservative gates; software reachability only, not clinical truth.",
     "conditionCount": 75,
     "reachableCount": 74
   },
@@ -497,7 +497,8 @@
         "layer": "skeleton",
         "feelings": [
           "放射痛",
-          "沿腿向下"
+          "沿腿向下",
+          "麻木"
         ],
         "signs": [],
         "timing": [],

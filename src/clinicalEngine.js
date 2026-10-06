@@ -4,6 +4,7 @@ import {CLINICAL_RULES} from './clinicalRules.js';
 import {evidenceFamily,PAIN_TAGS} from './symptomLanguage.js';
 import {basicAssessment} from './basicAssessments.js';
 import {orderPriorityGuidance,applyPriorityGuidance} from './priorityGuidance.js';
+import {literatureWarnings} from './literatureTriage.js';
 export const CONDITION_REGIONS=Object.fromEntries(Object.entries(CLINICAL_RULES).map(([id,r])=>[id,r.regions]));
 const DEFAULT_ORGAN_LOCATION={heart:'unknown',stomach:'epigastric',pancreas:'epigastric',appendix:'rlq',liver:'ruq',biliary:'ruq',spleen:'luq',kidney:'flank',ureter:'flank',bladder:'suprapubic'};
 export function normalizeReport(report){
@@ -56,6 +57,7 @@ export function assessSymptoms(knowledge,input={}){
   warn('关节新发肿痛伴发烧或寒战：当日急诊排查关节感染。','New swollen joint with fever or chills needs same-day urgent assessment for infection.','same-day');
  if(has('黄疸')&&has('发热','发冷'))warn('黄疸伴发热或寒战：当天尽快就医检查肝胆；如明显腹痛、意识变化或晕厥，立即急诊。','Jaundice with fever or chills needs same-day liver/biliary assessment; significant abdominal pain, altered awareness or fainting needs emergency care.','same-day');
  else if(has('黄疸'))warn('新出现眼白或皮肤发黄：尽快就医检查肝胆；伴发热或明显腹痛应急诊。','New yellow eyes or skin needs prompt liver/biliary assessment; fever or significant abdominal pain needs urgent care.','prompt');
+ urgent.push(...literatureWarnings(profiles,normalized));
  const orderedUrgent=orderPriorityGuidance(urgent);
  const missing=[],candidates=[];
  for(let i=0;i<normalized.length;i++){

@@ -1477,8 +1477,8 @@
     {
       "id": "ulnar-nerve-irritation",
       "name": {
-        "zh": "肘部尺神经刺激（可能）",
-        "en": "Possible ulnar-nerve irritation at the elbow"
+        "zh": "尺神经分布异常线索（位置待评估）",
+        "en": "Ulnar-distribution symptoms (site needs assessment)"
       },
       "feelings": [
         "无名小指麻木",
@@ -1488,16 +1488,16 @@
         "肌力下降"
       ],
       "advice": {
-        "zh": "避免长时间屈肘或把肘部压在硬面上，夜间保持舒适伸直。",
-        "en": "Avoid prolonged elbow flexion or leaning on a hard surface."
+        "zh": "减少长时间压迫和重复姿势，记录麻木分布；持续或力量下降时安排检查，先确认受影响部位。",
+        "en": "Reduce prolonged pressure and repetitive postures and record the numbness distribution. Persistent symptoms or reduced strength need examination to establish the affected site."
       },
       "shortDescription": {
-        "zh": "肘内侧至无名指、小指麻刺，可伴握力下降。",
-        "en": "Tingling from the inner elbow into the ring and little fingers; grip may weaken."
+        "zh": "无名指、小指麻木伴所选时间或力量变化，可涉及尺神经通路；不能仅据这些选择确认肘部受压。",
+        "en": "Ring- and little-finger numbness with the selected timing or strength changes may involve the ulnar pathway; these selections do not establish compression at the elbow."
       },
       "triggers": {
-        "zh": "肘部长期屈曲、靠肘支撑或局部撞击",
-        "en": "Prolonged elbow flexion, leaning on the elbow or local impact"
+        "zh": "可能与肘或腕部等位置受压、反复姿势有关，具体部位待检查。",
+        "en": "Pressure around the elbow or wrist and repetitive postures may be relevant; the specific site needs examination."
       },
       "threshold": {
         "zh": "握力进行性下降、手指明显无力、手部肌肉变薄或持续麻木时尽快就医。",
@@ -1664,12 +1664,12 @@
         "感觉减退"
       ],
       "advice": {
-        "zh": "避免继续负重或高风险运动，记录双侧感觉、步行和力量变化，尽快就医评估。",
-        "en": "Avoid further heavy loading or risky exercise, record bilateral sensation, walking and strength changes, and seek prompt assessment."
+        "zh": "记录实际感觉、步行和力量变化，避免高风险运动，尽快就医评估。",
+        "en": "Record actual sensory, walking and strength changes, avoid risky activity and seek prompt assessment."
       },
       "shortDescription": {
-        "zh": "双侧感觉变化、肌力下降或步态不稳。",
-        "en": "Bilateral sensory changes, weakness or an unsteady gait."
+        "zh": "会阴感觉或排尿功能变化伴所选神经线索，需要优先评估；点击结构不能定位病变。",
+        "en": "Saddle-sensation or urinary changes with the selected neurological findings need priority assessment; clicking a structure cannot locate a lesion."
       },
       "triggers": {
         "zh": "外伤、脊柱压迫或进行性神经症状",
@@ -2107,8 +2107,8 @@
         "en": "Keep gently active, avoid prolonged sitting pressure and sudden heavy lifting, and note changes in strength and walking."
       },
       "shortDescription": {
-        "zh": "腰臀向腿足放射的电击痛、麻刺或灼痛。",
-        "en": "Electric, tingling or burning pain from the lower back or buttock into the leg."
+        "zh": "沿腿向下的放射痛，伴所选感觉或力量变化；需检查区分神经根及周围神经等来源。",
+        "en": "Pain radiating down the leg with the selected sensory or strength changes needs examination to distinguish nerve-root and peripheral nerve sources."
       },
       "triggers": {
         "zh": "久坐、弯腰、搬抬或腰骶部负荷",
@@ -2561,16 +2561,16 @@
         "en": "Elevate and use a short wrapped cold pack."
       },
       "shortDescription": {
-        "zh": "突发单关节剧痛、红热肿胀，常见于足趾或踝。",
-        "en": "Sudden severe pain in a red, hot, swollen joint, often a toe or ankle."
+        "zh": "突然出现关节红肿、局部发热可见于晶体相关炎症，也可能有感染等原因，需要检查区分。",
+        "en": "Sudden joint swelling/redness and local heat can occur with crystal-related inflammation or infection and need examination to distinguish the causes."
       },
       "triggers": {
         "zh": "高嘌呤饮食、饮酒、脱水或关节负荷",
         "en": "Purine-rich food, alcohol, dehydration or joint stress"
       },
       "threshold": {
-        "zh": "高热、寒战、全身不适、疼痛快速加重或无法活动时立即就医，以排除化脓性关节炎。",
-        "en": "Urgent care is needed for fever, chills, feeling very unwell, rapidly worsening pain or inability to move, to exclude septic arthritis."
+        "zh": "红热肿胀的关节应当天评估，未报告发热也不能排除感染；明显不适或快速加重立即就医。",
+        "en": "A red, hot, swollen joint needs same-day assessment even when fever is unreported; seek immediate care if markedly unwell or rapidly worsening."
       },
       "context": [
         "突然起病"

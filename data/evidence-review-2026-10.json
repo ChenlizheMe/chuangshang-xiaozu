@@ -119,6 +119,250 @@
       "tests": [
         "tests/priority-guidance.test.mjs"
       ]
+    },
+    {
+      "id": "hot-swollen-joint",
+      "type": "Professional-source review with conservative software mapping",
+      "sources": [
+        {
+          "title": "SANJO: diagnostic approach recommendations 1 and 3",
+          "url": "https://jbji.copernicus.org/articles/8/29/2023/"
+        }
+      ],
+      "decision": "Swelling/redness and local heat or purulent drainage around an existing joint region receive same-day assessment even if fever is unreported. This does not confirm joint infection or gout.",
+      "positiveExamples": [
+        "Patella.r: 红肿 + 局部发热 + 无法承重",
+        "Patella.r: 局部肿胀 + 局部压痛 + 流脓, without reported heat or fever"
+      ],
+      "negativeExamples": [
+        "Patella.r: 局部肿胀 only; 发热 only"
+      ],
+      "notEstablished": [
+        "No clinical diagnostic validation, no inferred negative examination, and no new options or condition IDs."
+      ],
+      "tests": [
+        "tests/literature-neuro-msk.test.mjs"
+      ],
+      "rules": [
+        "hot-swollen-joint"
+      ]
+    },
+    {
+      "id": "headache-and-motor-warning",
+      "type": "Professional-source review with conservative software mapping",
+      "sources": [
+        {
+          "title": "MSD Professional: Headache and Weakness",
+          "url": "https://www.msdmanuals.com/professional/neurologic-disorders/headache/approach-to-the-patient-with-headache"
+        },
+        {
+          "title": "MSD Professional: Weakness",
+          "url": "https://www.msdmanuals.com/professional/neurologic-disorders/symptoms-of-neurologic-disorders/weakness"
+        }
+      ],
+      "decision": "Head pain with fever, progression or neurological changes prompts assessment. Explicit sudden motor loss, or sudden head pain with diplopia, requires immediate assessment. Fatigue is not substituted for motor weakness.",
+      "positiveExamples": [
+        "Frontal bone: 紧箍感 + 发热 + 持续加重",
+        "Scaphoid bone.r: 肌力下降 + 突然起病"
+      ],
+      "negativeExamples": [
+        "Frontal bone: 跳痛 + 畏光 only",
+        "Scaphoid bone.r: 疲劳乏力 + 突然起病"
+      ],
+      "notEstablished": [
+        "No clinical diagnostic validation, no inferred negative examination, and no new options or condition IDs."
+      ],
+      "tests": [
+        "tests/literature-neuro-msk.test.mjs"
+      ],
+      "rules": [
+        "headache-systemic-progressive",
+        "headache-neurological-change",
+        "sudden-motor-or-head-neurological-change"
+      ]
+    },
+    {
+      "id": "neck-back-pain-fever",
+      "type": "Professional-source review with conservative software mapping",
+      "sources": [
+        {
+          "title": "MSD Professional: Neck and Back Pain, Red flags",
+          "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/neck-and-back-pain/overview-of-neck-and-back-pain"
+        }
+      ],
+      "decision": "Actual neck/back pain plus fever or chills changes disposition; posture-related clues cannot explain it away. No unselected fever or bilateral/gait finding is invented.",
+      "positiveExamples": [
+        "Lumbar vertebra L3: 酸痛 + 久坐后 + 活动后缓解 + 发热"
+      ],
+      "negativeExamples": [
+        "Lumbar vertebra L3: 酸痛 + 久坐后 + 活动后缓解"
+      ],
+      "notEstablished": [
+        "No clinical diagnostic validation, no inferred negative examination, and no new options or condition IDs."
+      ],
+      "tests": [
+        "tests/literature-neuro-msk.test.mjs"
+      ],
+      "rules": [
+        "neck-back-pain-fever"
+      ]
+    },
+    {
+      "id": "exercise-muscle-urine-warning",
+      "type": "Professional-source review with conservative software mapping",
+      "sources": [
+        {
+          "title": "Merck Professional: Rhabdomyolysis",
+          "url": "https://www.merckmanuals.com/professional/nephrology/acute-kidney-injury/rhabdomyolysis"
+        }
+      ],
+      "decision": "Exercise-related local/limb pain independent of the selected model tissue with dark urine and weakness/swelling/worsening are assessed immediately. No new disease card is added; dark urine does not establish myoglobinuria and missing the combination does not exclude disease.",
+      "positiveExamples": [
+        "Rectus femoris muscle.r: 酸痛 + 新运动后1至3天 + 尿色深 + 肌力下降",
+        "Tibia.l: 酸痛 + 新运动后1至3天 + 尿色深 + 肌力下降 uses the same warning as a muscle selection"
+      ],
+      "negativeExamples": [
+        "Rectus femoris muscle.r: 酸痛 + 新运动后1至3天"
+      ],
+      "notEstablished": [
+        "No clinical diagnostic validation, no inferred negative examination, and no new options or condition IDs."
+      ],
+      "tests": [
+        "tests/literature-neuro-msk.test.mjs"
+      ],
+      "rules": [
+        "exercise-muscle-urine-warning"
+      ]
+    },
+    {
+      "id": "injury-with-functional-loss",
+      "type": "Professional-source review with conservative software mapping",
+      "sources": [
+        {
+          "title": "MSD Professional: Ankle Sprains",
+          "url": "https://www.msdmanuals.com/professional/injuries-poisoning/sprains-and-other-soft-tissue-injuries/ankle-sprains"
+        },
+        {
+          "title": "Merck Professional: Knee Sprains and Meniscal Injuries",
+          "url": "https://www.merckmanuals.com/professional/injuries-poisoning/sprains-and-other-soft-tissue-injuries/knee-sprains-and-meniscal-injuries"
+        }
+      ],
+      "decision": "Inability to bear weight or joint locking after selected trauma/twisting requires same-day assessment. The app does not apply Ottawa imaging rules, grade an injury or exclude fracture.",
+      "positiveExamples": [
+        "Talus.r: 扭伤后 + 无法承重 + 局部肿胀",
+        "Patella.r: 扭伤后 + 关节卡住"
+      ],
+      "negativeExamples": [
+        "Talus.r: 扭伤后 + 局部肿胀"
+      ],
+      "notEstablished": [
+        "No clinical diagnostic validation, no inferred negative examination, and no new options or condition IDs."
+      ],
+      "tests": [
+        "tests/literature-neuro-msk.test.mjs"
+      ],
+      "rules": [
+        "injury-with-functional-loss"
+      ]
+    },
+    {
+      "id": "tension-headache-conflicting-vomiting",
+      "type": "Professional-source review with conservative software mapping",
+      "sources": [
+        {
+          "title": "ICHD-3: episodic and chronic tension-type headache",
+          "url": "https://ichd-3.org/2-tension-type-headache/2-1-infrequent-episodic-tension-type-headache/"
+        },
+        {
+          "title": "ICHD-3: chronic tension-type headache",
+          "url": "https://ichd-3.org/2-tension-type-headache/2-3-chronic-tension-type-headache/"
+        }
+      ],
+      "decision": "Explicit vomiting blocks the uncomplicated tension-type reference. Photophobia alone and nausea of uncollected severity are not blanket exclusions. Full ICHD diagnostic criteria are not implemented.",
+      "positiveExamples": [
+        "Frontal bone: 紧箍感 + 双侧头痛 + 呕吐 blocks tension reference"
+      ],
+      "negativeExamples": [
+        "Frontal bone: 紧箍感 + 双侧头痛 + 畏光 keeps qualified reference"
+      ],
+      "notEstablished": [
+        "No clinical diagnostic validation, no inferred negative examination, and no new options or condition IDs."
+      ],
+      "tests": [
+        "tests/literature-neuro-msk.test.mjs"
+      ]
+    },
+    {
+      "id": "sensory-distribution-not-invented",
+      "type": "Professional-source review with conservative software mapping",
+      "sources": [
+        {
+          "title": "MSD Professional: Polyneuropathy",
+          "url": "https://www.msdmanuals.com/professional/neurologic-disorders/peripheral-nervous-system-and-motor-unit-disorders/polyneuropathy"
+        }
+      ],
+      "decision": "The existing symmetric-pattern card requires the existing explicit symmetric-distribution tag. Lack of that tag is unknown, not evidence against all polyneuropathy.",
+      "positiveExamples": [
+        "Tibia.l: 麻木 + 双侧手足对称 retains reference"
+      ],
+      "negativeExamples": [
+        "Tibia.l: 灼烧 + 感觉减退 does not invent symmetry"
+      ],
+      "notEstablished": [
+        "No clinical diagnostic validation, no inferred negative examination, and no new options or condition IDs."
+      ],
+      "tests": [
+        "tests/literature-neuro-msk.test.mjs"
+      ]
+    },
+    {
+      "id": "radiation-evidence-not-double-counted",
+      "type": "Professional-source review with conservative software mapping",
+      "sources": [
+        {
+          "title": "MSD Professional: Lumbosacral Radiculopathy",
+          "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/neck-and-back-pain/lumbosacral-radiculopathy"
+        }
+      ],
+      "decision": "The dedicated down-leg reference needs the selected leg course and a separate sensory/motor observation. General radiation and down-leg radiation share one evidence family. This is a conservative display gate, not a medical requirement for radiculopathy.",
+      "positiveExamples": [
+        "Lumbar vertebra L3: 放射痛 + 沿腿向下 + 麻木"
+      ],
+      "negativeExamples": [
+        "Lumbar vertebra L3: 放射痛 + 麻木; 放射痛 + 沿腿向下"
+      ],
+      "notEstablished": [
+        "No clinical diagnostic validation, no inferred negative examination, and no new options or condition IDs."
+      ],
+      "tests": [
+        "tests/literature-neuro-msk.test.mjs"
+      ]
+    },
+    {
+      "id": "ulnar-and-cord-description-scope",
+      "type": "Professional-source review with conservative software mapping",
+      "sources": [
+        {
+          "title": "Merck Professional: Cubital Tunnel Syndrome",
+          "url": "https://www.merckmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/hand-disorders/cubital-tunnel-syndrome"
+        },
+        {
+          "title": "MSD Professional: Neck and Back Pain, neurological red flags",
+          "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/neck-and-back-pain/overview-of-neck-and-back-pain"
+        }
+      ],
+      "decision": "Ulnar-distribution symptoms alone do not establish the elbow as the lesion site. Existing cord-reference wording describes selected findings rather than asserting unreported bilateral symptoms or gait changes.",
+      "positiveExamples": [
+        "Scaphoid bone.r: 无名小指麻木 + 夜间麻木 retains nonlocalized reference",
+        "Lumbar vertebra L3: 排尿困难 + 放射痛"
+      ],
+      "negativeExamples": [],
+      "notEstablished": [
+        "No clinical diagnostic validation, no inferred negative examination, and no new options or condition IDs."
+      ],
+      "tests": [
+        "tests/literature-neuro-msk.test.mjs"
+      ]
     }
   ]
 }
