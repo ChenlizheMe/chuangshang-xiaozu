@@ -1887,7 +1887,7 @@
       },
       "threshold": {
         "zh": "面部肿胀、发热、吞咽或呼吸困难时立即急诊。",
-        "en": "面部肿胀、发热、吞咽或呼吸困难时立即急诊。"
+        "en": "Seek emergency care for facial swelling, fever, difficulty swallowing or breathing."
       },
       "context": []
     },
@@ -1905,7 +1905,7 @@
       ],
       "advice": {
         "zh": "使用软毛牙刷轻柔清洁，避免吸烟和反复刺激，尽快预约牙科。",
-        "en": "使用软毛牙刷轻柔清洁，避免吸烟和反复刺激，尽快预约牙科。."
+        "en": "Clean gently with a soft toothbrush, avoid smoking and repeated irritation, and arrange a dental appointment soon."
       },
       "shortDescription": {
         "zh": "牙龈出血伴肿胀或异味；松动及退缩另需牙周评估。",
@@ -1917,7 +1917,7 @@
       },
       "threshold": {
         "zh": "面部肿胀、发热、流脓或张口困难时及时就医。",
-        "en": "面部肿胀、发热、流脓或张口困难时及时就医。"
+        "en": "Seek prompt care for facial swelling, fever, pus or difficulty opening the mouth."
       },
       "context": []
     },
@@ -1937,7 +1937,7 @@
       ],
       "advice": {
         "zh": "暂时吃软食，避免大张口和咬硬物，热敷并记录卡顿情况。",
-        "en": "暂时吃软食，避免大张口和咬硬物，热敷并记录卡顿情况。."
+        "en": "Temporarily choose soft foods, avoid wide opening and hard biting, use a warm compress and note any catching."
       },
       "shortDescription": {
         "zh": "耳前或咀嚼肌痛，张口弹响、受限或卡住。",
@@ -1949,7 +1949,7 @@
       },
       "threshold": {
         "zh": "关节锁住、明显外伤、面部肿胀或吞咽呼吸困难时及时就医。",
-        "en": "关节锁住、明显外伤、面部肿胀或吞咽呼吸困难时及时就医。"
+        "en": "Seek prompt care for a locked jaw, significant injury, facial swelling or difficulty swallowing or breathing."
       },
       "context": [
         "咀嚼加重",
@@ -1971,7 +1971,7 @@
       ],
       "advice": {
         "zh": "避免用患侧咀嚼，保留脱落碎片，尽快看牙科。",
-        "en": "避免用患侧咀嚼，保留脱落碎片，尽快看牙科。."
+        "en": "Avoid chewing on the affected side, keep any broken fragments and see a dentist promptly."
       },
       "shortDescription": {
         "zh": "咬合锐痛、冷热敏感，可出现在外伤后。",
@@ -1983,7 +1983,7 @@
       },
       "threshold": {
         "zh": "牙齿明显移位、持续出血、面部肿胀或吞咽困难时急诊。",
-        "en": "牙齿明显移位、持续出血、面部肿胀或吞咽困难时急诊。"
+        "en": "Seek emergency care for a clearly displaced tooth, persistent bleeding, facial swelling or difficulty swallowing."
       },
       "context": [
         "外伤后"
@@ -2006,7 +2006,7 @@
       ],
       "advice": {
         "zh": "安静避光休息，记录持续时间和诱因。",
-        "en": "安静避光休息，记录持续时间和诱因；反复发作请就医制定方案。."
+        "en": "Rest in a quiet, dark place and record duration and triggers."
       },
       "shortDescription": {
         "zh": "搏动性头痛，伴恶心、畏光或视觉先兆。",
@@ -2018,7 +2018,7 @@
       },
       "threshold": {
         "zh": "突然最严重头痛、发热颈硬、意识改变或单侧无力时立即急诊。",
-        "en": "突然最严重头痛、发热颈硬、意识改变或单侧无力时立即急诊。"
+        "en": "Seek emergency care for a sudden worst-ever headache, fever with a stiff neck, altered awareness or one-sided weakness."
       },
       "context": [
         "活动诱发"
@@ -2037,7 +2037,7 @@
       "signs": [],
       "advice": {
         "zh": "记录触发动作和疼痛分布，避免自行加大止痛药剂量，尽快安排评估。",
-        "en": "记录触发动作和疼痛分布，避免自行加大止痛药剂量，尽快安排评估。."
+        "en": "Record triggering actions and the pain distribution. Do not increase painkiller doses yourself; arrange assessment promptly."
       },
       "shortDescription": {
         "zh": "单侧面部短促电击样痛，轻触或咀嚼可诱发。",
@@ -2049,7 +2049,7 @@
       },
       "threshold": {
         "zh": "伴面部无力、持续感觉缺失、视力改变或其他神经症状时立即就医。",
-        "en": "伴面部无力、持续感觉缺失、视力改变或其他神经症状时立即就医。"
+        "en": "Seek immediate care for facial weakness, persistent sensory loss, vision changes or other neurological symptoms."
       },
       "context": [
         "触碰诱发",
@@ -2071,7 +2071,7 @@
       ],
       "advice": {
         "zh": "减少长时间屈腕和重复抓握，保持腕部中立。",
-        "en": "减少长时间屈腕和重复抓握，保持腕部中立；持续或无力请评估。."
+        "en": "Reduce prolonged wrist bending and repetitive gripping; keep the wrist in a neutral position."
       },
       "shortDescription": {
         "zh": "拇、食、中指麻刺，常在夜间加重。",
@@ -2083,7 +2083,7 @@
       },
       "threshold": {
         "zh": "手部进行性无力、肌肉萎缩或麻木持续扩展时尽快就医。",
-        "en": "手部进行性无力、肌肉萎缩或麻木持续扩展时尽快就医。"
+        "en": "Seek prompt care for progressive hand weakness, muscle wasting or persistently spreading numbness."
       },
       "context": [
         "甩手缓解"
@@ -2104,7 +2104,7 @@
       "signs": [],
       "advice": {
         "zh": "保持轻柔活动，避免长时间坐压和突然搬重物，记录力量与步态变化。",
-        "en": "保持轻柔活动，避免长时间坐压和突然搬重物，记录力量与步态变化。."
+        "en": "Keep gently active, avoid prolonged sitting pressure and sudden heavy lifting, and note changes in strength and walking."
       },
       "shortDescription": {
         "zh": "腰臀向腿足放射的电击痛、麻刺或灼痛。",
@@ -2116,7 +2116,7 @@
       },
       "threshold": {
         "zh": "脚下垂、进行性无力、会阴麻木或大小便异常时立即急诊。",
-        "en": "脚下垂、进行性无力、会阴麻木或大小便异常时立即急诊。"
+        "en": "Seek emergency care for foot drop, progressive weakness, saddle numbness or bladder or bowel changes."
       },
       "context": []
     },
@@ -2137,7 +2137,7 @@
       ],
       "advice": {
         "zh": "记录对称范围和进展，检查鞋袜及皮肤是否受伤，尽快安排评估。",
-        "en": "记录对称范围和进展，检查鞋袜及皮肤是否受伤，尽快安排评估。."
+        "en": "Record the symmetrical distribution and progression, check footwear and skin for injury, and arrange assessment promptly."
       },
       "shortDescription": {
         "zh": "双侧对称麻木、灼烧或针刺，常累及手足。",
@@ -2149,7 +2149,7 @@
       },
       "threshold": {
         "zh": "快速进展的无力、呼吸吞咽困难或步行明显不稳时立即就医。",
-        "en": "快速进展的无力、呼吸吞咽困难或步行明显不稳时立即就医。"
+        "en": "Seek immediate care for rapidly progressing weakness, difficulty breathing or swallowing, or marked unsteadiness when walking."
       },
       "context": []
     },
@@ -2166,7 +2166,7 @@
       ],
       "advice": {
         "zh": "记录开始时间并保护眼睛避免干燥，尽快就医评估。",
-        "en": "记录开始时间并保护眼睛避免干燥，尽快就医评估。."
+        "en": "Record the onset time, protect the eye from drying and seek prompt medical assessment."
       },
       "shortDescription": {
         "zh": "单侧表情无力、口角下垂或闭眼不全。",
@@ -2178,7 +2178,7 @@
       },
       "threshold": {
         "zh": "突然面部歪斜伴说话含糊、手臂无力或视力异常时立即急诊。",
-        "en": "突然面部歪斜伴说话含糊、手臂无力或视力异常时立即急诊。"
+        "en": "Seek emergency care for sudden facial droop with slurred speech, arm weakness or vision changes."
       },
       "context": []
     },
@@ -2218,7 +2218,7 @@
       ],
       "advice": {
         "zh": "减少诱发负荷但保持舒适范围活动，逐步恢复。",
-        "en": "减少诱发负荷但保持舒适范围活动，逐步恢复；持续请接受康复评估。."
+        "en": "Reduce provoking loads while keeping movement within a comfortable range; return to activity gradually."
       },
       "shortDescription": {
         "zh": "肌腱附近压痛，用力或重复动作时疼痛。",
@@ -2230,7 +2230,7 @@
       },
       "threshold": {
         "zh": "突然断裂感、明显无力、快速肿胀或无法承重时及时就医。",
-        "en": "突然断裂感、明显无力、快速肿胀或无法承重时及时就医。"
+        "en": "Seek prompt care for a sudden snapping sensation, marked weakness, rapid swelling or inability to bear weight."
       },
       "context": [
         "反复用力",
@@ -2250,7 +2250,7 @@
       ],
       "advice": {
         "zh": "减少直接压迫，短时间冷敷并保持轻柔活动。",
-        "en": "减少直接压迫，短时间冷敷并保持轻柔活动；红热明显请评估。."
+        "en": "Reduce direct pressure, use brief cold compresses and keep gently active."
       },
       "shortDescription": {
         "zh": "关节旁压痛、局部肿胀，受压时加重。",
@@ -2262,7 +2262,7 @@
       },
       "threshold": {
         "zh": "高热、迅速扩大的红肿、流脓或无法活动时尽快就医。",
-        "en": "高热、迅速扩大的红肿、流脓或无法活动时尽快就医。"
+        "en": "Seek prompt care for high fever, rapidly spreading redness and swelling, pus or inability to move."
       },
       "context": [
         "侧卧肩痛",
@@ -2285,7 +2285,7 @@
       ],
       "advice": {
         "zh": "停止扭转和跑跳，抬高并短时间冷敷，尽快评估。",
-        "en": "停止扭转和跑跳，抬高并短时间冷敷，尽快评估。."
+        "en": "Stop twisting, running and jumping. Elevate the area, use brief cold compresses and arrange prompt assessment."
       },
       "shortDescription": {
         "zh": "扭伤后膝肿、卡顿、锁住或不稳。",
@@ -2297,7 +2297,7 @@
       },
       "threshold": {
         "zh": "无法承重、明显变形、膝关节锁死或肿胀迅速出现时及时就医。",
-        "en": "无法承重、明显变形、膝关节锁死或肿胀迅速出现时及时就医。"
+        "en": "Seek prompt care for inability to bear weight, obvious deformity, a locked knee or rapid swelling."
       },
       "context": [
         "扭伤后"
@@ -2320,7 +2320,7 @@
       ],
       "advice": {
         "zh": "少量多次补充水分和电解质，暂时选择清淡饮食。",
-        "en": "少量多次补充水分和电解质，暂时选择清淡饮食；症状持续请就医。."
+        "en": "Replace fluids and electrolytes in small, frequent amounts and temporarily choose bland foods."
       },
       "shortDescription": {
         "zh": "腹部绞痛伴腹泻、恶心或呕吐。",
@@ -2332,7 +2332,7 @@
       },
       "threshold": {
         "zh": "无法进水、明显脱水、血便、持续高热或剧烈腹痛时立即就医。",
-        "en": "无法进水、明显脱水、血便、持续高热或剧烈腹痛时立即就医。"
+        "en": "Seek immediate care for inability to take fluids, marked dehydration, blood in stool, persistent high fever or severe abdominal pain."
       },
       "context": []
     },
@@ -2374,7 +2374,7 @@
       ],
       "advice": {
         "zh": "避免自行热敷、泻药或大量进食，尽快就医检查。",
-        "en": "避免自行热敷、泻药或大量进食，尽快就医检查。."
+        "en": "Avoid applying heat, taking laxatives or eating large amounts; seek prompt medical assessment."
       },
       "shortDescription": {
         "zh": "腹痛逐渐集中到右下腹，可伴恶心、发热。",
@@ -2386,7 +2386,7 @@
       },
       "threshold": {
         "zh": "疼痛持续加重、走动震动明显加重、腹部僵硬或反复呕吐时立即急诊。",
-        "en": "疼痛持续加重、走动震动明显加重、腹部僵硬或反复呕吐时立即急诊。"
+        "en": "Seek emergency care for steadily worsening pain, pain markedly worsened by movement, abdominal rigidity or repeated vomiting."
       },
       "context": [
         "持续加重"
@@ -2407,7 +2407,7 @@
       ],
       "advice": {
         "zh": "记录尿色、排尿和疼痛波动，补充适量水分并尽快评估。",
-        "en": "记录尿色、排尿和疼痛波动，补充适量水分并尽快评估。."
+        "en": "Record urine colour, urination and changes in pain, maintain appropriate hydration and arrange prompt assessment."
       },
       "shortDescription": {
         "zh": "腰侧绞痛向腹股沟放射，可伴血尿或恶心。",
@@ -2419,7 +2419,7 @@
       },
       "threshold": {
         "zh": "发热寒战、无法排尿、血尿明显、持续呕吐或疼痛无法控制时立即就医。",
-        "en": "发热寒战、无法排尿、血尿明显、持续呕吐或疼痛无法控制时立即就医。"
+        "en": "Seek immediate care for fever or chills, inability to urinate, marked blood in urine, persistent vomiting or uncontrolled pain."
       },
       "context": []
     },
@@ -2439,7 +2439,7 @@
       ],
       "advice": {
         "zh": "暂停剧烈活动并记录呼吸变化，不要只按肌肉痛持续观察。",
-        "en": "暂停剧烈活动并记录呼吸变化，不要只按肌肉痛持续观察。."
+        "en": "Pause strenuous activity and record breathing changes. Do not keep observing it solely as muscle pain."
       },
       "shortDescription": {
         "zh": "深呼吸或咳嗽时胸部锐痛。",
@@ -2451,7 +2451,7 @@
       },
       "threshold": {
         "zh": "呼吸困难、咳血、嘴唇发青、突发剧烈胸痛或晕厥时立即急诊。",
-        "en": "呼吸困难、咳血、嘴唇发青、突发剧烈胸痛或晕厥时立即急诊。"
+        "en": "Seek emergency care for difficulty breathing, coughing blood, blue lips, sudden severe chest pain or fainting."
       },
       "context": []
     },

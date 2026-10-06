@@ -32,7 +32,7 @@ export function assessSymptoms(knowledge,input={}){
  else if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,'突发剧痛')))warn('突发严重胸痛：立即联系急救，不要等待更多症状。','Sudden severe chest pain: call emergency services without waiting for more symptoms.');
  else if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,'压迫感')))warn('新发胸部压迫感应尽快就医；突然发生或持续不缓解时立即联系急救。','New chest pressure needs prompt assessment; sudden or persistent pressure needs emergency care.');
  if(abdominal&&(has('突发剧痛','黑便','血便','呕血','腹部僵硬','晕厥')))warn('严重或突发腹部/盆腔痛、出血、腹部僵硬或晕厥：立即急诊。','Severe or sudden abdominal/pelvic pain, bleeding, rigidity or fainting: seek emergency assessment.');
- if(profiles.some((p,i)=>p.region==='abdomen'&&(normalized[i].tags.has('腹痛迁移至右下腹')||normalized[i].location==='rlq'&&normalized[i].tags.has('持续加重'))))warn('右下腹迁移痛或持续加重的右下腹痛伴发热：尽快急诊排查阑尾炎等原因。','Migrating or worsening right-lower abdominal pain, especially with fever, needs urgent assessment for appendicitis and other causes.');
+ if(profiles.some((p,i)=>p.region==='abdomen'&&(normalized[i].tags.has('腹痛迁移至右下腹')||normalized[i].location==='rlq'&&normalized[i].tags.has('持续加重'))))warn('右下腹迁移痛或持续加重的右下腹痛：尽快急诊排查阑尾炎等原因，伴发热时更应警惕。','Migrating or worsening right-lower abdominal pain, especially with fever, needs urgent assessment for appendicitis and other causes.');
  if(has('会阴麻木','排尿困难')&&profiles.some(p=>['neck','spine','hip','pelvis','lower-limb'].includes(p.region)))warn('腰腿症状伴会阴麻木或新发排尿困难：立即急诊评估。','Back/leg symptoms with saddle numbness or new difficulty passing urine need emergency assessment.');
  if(profiles.some((p,i)=>p.region==='eye'&&localHas(i,'视物模糊','畏光')))warn('眼痛伴视力变化或畏光：尽快眼科急诊。','Eye pain with vision change or light sensitivity: seek urgent eye assessment.');
  if(profiles.some((p,i)=>p.region==='lower-limb'&&localHas(i,'单侧肿胀')))warn('单侧腿部新发肿痛需要当日排查血栓；同时气短或胸痛应立即急救。','New one-sided leg swelling needs same-day assessment for a clot; associated breathlessness or chest pain is an emergency.');
@@ -43,7 +43,11 @@ export function assessSymptoms(knowledge,input={}){
  if(has('血尿'))warn('出现血尿：尽快就医检查；伴剧痛、发热或排尿困难时应急诊。','Blood in urine needs prompt medical assessment; severe pain, fever or difficulty passing urine needs urgent care.');
 
  if(has('突发最严重头痛'))warn('突发最严重头痛：立即急诊，记录开始时间。','Sudden worst-ever headache: seek emergency care and note onset time.');
- if(has('呼吸困难','静息气短','吞咽困难'))warn('新发呼吸困难、静息气短或无法吞咽液体：立即就医；严重呼吸困难联系急救。','New breathing difficulty, breathlessness at rest or inability to swallow fluids needs immediate care; severe breathing difficulty is an emergency.');
+ if(has('呼吸困难','静息气短'))warn('新发呼吸困难或静息气短：立即就医；严重呼吸困难联系急救。','New breathing difficulty or breathlessness at rest needs immediate care; severe breathing difficulty is an emergency.');
+ if(has('吞咽困难')){
+  if(profiles.some((p,i)=>['tooth','jaw'].includes(p.region)&&localHas(i,'牙龈肿胀','面部肿胀','流脓')))warn('牙齿或颌面肿胀/感染表现伴吞咽困难：立即急诊；伴呼吸困难联系急救。','Dental or facial swelling/infection signs with difficulty swallowing need emergency assessment; call emergency services if breathing is affected.');
+  else warn('新发吞咽困难：尽快就医；如已无法吞咽液体、明显口腔肿胀或伴呼吸困难，立即急诊。','New difficulty swallowing needs prompt medical assessment. If unable to swallow liquids, the mouth is markedly swollen or breathing is affected, seek emergency care.');
+ }
  if(has('突然听力下降'))warn('突然听力下降：当日尽快耳鼻喉科评估。','Sudden hearing loss needs urgent same-day ENT assessment.');
  if(profiles.some((p,i)=>['shoulder','upper-limb','hand','hip','knee','ankle','foot'].includes(p.region)&&['红肿','局部肿胀'].some(t=>normalized[i].tags.has(t))&&has('发热','发冷')))
   warn('关节新发肿痛伴发烧或寒战：当日急诊排查关节感染。','New swollen joint with fever or chills needs same-day urgent assessment for infection.');
