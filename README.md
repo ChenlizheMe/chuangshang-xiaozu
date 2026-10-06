@@ -103,3 +103,6 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 运行 `npm run check` 一次执行全部 Node 回归与生产构建。Pages 工作流使用锁文件安装依赖，并在测试失败时阻止部署。回归覆盖名称与模型完整性、单部位状态、规则证据、危险信号、缓存升级及断网；合成输入的规则回归不表示临床准确率或真实设备性能验证。
 
 离线缓存只保留成功的 HTML 导航响应。上游 404/5xx 不会覆盖可用首页；缺失的脚本、样式与二进制资源返回真实资源错误，不会用 HTML 冒充。浏览器限制缓存或存储已满时，成功的在线响应仍正常提供。
+
+
+危险信号回归同时验证“现有按钮可见”和“所选组合能触发优先处理”，覆盖腹壁突发剧痛、牙痛相关呼吸/吞咽困难、不同胸痛描述与伴随信号、盆腔与妊娠/晕厥，以及侧腰痛伴发热和血尿。未增加症状或病种选项。依据：[NHS 胸痛](https://www.nhs.uk/symptoms/chest-pain/)、[NHS 腹痛](https://www.nhs.uk/symptoms/stomach-ache/)、[NHS 牙脓肿](https://www.nhs.uk/conditions/dental-abscess/)、[NHS 盆腔痛](https://www.nhs.uk/symptoms/pelvic-pain/)、[NHS 肾感染](https://www.nhs.uk/conditions/kidney-infection/)。这些是保守就医提示，不确定病因，也不等于临床验证。
