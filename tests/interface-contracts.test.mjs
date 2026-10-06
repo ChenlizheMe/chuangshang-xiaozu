@@ -37,3 +37,10 @@ test('native motion and compact mobile layouts have explicit accessible fallback
  assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
  const pkg=JSON.parse(fs.readFileSync(new URL('../package.json',import.meta.url)));assert.ok(!pkg.dependencies.gsap);
 });
+
+test('English report labels have a non-overlapping narrow-screen layout',()=>{
+ const css=fs.readFileSync(new URL('../src/cassette.css',import.meta.url),'utf8');
+ const tree=postcss.parse(css);let stacked=false;
+ tree.walkAtRules('media',media=>{if(media.params==='(max-width:700px)')media.walkRules('[data-lang=en] .card-field',rule=>{rule.walkDecls('grid-template-columns',decl=>{if(decl.value==='minmax(0,1fr)')stacked=true;});});});
+ assert.ok(stacked,'English labels and values must stack inside narrow report panels');
+});

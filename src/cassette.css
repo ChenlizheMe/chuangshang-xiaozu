@@ -60,3 +60,5 @@ button:active{transform:translateY(1px) scale(.98)}
  [data-lang=en] .part-selection{font-size:clamp(17px,4.8vw,21px);font-weight:600;letter-spacing:-.015em}
 }
 @media(prefers-reduced-motion:reduce){button:hover,button:active{transform:none}*,*::before,*::after{animation:none!important;transition:none!important}}
+[data-lang=en] .card-field{grid-template-columns:72px minmax(0,1fr)}
+@media(max-width:700px){[data-lang=en] .card-field{grid-template-columns:minmax(0,1fr);gap:4px}}
