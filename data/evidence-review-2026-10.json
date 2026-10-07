@@ -1992,6 +1992,79 @@
         "tests/build/verify-built-assessment.test.mjs"
       ],
       "status": "implemented-with-stated-limits"
+    },
+    {
+      "id": "new-slurred-speech-display-scope",
+      "type": "Bilingual observation-label consistency",
+      "sources": [
+        {
+          "title": "American Stroke Association: Stroke Symptoms, B.E. F.A.S.T. speech",
+          "url": "https://www.stroke.org/en/about-stroke/stroke-symptoms",
+          "use": "A new speech warning warrants immediate help; uncertainty about the exact onset is not an exclusion criterion."
+        },
+        {
+          "title": "CDC: Signs and Symptoms of Stroke",
+          "url": "https://www.cdc.gov/stroke/signs-symptoms/index.html",
+          "use": "Speech difficulty is a stroke warning; note onset and seek immediate help rather than waiting to establish every detail."
+        }
+      ],
+      "decision": "Change only the Chinese label for the existing 说话含糊 ID to 新出现说话含糊, matching New slurred speech. Keep the existing emergency action, predicate and warning text. New describes a change from the prior state and does not automatically establish sudden onset.",
+      "appliesTo": "The existing selectable speech observation. Frontal bone provides a verified two-asset UI path; a separate sudden-onset checkbox remains optional for this existing action.",
+      "notEstablished": [
+        "This is not a diagnosis of stroke, an examination of speech, or confirmation of an objective onset time.",
+        "Known longstanding stable or clearly chronic progressive speech changes are not separately characterized by this input and were not newly validated.",
+        "NICE full guidance was not retrieved in this review and is not cited as full-text support."
+      ],
+      "tests": [
+        "tests/bilingual-observation-copy.test.mjs"
+      ]
+    },
+    {
+      "id": "thermal-relief-display-relation",
+      "type": "Bilingual observation-label consistency",
+      "sources": [
+        {
+          "title": "American Association of Endodontists: Endodontic Diagnosis, pages 2–3",
+          "url": "https://www.aae.org/specialty/wp-content/uploads/sites/2/2017/07/endodonticdiagnosisfall2013.pdf",
+          "use": "Distinguishes pain settling after a thermal stimulus is removed from pain that persists after removal; symptom descriptions alone do not establish the tissue diagnosis."
+        }
+      ],
+      "decision": "For the existing 刺激去除即缓解 ID, retain 冷热刺激一停就好 and replace Brief sensitivity with Pain stops when hot/cold stimulus ends. Preserve its existing combination with thermal sensitivity and the lingering-pain exclusion.",
+      "appliesTo": "The existing dental observation and its displayed matched detail, verified on Lower canine.l in both shipped model qualities.",
+      "notEstablished": [
+        "Brief duration alone does not supply the stimulus-removal relationship.",
+        "No new seconds cutoff, symptom, diagnostic criterion or treatment indication is introduced.",
+        "Relief after stimulus removal alone cannot distinguish dentin sensitivity from reversible pulp irritation."
+      ],
+      "tests": [
+        "tests/bilingual-observation-copy.test.mjs"
+      ]
+    },
+    {
+      "id": "head-reference-fever-stiffness-copy",
+      "type": "Bilingual reference safety-net consistency",
+      "sources": [
+        {
+          "title": "MSD Manual Professional: Acute Bacterial Meningitis",
+          "url": "https://www.msdmanuals.com/professional/neurologic-disorders/meningitis/acute-bacterial-meningitis",
+          "use": "Fever, headache and neck stiffness can indicate an urgent evaluation context; requiring a high fever is not supported as an exclusion boundary."
+        },
+        {
+          "title": "NHS: Meningitis",
+          "url": "https://www.nhs.uk/conditions/meningitis/",
+          "use": "Supports urgent assessment of concerning combinations without assuming every possible symptom must be present."
+        }
+      ],
+      "decision": "In the head-pressure-pattern reference threshold only, change 伴高热颈硬 to 伴发热和颈部僵硬. Retain fever with stiff neck in English, the AND relationship and the existing emergency instruction.",
+      "appliesTo": "A conditional future safety net on an existing reference card. Frontal bone with band-like pressure and bilateral headache displays the card without a priority override.",
+      "notEstablished": [
+        "The selected headache observations do not establish that fever or neck stiffness is currently present.",
+        "This does not diagnose meningitis, add a temperature cutoff or a new neck-stiffness input, or modify an independent triage predicate.",
+        "Absent or unreported high fever cannot be used to exclude infection."
+      ],
+      "tests": [
+        "tests/bilingual-observation-copy.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [

@@ -178,7 +178,7 @@
     {
       "id": "刺激去除即缓解",
       "zh": "冷热刺激一停就好",
-      "en": "Brief sensitivity"
+      "en": "Pain stops when hot/cold stimulus ends"
     },
     {
       "id": "自发痛",
@@ -809,7 +809,7 @@
     },
     {
       "id": "说话含糊",
-      "zh": "突然说话含糊",
+      "zh": "新出现说话含糊",
       "en": "New slurred speech"
     },
     {
@@ -1150,7 +1150,7 @@
         "en": "Stress, poor sleep, prolonged sitting or neck and shoulder tension"
       },
       "threshold": {
-        "zh": "突然达到最严重、伴高热颈硬、意识改变、单侧无力、视力异常或反复呕吐时立即急诊。",
+        "zh": "突然达到最严重、伴发热和颈部僵硬、意识改变、单侧无力、视力异常或反复呕吐时立即急诊。",
         "en": "Seek emergency care for sudden worst-ever pain, fever with stiff neck, confusion, one-sided weakness, vision change or repeated vomiting."
       },
       "context": [
