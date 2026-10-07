@@ -1204,6 +1204,47 @@
       "tests": [
         "tests/confirmed-flank-state.test.mjs"
       ]
+    },
+    {
+      "id": "confirmed-left-lower-abdominal-alarm",
+      "reviewedOn": "2026-10-07",
+      "status": "implemented-with-stated-limits",
+      "type": "Explicit-location safety disposition, without changing reference evidence gates",
+      "rules": [
+        "diverticular-left-abdominal",
+        "confirmed-left-lower-pain-warning"
+      ],
+      "sources": [
+        {
+          "title": "NHS: Diverticular disease and diverticulitis, urgent advice",
+          "url": "https://www.nhs.uk/conditions/diverticular-disease-and-diverticulitis/",
+          "use": "Worsening abdominal pain and systemic fever/chills warrant urgent medical contact."
+        },
+        {
+          "title": "MSD Professional: Colonic Diverticulitis, symptoms and signs",
+          "url": "https://www.msdmanuals.com/professional/gastrointestinal-disorders/diverticular-disease/colonic-diverticulitis",
+          "use": "Left-lower pain or tenderness may occur with fever; diagnosis requires assessment."
+        }
+      ],
+      "decision": "Explicitly confirmed LLQ location plus local pain/tenderness and fever, chills or progressive worsening receives same-day assessment. A selected organ does not supply actual LLQ location. The existing reference card now describes bowel changes and fever as possible associated features, not guaranteed patient facts.",
+      "positiveExamples": [
+        "Abdominal wall: confirmed llq + 疼痛 + 发热",
+        "Confirmed llq + 局部压痛 + 发冷",
+        "Confirmed llq + 疼痛 + 持续加重, without a bowel-change checkbox"
+      ],
+      "negativeExamples": [
+        "LLQ plus fever/progression alone does not establish pain.",
+        "Unknown/diffuse location does not establish LLQ.",
+        "Local warmth alone does not establish systemic fever.",
+        "A single vomiting checkbox does not establish repeated vomiting or inability to retain fluid.",
+        "Constipation and bloating do not establish complete inability to pass stool or gas."
+      ],
+      "notEstablished": [
+        "No diagnosis, diagnostic gate relaxation, bowel-change fact or organ-source inference. Existing higher-priority bleeding guidance remains in force."
+      ],
+      "tests": [
+        "tests/confirmed-llq-state.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [

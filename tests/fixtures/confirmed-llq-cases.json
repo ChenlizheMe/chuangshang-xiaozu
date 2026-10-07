@@ -1,0 +1,280 @@
+{
+  "scope": "Independent source-reviewed synthetic LLQ cases. Local warmth is an API-only negative, not an exposed abdominal option. Reference IDs are unchanged from the recorded baseline.",
+  "cases": [
+    {
+      "name": "pain systemic fever",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "发热"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": "same-day",
+      "referenceIds": [
+        "diverticular-left-abdominal"
+      ]
+    },
+    {
+      "name": "pain chills",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "发冷"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": "same-day",
+      "referenceIds": [
+        "basic-abdomen-abdomen"
+      ]
+    },
+    {
+      "name": "tenderness systemic fever",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "局部压痛",
+          "发热"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": "same-day",
+      "referenceIds": [
+        "basic-abdomen-abdomen"
+      ]
+    },
+    {
+      "name": "worsening existing bowel pattern",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "排便改变"
+        ],
+        "timing": [
+          "持续加重"
+        ],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": "same-day",
+      "referenceIds": [
+        "diverticular-left-abdominal"
+      ]
+    },
+    {
+      "name": "worsening LLQ pain alone",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [],
+        "timing": [
+          "持续加重"
+        ],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": "same-day",
+      "referenceIds": [
+        "basic-abdomen-abdomen"
+      ]
+    },
+    {
+      "name": "local warmth only",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "局部发热"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": false,
+      "wantLevel": null,
+      "referenceIds": [
+        "basic-abdomen-abdomen"
+      ]
+    },
+    {
+      "name": "site plus fever no pain",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": null,
+      "referenceIds": [
+        "basic-systemic-abdomen"
+      ]
+    },
+    {
+      "name": "unknown site pain fever",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "发热"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": null,
+      "referenceIds": [
+        "basic-abdomen-abdomen"
+      ]
+    },
+    {
+      "name": "diffuse pain fever",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "diffuse",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "发热"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": null,
+      "referenceIds": [
+        "basic-abdomen-abdomen"
+      ]
+    },
+    {
+      "name": "ordinary LLQ bowel pattern",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "排便改变"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": null,
+      "referenceIds": [
+        "diverticular-left-abdominal"
+      ]
+    },
+    {
+      "name": "vomiting without duration",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "排便改变",
+          "呕吐"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": null,
+      "referenceIds": [
+        "diverticular-left-abdominal"
+      ]
+    },
+    {
+      "name": "blood already emergent",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "血便"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": "emergency",
+      "referenceIds": [
+        "diverticular-left-abdominal"
+      ]
+    },
+    {
+      "name": "abdominal distension constipation",
+      "input": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [
+          "疼痛",
+          "腹胀"
+        ],
+        "signs": [
+          "便秘",
+          "排便改变"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "uiReachable": true,
+      "wantLevel": null,
+      "referenceIds": [
+        "diverticular-left-abdominal"
+      ]
+    }
+  ]
+}
