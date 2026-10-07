@@ -1,0 +1,326 @@
+{
+  "scope": "Minimal source/build parity cases for reported observation semantics; actual anatomy and per-field visibility are asserted by reported-observation-facts.test.mjs. Not clinical validation.",
+  "cases": [
+    {
+      "name": "back-night-fever",
+      "report": {
+        "part": "Vertebra L3",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "expected": {
+        "triageLevel": "same-day",
+        "itemIds": [
+          "basic-priority-spine"
+        ],
+        "warningIds": [
+          "neck-back-pain-fever"
+        ]
+      }
+    },
+    {
+      "name": "back-night-weight-loss",
+      "report": {
+        "part": "Vertebra L3",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "体重下降"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "expected": {
+        "triageLevel": "prompt",
+        "itemIds": [
+          "basic-priority-spine"
+        ],
+        "warningIds": [
+          "neck-back-weight-change-review"
+        ]
+      }
+    },
+    {
+      "name": "back-night-alone",
+      "report": {
+        "part": "Vertebra L3",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "basic-spine-spine"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "back-fever-without-pain",
+      "report": {
+        "part": "Vertebra L3",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "basic-systemic-spine"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "elbow-numbness-only",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "屈肘加重"
+        ]
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "basic-sensory-upper-limb"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "elbow-with-reported-distribution",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [
+          "无名小指麻木"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "屈肘加重"
+        ]
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "ulnar-nerve-irritation"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "facial-numbness-unknown-onset",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [
+          "面部麻木"
+        ],
+        "signs": [],
+        "timing": [],
+        "triggers": []
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "basic-sensory-head"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "facial-numbness-recurring",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [
+          "面部麻木"
+        ],
+        "signs": [],
+        "timing": [
+          "反复数月"
+        ],
+        "triggers": []
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "basic-sensory-head"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "sudden-facial-numbness",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [
+          "面部麻木"
+        ],
+        "signs": [],
+        "timing": [
+          "突然起病"
+        ],
+        "triggers": []
+      },
+      "expected": {
+        "triageLevel": "emergency",
+        "itemIds": [
+          "basic-priority-head"
+        ],
+        "warningIds": [
+          "sudden-facial-numbness"
+        ]
+      }
+    },
+    {
+      "name": "sudden-elbow-trigger-not-facial",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "突然起病"
+        ],
+        "triggers": [
+          "屈肘加重"
+        ]
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "basic-sensory-upper-limb"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "remote-shoulder-swelling",
+      "report": {
+        "part": "Patella.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "局部肿胀"
+        ],
+        "timing": [],
+        "triggers": [
+          "侧卧肩痛"
+        ]
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "basic-knee-knee"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "remote-shoulder-with-local-tenderness",
+      "report": {
+        "part": "Patella.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "局部肿胀",
+          "局部压痛"
+        ],
+        "timing": [],
+        "triggers": [
+          "侧卧肩痛"
+        ]
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "bursitis-pattern"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "local-shoulder-swelling",
+      "report": {
+        "part": "Scapula.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "局部肿胀"
+        ],
+        "timing": [],
+        "triggers": [
+          "侧卧肩痛"
+        ]
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "bursitis-pattern"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "remote-shoulder-with-independent-fatigue",
+      "report": {
+        "part": "Patella.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "疲劳乏力"
+        ],
+        "timing": [],
+        "triggers": [
+          "侧卧肩痛"
+        ]
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "basic-fatigue-knee"
+        ],
+        "warningIds": []
+      }
+    }
+  ]
+}

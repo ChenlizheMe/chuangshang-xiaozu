@@ -155,6 +155,7 @@ export async function verifyBuiltAssessment({repo: repoOption = defaultRepo, dis
   const visceral=json('tests/fixtures/visceral-source-cases.json');
   const flank=json('tests/fixtures/confirmed-flank-cases.json');
   const llq=json('tests/fixtures/confirmed-llq-cases.json');
+  const observations=json('tests/fixtures/reported-observation-facts.json');
   const crossTestAst=parseAst(read('tests/cross-specialty-invariants.test.mjs'));
   const dangerDeclarations=crossTestAst.body.flatMap(n=>n.type==='VariableDeclaration'?n.declarations:[]).filter(n=>n.id.name==='danger');
   assert.equal(dangerDeclarations.length,1);
@@ -176,6 +177,7 @@ export async function verifyBuiltAssessment({repo: repoOption = defaultRepo, dis
   for(const c of visceral.cases)add('visceral reference boundaries',c.name,c.report,{kind:'condition',id:c.conditionId,match:c.shouldMatch});
   for(const c of flank.cases)add('confirmed flank boundaries',c.name,c.input,{kind:'triage',level:c.wantLevel});
   for(const c of llq.cases)add('confirmed LLQ boundaries',c.name,c.input,{kind:'llq',level:c.wantLevel,referenceIds:c.referenceIds});
+  for(const c of observations.cases)add('reported observation boundaries',c.name,c.report,{kind:'observation',...c.expected});
   for(const c of cross.crossLayerCases)for(const [i,r]of c.reports.entries())add('cross-layer equivalent areas',`${c.name} #${i+1}`,r);
   for(const {name,report:r}of cross.seeds) {
     add('reversed input arrays',name,{...r,...Object.fromEntries(fields.map(f=>[f,[...(r[f]||[])].reverse()]))});
@@ -203,6 +205,11 @@ export async function verifyBuiltAssessment({repo: repoOption = defaultRepo, dis
         if(exp.kind==='condition')assert.equal(actual.items.some(i=>i.id===exp.id),exp.match);
         if(exp.kind==='triage'||exp.kind==='llq')assert.equal(actual.triageLevel,exp.level);
         if(exp.kind==='llq')assert.deepEqual(actual.items.map(i=>i.id).filter(id=>!id.startsWith('basic-')),exp.referenceIds.filter(id=>!id.startsWith('basic-')));
+        if(exp.kind==='observation'){
+          assert.equal(actual.triageLevel,exp.triageLevel);
+          assert.deepEqual(actual.items.map(i=>i.id),exp.itemIds);
+          assert.deepEqual(actual.urgent.map(w=>w.id),exp.warningIds);
+        }
         expectationChecks++;
       }
     } catch(error) {

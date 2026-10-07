@@ -51,20 +51,21 @@ before(async () => {
 
 test('real built modules pass all retained inputs and optional reports contain verifiable hashes', () => {
   assert.equal(report.status, 'PASS');
-  assert.equal(report.coverage.uniqueInputs, 7633);
-  assert.equal(report.coverage.rawEntries, 9672);
-  assert.equal(report.coverage.existingFixtureExpectationsChecked, 139);
+  assert.equal(report.coverage.uniqueInputs, 7647);
+  assert.equal(report.coverage.rawEntries, 9686);
+  assert.equal(report.coverage.existingFixtureExpectationsChecked, 153);
+  assert.deepEqual(report.coverage.groups['reported observation boundaries'], {raw:14,newUnique:14});
   assert.equal(report.sourceSHA, sha(JSON.stringify(report.stability.sourceHashes)));
   for (const module of report.actualCompiledModules) assert.equal(module.sha256, sha(fs.readFileSync(path.join(repo, module.file))));
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(scratch, 'report/report.json'), 'utf8')), report);
-  assert.equal(JSON.parse(fs.readFileSync(path.join(scratch, 'report/case-manifest.json'), 'utf8')).length, 7633);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(scratch, 'report/case-manifest.json'), 'utf8')).length, 7647);
 });
 
 test('the default CLI resolves the repo from its own path and writes no files', () => {
   const before = snapshot(repo);
   const output = execFileSync(process.execPath, ['--experimental-vm-modules', path.join(repo, 'scripts/verify-built-assessment.mjs')],
     {cwd:os.tmpdir(), encoding:'utf8', stdio:['ignore','pipe','pipe'], timeout:60000});
-  assert.match(output, /^Built assessment parity PASS: 7,633 unique inputs, 139 fixture expectations, \d+ actual modules;/);
+  assert.match(output, /^Built assessment parity PASS: 7,647 unique inputs, 153 fixture expectations, \d+ actual modules;/);
   assert.equal(output.trim().split('\n').length, 1);
   assert.deepEqual(snapshot(repo), before);
 });
@@ -92,6 +93,16 @@ test('rejects a changed assessor result while preserving its detectable shape', 
   const property = result.argument.properties.find(node => (node.key.name || node.key.value) === 'triageLevel');
   return replace(text, property.value, JSON.stringify('CORRUPTED'));
 }, /Complete output parity/));
+
+test('new facial-onset fixtures detect corruption isolated to that branch', t => rejectsCorruption(t, text => {
+  const node=functionNode(),parameter=node.params[1].left || node.params[1];
+  assert.equal(parameter.type,'Identifier');
+  const result=node.body.body.find(n=>n.type==='ReturnStatement'&&n.argument?.type==='ObjectExpression');
+  const property=result.argument.properties.find(n=>(n.key.name||n.key.value)==='triageLevel');
+  const original=text.slice(property.value.start,property.value.end);
+  const applies=`(${parameter.name}.reports||[]).some(r=>(r.feelings||[]).includes('面部麻木')&&(r.timing||[]).includes('突然起病'))`;
+  return replace(text,property.value,`(${applies}?'prompt':(${original}))`);
+}, /Complete output parity.*reported observation boundaries: sudden-facial-numbness/));
 
 test('rejects input mutation even when the full result remains equal', t => rejectsCorruption(t, text => {
   const node = functionNode(), offset = node.body.start + 1;

@@ -20,6 +20,21 @@ function assess(part,layer,tags){
 }
 const has=(result,id)=>result.items.some(item=>item.id===id);
 const assertPriorityAdvice=result=>{for(const item of result.items)for(const lang of ['zh','en'])assert.equal(item.advice[lang],result.urgent[0][lang]);};
+test('the minimal built-parity fixtures use real selectable anatomy and retain both positive and negative outcomes',()=>{
+ const fixture=JSON.parse(fs.readFileSync(new URL('./fixtures/reported-observation-facts.json',import.meta.url)));
+ assert.equal(fixture.cases.length,14);
+ for(const {name,report,expected}of fixture.cases){
+  assertSelectableStructure(report.part,report.layer);
+  for(const field of fields){
+   const available=new Set(visibleSymptoms(k,{parts:[report.part],layer:report.layer,kind:field}).map(option=>option.id));
+   for(const tag of report[field])assert.ok(available.has(tag),`${name}: ${field}:${tag}`);
+  }
+  const result=assessSymptoms(k,{reports:[report]});
+  assert.equal(result.triageLevel,expected.triageLevel,name);
+  assert.deepEqual(result.items.map(item=>item.id),expected.itemIds,name);
+  assert.deepEqual(result.urgent.map(warning=>warning.id),expected.warningIds,name);
+ }
+});
 for(const part of ['Vertebra L3','Vertebra C3']){
  for(const [sign,level] of [['发热','same-day'],['发冷','same-day'],['体重下降','prompt']])test(`${part}: night pain reuses the existing ${sign} disposition`,()=>{
   const r=assess(part,'skeleton',['夜间痛',sign]);
