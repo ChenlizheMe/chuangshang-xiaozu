@@ -3995,7 +3995,9 @@
     {
       "id": "持续超过10天",
       "zh": "持续超过10天",
-      "en": "Over 10 days"
+      "en": "Over 10 days",
+      "group": "duration",
+      "universal": false
     },
     {
       "id": "经期相关",

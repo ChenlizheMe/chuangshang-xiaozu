@@ -72,7 +72,7 @@ const regionForTag=(knowledge,id)=>{
 
 export function visibleSymptoms(knowledge,{parts=[],layer='skeleton',kind='feelings'}={}){
   const tags=knowledge[kind]||[];
-  const universalTiming=tag=>kind==='timing'&&(tag.group==='duration'||['突然起病','持续加重','短暂发作','反复数月'].includes(tag.id));
+  const universalTiming=tag=>kind==='timing'&&(tag.group==='duration'&&tag.universal!==false||['突然起病','持续加重','短暂发作','反复数月'].includes(tag.id));
   const profiles=parts.map(part=>clinicalProfile(part,layer));
   if(profiles.length&&profiles.every(p=>p.organ)){
     const conditions=new Set(profiles.flatMap(p=>ORGAN_CONDITIONS[p.organ]||[]));
