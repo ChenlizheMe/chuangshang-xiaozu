@@ -114,23 +114,44 @@ self.addEventListener('install', event => {
   })());
 });
 self.addEventListener('activate', event => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
+  let expired = false, timer;
+  // Activation buffers fetch dispatch. Bound optional maintenance as a whole,
+  // while preserving uncertain caches rather than treating timeout as success.
+  const budget = new Promise(resolve => { timer = setTimeout(() => { expired = true; resolve(); }, 1500); });
+  const step = async operation => {
+    if (expired) throw new Error('Cache maintenance expired');
+    const value = await operation();
+    if (expired) throw new Error('Cache maintenance expired');
+    return value;
+  };
+  // Thunks check expiry before starting I/O, and after its eventual completion.
+  // Racing a promise alone would allow the old cleanup chain to resume later.
+  const maintenanceCaches = {
+    keys: () => step(() => caches.keys()),
+    open: async name => {
+      const cache = await step(() => caches.open(name));
+      return {keys: () => step(() => cache.keys()), match: request => step(() => cache.match(request)),
+        put: (request, response) => step(() => cache.put(request, response))};
+    },
+    delete: name => step(() => caches.delete(name))
+  };
+  const maintenance = (async () => {
+    const keys = await maintenanceCaches.keys();
     // Do not retire a newer worker's cache if it was created during this
     // worker's installation/activation handover.
     const currentIndex = keys.indexOf(CACHE);
     // If this generation was evicted, cache insertion order no longer gives a
     // safe boundary between old caches and a newer worker's staging caches.
-    if (currentIndex < 0) { await self.clients.claim(); return; }
+    if (currentIndex < 0) return;
     const previousKeys = keys.slice(0, currentIndex);
     let models;
-    try { models = await caches.open(MODEL_CACHE); } catch { await self.clients.claim(); return; }
+    try { models = await maintenanceCaches.open(MODEL_CACHE); } catch { return; }
     const preserveShells = new Set();
     // Existing installations kept GLBs in the shell cache. Migrate those
     // downloads before retiring that cache, rather than fetching them again.
     for (const key of previousKeys.filter(key => key.startsWith(PREFIX + 'shell-') && key !== CACHE)) {
       try {
-        const previous = await caches.open(key);
+        const previous = await maintenanceCaches.open(key);
         for (const request of await previous.keys()) {
           if (!canReuseModel(new URL(request.url))) continue;
           const existing = await models.match(request);
@@ -138,7 +159,7 @@ self.addEventListener('activate', event => {
           const response = await previous.match(request);
           if (response && validModelResponse(response)) await models.put(request, response);
         }
-      } catch { preserveShells.add(key); }
+      } catch { preserveShells.add(key); if (expired) return; }
     }
     // Requests during an upgrade can still be controlled by the old worker.
     // Retain one earlier runtime cache for open tabs and offline reloads; the
@@ -147,7 +168,7 @@ self.addEventListener('activate', event => {
     const earlierShells = previousKeys.filter(key => key.startsWith(PREFIX + 'shell-') && key !== CACHE).reverse()
       .sort((a, b) => Number(b.match(/shell-v(\d+)/)?.[1] || 0) - Number(a.match(/shell-v(\d+)/)?.[1] || 0));
     for (const key of earlierShells) {
-      const previous = await caches.open(key);
+      const previous = await maintenanceCaches.open(key);
       if (key.includes('shell-v11-') && !await previous.match(READY)) continue;
       for (const request of await previous.keys()) {
         if (!isRuntimeAsset(new URL(request.url))) continue;
@@ -156,9 +177,17 @@ self.addEventListener('activate', event => {
       }
       if (previousShell) break;
     }
-    await Promise.all(previousKeys.filter(key => key.startsWith(PREFIX) && key !== CACHE && key !== MODEL_CACHE && key !== previousShell && !preserveShells.has(key)).map(key => caches.delete(key).catch(() => false)));
-    await self.clients.claim();
-  })());
+    // Once a deletion starts it cannot be cancelled. Its migration/retention
+    // checks must already hold; sequential calls prevent new deletes on expiry.
+    for (const key of previousKeys.filter(key => key.startsWith(PREFIX) && key !== CACHE && key !== MODEL_CACHE && key !== previousShell && !preserveShells.has(key))) {
+      try { await maintenanceCaches.delete(key); } catch { if (expired) return; }
+    }
+  })().catch(() => {});
+  // A storage failure must not skip the claim attempt. Claim itself remains a
+  // separate browser operation; this budget is not a browser-process timeout.
+  const claim = self.clients.claim().catch(() => {});
+  const bounded = Promise.race([maintenance, budget]).finally(() => { expired = true; clearTimeout(timer); });
+  event.waitUntil(Promise.all([bounded, claim]));
 });
 self.addEventListener('fetch', event => {
   const request = event.request;
