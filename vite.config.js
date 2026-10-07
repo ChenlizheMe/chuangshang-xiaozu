@@ -1,10 +1,14 @@
 import { defineConfig } from 'vite'
 import { offlineReleasePlugin } from './scripts/offline-release.mjs'
+import { createAnatomyAssetManifest, anatomyAssetManifestPlugin } from './scripts/anatomy-asset-manifest.mjs'
+
+const anatomyManifest=createAnatomyAssetManifest()
 
 // Relative assets keep the build usable on GitHub Pages project URLs and local previews.
-export default defineConfig({
+export default defineConfig(({command})=>({
   base: './',
-  plugins: [offlineReleasePlugin()],
+  define: command==='build'?{__ANATOMY_ASSET_MANIFEST__:JSON.stringify(anatomyManifest)}:{},
+  plugins: [anatomyAssetManifestPlugin(anatomyManifest),offlineReleasePlugin()],
   build: {
     rollupOptions: {
       output: {
@@ -19,4 +23,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))

@@ -1,0 +1,15 @@
+Draco decoder resources
+
+Copyright 2016 The Draco Authors.
+Licensed under the Apache License, Version 2.0, with the additional third-party
+notices included in DRACO-LICENSE.txt. The decoder resource bytes are unchanged.
+
+Project: https://github.com/google/draco
+License source: https://github.com/google/draco/blob/1.5.7/LICENSE
+Redistributed files: public/draco/draco_decoder.js,
+public/draco/draco_wasm_wrapper.js, public/draco/draco_decoder.wasm.
+
+These are the repository's existing Draco resources. Their content-addressed
+SHA-256 identities are recorded in packaged-assets.json. The license source tag
+identifies the retrieved license, not an assertion that all three existing
+compiled binaries were built from that tag.

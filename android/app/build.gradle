@@ -1,0 +1,43 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'cn.traumateam.app'
+    compileSdk 35
+    buildToolsVersion '35.0.0'
+    defaultConfig {
+        applicationId 'cn.traumateam.app'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0'
+    }
+    buildTypes {
+        release {
+            // Intentionally unsigned. Release signing must use the owner's stable key.
+            debuggable false
+            minifyEnabled false
+        }
+        debug { applicationIdSuffix '.debug'; versionNameSuffix '-debug' }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets.main.assets.srcDir layout.buildDirectory.dir('generated/bundled-assets')
+    androidResources { noCompress += ['glb', 'wasm'] }
+    lint { abortOnError true; checkReleaseBuilds true }
+}
+
+def prepareBundledAssets = tasks.register('prepareBundledAssets', Exec) {
+    workingDir rootDir.parentFile
+    commandLine 'node', 'android/scripts/prepare-assets.mjs',
+            layout.buildDirectory.dir('generated/bundled-assets').get().asFile.absolutePath
+    inputs.files(fileTree('../../public/anatomy') { include '*-mobile.glb', 'LICENSE', 'NOTICE' })
+    inputs.files(fileTree('../../public/draco'))
+    inputs.file('../scripts/prepare-assets.mjs')
+    inputs.files(fileTree('../licenses'))
+    outputs.dir(layout.buildDirectory.dir('generated/bundled-assets'))
+}
+tasks.named('preBuild').configure { dependsOn prepareBundledAssets }
+
+dependencies { testImplementation 'junit:junit:4.13.2' }

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">创伤小组</string>
+    <string name="loading">正在连接 traumateam.cn…</string>
+    <string name="load_error">暂时无法打开网页</string>
+    <string name="load_error_detail">请检查网络后重试。首次打开需要联网；应用不会用内置旧网页替代正式站。</string>
+    <string name="secure_error">安全连接失败。请检查设备时间或稍后重试。</string>
+    <string name="renderer_error">网页渲染已暂停。请重试；若反复出现，请更新 Android System WebView 或 Chrome。</string>
+    <string name="retry">重新加载</string>
+    <string name="open_browser">在浏览器打开</string>
+    <string name="no_browser">未找到可打开 HTTPS 网页的浏览器</string>
+    <string name="link_blocked">为保护安全，此链接无法在应用中打开</string>
+</resources>

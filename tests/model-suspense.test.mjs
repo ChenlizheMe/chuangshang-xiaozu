@@ -1,6 +1,8 @@
 // Actual React/R3F reconciler and event routing with synthetic geometry and a
 // mocked GL renderer. This verifies lifecycle/raycast work, not browser FPS.
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {createRequire} from 'node:module';
+import {createAnatomyAssetManifest} from '../scripts/anatomy-asset-manifest.mjs';
+const manifest=createAnatomyAssetManifest();
 const require=createRequire(import.meta.url);const repo=new URL('../',import.meta.url).pathname;
 if(!globalThis.navigator)globalThis.navigator={};
 const windowEvents=new Map();
@@ -10,14 +12,14 @@ globalThis.requestAnimationFrame=cb=>setTimeout(()=>cb(performance.now()),16);gl
 const React=require('react'),THREE=require('three'),fiber=require('@react-three/fiber');fiber.extend(THREE);
 const {build}=require('esbuild');let source=fs.readFileSync(new URL('../src/AnatomyViewer.jsx',import.meta.url),'utf8');
 source=source.replace("import {Canvas,useLoader,useThree} from '@react-three/fiber';","import {Canvas,useThree} from '@react-three/fiber'; const useLoader=Object.assign((Loader,url)=>globalThis.__loadTestModel(url),{preload:()=>{},clear:()=>{}});").replace("import {Html} from '@react-three/drei';","const Html=()=>null;").replace('function Model(', 'export function Model(');
-const compiled=(await build({stdin:{contents:source,sourcefile:repo+'src/AnatomyViewer.jsx',resolveDir:repo+'src',loader:'jsx'},bundle:true,platform:'node',format:'cjs',external:['react','@react-three/fiber'],plugins:[{name:'share-three-instance',setup(build){build.onResolve({filter:/^three$/},args=>({path:args.path,external:true}));}} ],write:false})).outputFiles[0].text;
+const compiled=(await build({stdin:{contents:source,sourcefile:repo+'src/AnatomyViewer.jsx',resolveDir:repo+'src',loader:'jsx'},bundle:true,platform:'node',format:'cjs',define:{__ANATOMY_ASSET_MANIFEST__:JSON.stringify(manifest)},external:['react','@react-three/fiber'],plugins:[{name:'share-three-instance',setup(build){build.onResolve({filter:/^three$/},args=>({path:args.path,external:true}));}} ],write:false})).outputFiles[0].text;
 const module={exports:{}};new Function('module','exports','require',compiled)(module,module.exports,require);const {Model}=module.exports;
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const until=async predicate=>{const deadline=performance.now()+4000;while(!predicate()){assert.ok(performance.now()<deadline,'React lifecycle transition timed out');await sleep(20);}};
 const asset=name=>{const scene=new THREE.Group(),mesh=new THREE.Mesh(new THREE.BoxGeometry(.25,.5,.15),new THREE.MeshStandardMaterial());mesh.name=name;mesh.position.set(0,.857,.005);scene.add(mesh);return {scene,mesh,parser:{associations:new Map(),json:{nodes:[]}}};};
 test('hidden Suspense models cannot be picked and one visible branch raycasts only once',async()=>{
  const skeleton=asset('Femur.l'),muscle=asset('Rectus femoris muscle.r');let resolve,ready=false;const pending=new Promise(r=>{resolve=r;});
- globalThis.__loadTestModel=url=>{if(/muscl/.test(url)){if(!ready)throw pending;return muscle;}return skeleton;};
+ globalThis.__loadTestModel=url=>{assert.ok(Object.values(manifest.assets).some(asset=>asset.url===url),'actual Model requests a versioned build resource');if(/muscl/.test(url)){if(!ready)throw pending;return muscle;}return skeleton;};
  const noop=()=>{};const canvas={addEventListener:noop,removeEventListener:noop,style:{},getBoundingClientRect:()=>({width:390,height:844,left:0,top:0})};
  const gl={render:noop,setPixelRatio:noop,setSize:noop,domElement:canvas,xr:{addEventListener:noop,removeEventListener:noop},shadowMap:{},capabilities:{isWebGL2:true}};
  const root=fiber.createRoot(canvas);root.configure({gl,events:fiber.events,onPointerMissed:event=>approximate.current?.(event),size:{width:390,height:844,top:0,left:0},frameloop:'never',camera:{position:[0,0,3.8],fov:38}});

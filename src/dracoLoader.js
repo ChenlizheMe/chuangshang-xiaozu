@@ -1,5 +1,6 @@
 import {LoadingManager} from 'three';
 import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader.js';
+import {anatomyAssetUrl} from './anatomyAssetUrls.js';
 
 // GLTFLoader is cached across layer loads. Share its decoder and worker pool too.
 // A dedicated manager observes only decoder JS/WASM library loading failures.
@@ -10,6 +11,7 @@ export function createSharedDraco({decoderPath='./draco/',workerLimit=1,makeMana
  return()=>{
   if(shared)return shared;
   const manager=makeManager(),decoder=makeLoader(manager);
+  manager.setURLModifier?.(anatomyAssetUrl);
   decoder.setDecoderPath(decoderPath);decoder.setWorkerLimit(workerLimit);
   manager.onError=()=>{if(shared!==decoder)return;shared=null;decoder.dispose();};
   shared=decoder;return decoder;
