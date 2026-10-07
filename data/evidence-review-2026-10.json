@@ -1409,6 +1409,47 @@
       "tests": [
         "tests/biting-pain-context.test.mjs"
       ]
+    },
+    {
+      "id": "painful-gum-swelling-dental-contact",
+      "reviewedOn": "2026-10-07",
+      "status": "implemented-with-stated-limits",
+      "type": "Conservative dental contact timing for existing reported observations",
+      "rules": [
+        "painful-gum-swelling-review"
+      ],
+      "sources": [
+        {
+          "title": "SDCEP: Acute periodontal conditions",
+          "url": "https://www.acutedentalproblems.sdcep.org.uk/guidance/management-of-oral-conditions/common-oral-conditions/acute-periodontal-conditions/",
+          "use": "Pain and gingival swelling can occur in acute periodontal problems. Urgent dental care is distinct from medical emergency care for airway compromise."
+        },
+        {
+          "title": "SDCEP: Timescales for treatment",
+          "url": "https://www.acutedentalproblems.sdcep.org.uk/guidance/overarching-principles/timescales-for-treatment/",
+          "use": "Urgent dental care is the next available clinic, within 24 hours or as soon as practicable, with clinical judgement and local service constraints."
+        }
+      ],
+      "decision": "In existing tooth/jaw entries, reported gum swelling with 疼痛, 咬合痛, 持续冷热痛, 自发痛 or 夜间痛 prompts contact with a dentist today for triage and examination. This is a conservative application mapping for unassessed painful swelling, independent of candidate condition names. Injury is neither required nor proof of infection. Existing emergency airway/opening actions remain higher priority.",
+      "positiveExamples": [
+        "Lower canine.l and Mandible: each of the five explicit pain labels plus 牙龈肿胀; no redundant generic pain is needed.",
+        "Superficial part of masseter.r consumes the same existing jaw observations; the test checks both deployed detail levels for the actual mesh.",
+        "Adding 外伤后 preserves the action without establishing a cause.",
+        "The action remains after dental-abscess and dental-fracture reference cards are removed from a test knowledge copy."
+      ],
+      "negativeExamples": [
+        "Biting pain alone, injury with biting pain, isolated swelling, or bleeding with swelling does not acquire this new action.",
+        "Brief thermal sensitivity, 紧绷 and remote/radiating pain do not satisfy this sufficient trigger.",
+        "Restricted opening, swallowing or breathing still retains the existing emergency tier."
+      ],
+      "notEstablished": [
+        "These observations do not diagnose an abscess, spreading infection, periodontal disease or acute onset.",
+        "The five-label trigger is not an exclusion test: other symptoms can still need dental care.",
+        "No validated two-checkbox score, diagnostic performance or guaranteed local access within 24 hours is claimed. No new symptom, condition or anatomy model is added."
+      ],
+      "tests": [
+        "tests/painful-gum-swelling.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [
