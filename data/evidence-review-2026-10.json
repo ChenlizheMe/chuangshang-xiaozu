@@ -1911,6 +1911,87 @@
         "tests/build/verify-built-assessment.test.mjs"
       ],
       "status": "implemented-with-stated-limits"
+    },
+    {
+      "id": "exercise-night-pain-fact",
+      "reviewedOn": "2026-10-07",
+      "type": "Existing exercise/urine safety predicate consuming an explicit pain observation",
+      "sources": [
+        {
+          "title": "MSD Professional: Rhabdomyolysis",
+          "url": "https://www.msdmanuals.com/professional/nephrology/acute-kidney-injury/rhabdomyolysis",
+          "use": "Exercise-related pain, weakness and dark urine can require urgent assessment. The complete triad is uncommon; symptoms alone neither establish nor exclude the diagnosis."
+        },
+        {
+          "title": "CDC/NIOSH: Signs and Symptoms of Rhabdomyolysis",
+          "url": "https://www.cdc.gov/niosh/rhabdo/signs-symptoms/index.html",
+          "use": "Describes pain, dark urine and weakness, possible delayed appearance, and the need for immediate medical care and testing."
+        }
+      ],
+      "decision": "Night pain supplies only the original reported-pain premise in exercise-muscle-urine-warning. The musculoskeletal region list, exercise or delayed exercise-soreness observation, dark urine, and at least one of weakness/swelling/progression are all retained. The original conservative emergency action is reused without a model-tissue restriction.",
+      "existingSourceScopes": [
+        "exercise-muscle-urine-warning"
+      ],
+      "positiveExamples": [
+        "Humerus.l: night pain + exercise/extra load + dark urine + reduced strength, local swelling or progressive worsening",
+        "Rectus femoris muscle.r: the same complete observation combination"
+      ],
+      "negativeExamples": [
+        "Missing exercise, dark urine or the final accompanying-signal group does not activate this predicate.",
+        "Night pain alone and dark urine alone do not automatically escalate.",
+        "The existing delayed exercise-soreness route retains its original action."
+      ],
+      "notEstablished": [
+        "Dark urine is not proven myoglobinuria; reported reduced strength is not an objective examination. No rhabdomyolysis diagnosis, severity, injury mechanism or laboratory result is invented.",
+        "Negative test cases mean this sufficient software trigger is unmet, not that disease is excluded or dehydration is safe to assume.",
+        "No general pain tag is inserted; global pain sets, disease P gates and evidence families remain unchanged."
+      ],
+      "rules": [
+        "exercise-muscle-urine-warning"
+      ],
+      "tests": [
+        "tests/remaining-night-pain.test.mjs",
+        "tests/fixtures/remaining-night-pain.json",
+        "tests/build/verify-built-assessment.test.mjs"
+      ],
+      "status": "implemented-with-stated-limits"
+    },
+    {
+      "id": "eye-injury-night-pain-fact",
+      "reviewedOn": "2026-10-07",
+      "type": "Existing eye-injury review predicate consuming an explicit pain observation",
+      "sources": [
+        {
+          "title": "NHS: Eye injuries",
+          "url": "https://www.nhs.uk/conditions/eye-injuries/",
+          "use": "Separates post-injury assessment from immediate actions for severe pain, visual changes, photophobia or high-risk mechanisms. Night timing does not establish these additional findings."
+        }
+      ],
+      "decision": "For the original eye region plus reported injury review only, night pain satisfies the original discomfort/pain premise without requiring an extra stinging checkbox. The existing same-day review is retained; all separately reported higher-priority eye findings keep their previous emergency actions.",
+      "existingSourceScopes": [
+        "eye-injury-and-visual-warning"
+      ],
+      "positiveExamples": [
+        "Palpebral part of orbicularis oculi.l: night pain + reported injury, with or without an additional stinging observation"
+      ],
+      "negativeExamples": [
+        "Night pain alone, injury alone or injury plus duration alone does not add the eye-injury review.",
+        "A non-eye selection does not receive this eye-specific review from the change."
+      ],
+      "notEstablished": [
+        "Night pain does not establish severe pain, symptoms lasting 24 hours, a penetrating injury, a confirmed globe injury or a diagnosis. Selecting an eyelid muscle does not identify the injured tissue.",
+        "Without a selected pain observation is not a history of explicitly absent pain.",
+        "No global reported-pain function, disease gate, visible option, anatomy asset or existing high-priority eye rule is changed."
+      ],
+      "rules": [
+        "eye-injury-review"
+      ],
+      "tests": [
+        "tests/remaining-night-pain.test.mjs",
+        "tests/fixtures/remaining-night-pain.json",
+        "tests/build/verify-built-assessment.test.mjs"
+      ],
+      "status": "implemented-with-stated-limits"
     }
   ],
   "retainedBoundaries": [

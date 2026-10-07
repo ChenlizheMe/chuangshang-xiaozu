@@ -51,23 +51,24 @@ before(async () => {
 
 test('real built modules pass all retained inputs and optional reports contain verifiable hashes', () => {
   assert.equal(report.status, 'PASS');
-  assert.equal(report.coverage.uniqueInputs, 7676);
-  assert.equal(report.coverage.rawEntries, 9716);
-  assert.equal(report.coverage.existingFixtureExpectationsChecked, 183);
+  assert.equal(report.coverage.uniqueInputs, 7688);
+  assert.equal(report.coverage.rawEntries, 9728);
+  assert.equal(report.coverage.existingFixtureExpectationsChecked, 195);
   assert.deepEqual(report.coverage.groups['reported observation boundaries'], {raw:16,newUnique:16});
   assert.deepEqual(report.coverage.groups['regional night-pain boundaries'], {raw:17,newUnique:17});
   assert.deepEqual(report.coverage.groups['head night-pain boundaries'], {raw:11,newUnique:10});
+  assert.deepEqual(report.coverage.groups['eye and exercise night-pain boundaries'], {raw:12,newUnique:12});
   assert.equal(report.sourceSHA, sha(JSON.stringify(report.stability.sourceHashes)));
   for (const module of report.actualCompiledModules) assert.equal(module.sha256, sha(fs.readFileSync(path.join(repo, module.file))));
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(scratch, 'report/report.json'), 'utf8')), report);
-  assert.equal(JSON.parse(fs.readFileSync(path.join(scratch, 'report/case-manifest.json'), 'utf8')).length, 7676);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(scratch, 'report/case-manifest.json'), 'utf8')).length, 7688);
 });
 
 test('the default CLI resolves the repo from its own path and writes no files', () => {
   const before = snapshot(repo);
   const output = execFileSync(process.execPath, ['--experimental-vm-modules', path.join(repo, 'scripts/verify-built-assessment.mjs')],
     {cwd:os.tmpdir(), encoding:'utf8', stdio:['ignore','pipe','pipe'], timeout:60000});
-  assert.match(output, /^Built assessment parity PASS: 7,676 unique inputs, 183 fixture expectations, \d+ actual modules;/);
+  assert.match(output, /^Built assessment parity PASS: 7,688 unique inputs, 195 fixture expectations, \d+ actual modules;/);
   assert.equal(output.trim().split('\n').length, 1);
   assert.deepEqual(snapshot(repo), before);
 });
@@ -125,6 +126,18 @@ test('head night-pain fixtures detect corruption isolated to the fever branch', 
   const applies=`(${parameter.name}.reports||[]).some(r=>r.part==='Frontal bone'&&!(r.feelings||[]).length&&(r.timing||[]).includes('夜间痛')&&(r.signs||[]).includes('发热'))`;
   return replace(text,property.value,`(${applies}?null:(${original}))`);
 }, /Complete output parity.*head night-pain boundaries: head night pain fever/));
+
+for(const [name,expression,incorrect,expected] of [
+  ['exercise night pain',"r.part==='Humerus.l'&&!(r.feelings||[]).length&&(r.timing||[]).includes('夜间痛')&&(r.signs||[]).includes('尿色深')&&(r.signs||[]).includes('肌力下降')&&(r.triggers||[]).includes('运动后')",'prompt',/Complete output parity.*eye and exercise night-pain boundaries: exercise night pain dark urine weakness/],
+  ['eye-injury night pain',"r.part==='Palpebral part of orbicularis oculi.l'&&!(r.feelings||[]).length&&(r.timing||[]).includes('夜间痛')&&(r.triggers||[]).includes('外伤后')",null,/Complete output parity.*eye and exercise night-pain boundaries: eye injury night pain/],
+])test(`${name} fixtures detect isolated compiled corruption`,t=>rejectsCorruption(t,text=>{
+  const node=functionNode(),parameter=node.params[1].left || node.params[1];
+  assert.equal(parameter.type,'Identifier');
+  const result=node.body.body.find(n=>n.type==='ReturnStatement'&&n.argument?.type==='ObjectExpression');
+  const property=result.argument.properties.find(n=>(n.key.name||n.key.value)==='triageLevel');
+  const original=text.slice(property.value.start,property.value.end);
+  return replace(text,property.value,`((${parameter.name}.reports||[]).some(r=>${expression})?${JSON.stringify(incorrect)}:(${original}))`);
+},expected));
 
 test('rejects input mutation even when the full result remains equal', t => rejectsCorruption(t, text => {
   const node = functionNode(), offset = node.body.start + 1;

@@ -1,0 +1,404 @@
+{
+  "scope": "Night pain is recognized only inside the existing eye-injury and exercise/urine safety predicates. Missing observations do not rule out injury or disease. All cases use actual selectable full/mobile meshes and field-visible labels.",
+  "cases": [
+    {
+      "name": "exercise night pain dark urine weakness",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿色深",
+          "肌力下降"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "运动后"
+        ]
+      },
+      "wantLevel": "emergency",
+      "builtParity": true
+    },
+    {
+      "name": "exercise night pain dark urine swelling",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿色深",
+          "局部肿胀"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "运动后"
+        ]
+      },
+      "wantLevel": "emergency",
+      "builtParity": false
+    },
+    {
+      "name": "exercise night pain dark urine worsening",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿色深"
+        ],
+        "timing": [
+          "夜间痛",
+          "持续加重"
+        ],
+        "triggers": [
+          "运动后"
+        ]
+      },
+      "wantLevel": "emergency",
+      "builtParity": true
+    },
+    {
+      "name": "exercise no reported pain",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿色深",
+          "肌力下降"
+        ],
+        "timing": [],
+        "triggers": [
+          "运动后"
+        ]
+      },
+      "wantLevel": "prompt",
+      "builtParity": true
+    },
+    {
+      "name": "exercise trigger not reported",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿色深",
+          "肌力下降"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "prompt",
+      "builtParity": true
+    },
+    {
+      "name": "exercise additional alarm not reported",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿色深"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "运动后"
+        ]
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "exercise dark urine not reported",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "肌力下降"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "运动后"
+        ]
+      },
+      "wantLevel": "prompt",
+      "builtParity": true
+    },
+    {
+      "name": "limb night pain alone",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": false
+    },
+    {
+      "name": "dark urine alone",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿色深"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": false
+    },
+    {
+      "name": "existing delayed soreness warning retained",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿色深",
+          "肌力下降"
+        ],
+        "timing": [
+          "新运动后1至3天"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "emergency",
+      "builtParity": true
+    },
+    {
+      "name": "muscle identity retains exercise warning",
+      "report": {
+        "part": "Rectus femoris muscle.r",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "尿色深",
+          "肌力下降"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "运动后"
+        ]
+      },
+      "wantLevel": "emergency",
+      "builtParity": false
+    },
+    {
+      "name": "eye injury night pain",
+      "report": {
+        "part": "Palpebral part of orbicularis oculi.l",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "eye injury night pain and stinging",
+      "report": {
+        "part": "Palpebral part of orbicularis oculi.l",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [
+          "刺痛"
+        ],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "wantLevel": "same-day",
+      "builtParity": false
+    },
+    {
+      "name": "eye night pain alone",
+      "report": {
+        "part": "Palpebral part of orbicularis oculi.l",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "eye injury without reported pain",
+      "report": {
+        "part": "Palpebral part of orbicularis oculi.l",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "wantLevel": null,
+      "builtParity": false
+    },
+    {
+      "name": "eye injury duration alone",
+      "report": {
+        "part": "Palpebral part of orbicularis oculi.l",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "持续数小时"
+        ],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "non-eye injury is not eye warning",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "eye injury diplopia keeps emergency",
+      "report": {
+        "part": "Palpebral part of orbicularis oculi.l",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "复视"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "wantLevel": "emergency",
+      "builtParity": true
+    },
+    {
+      "name": "eye injury red eye keeps emergency",
+      "report": {
+        "part": "Palpebral part of orbicularis oculi.l",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "眼红"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "wantLevel": "emergency",
+      "builtParity": false
+    },
+    {
+      "name": "eye injury photophobia keeps emergency",
+      "report": {
+        "part": "Palpebral part of orbicularis oculi.l",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "畏光"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "wantLevel": "emergency",
+      "builtParity": false
+    },
+    {
+      "name": "eye injury blurred vision keeps emergency",
+      "report": {
+        "part": "Palpebral part of orbicularis oculi.l",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "视物模糊"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "wantLevel": "emergency",
+      "builtParity": false
+    }
+  ]
+}
