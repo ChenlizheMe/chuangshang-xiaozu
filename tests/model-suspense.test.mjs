@@ -29,6 +29,11 @@ test('hidden Suspense models cannot be picked and one visible branch raycasts on
   assert.equal(state.internal.interaction.length,1);let rays=0;const raycast=skeleton.mesh.raycast;skeleton.mesh.raycast=function(...args){rays++;return raycast.apply(this,args);};
   state.events.handlers.onPointerMove(event);assert.equal(rays,0,'idle hover needs no mesh intersection');
   state.events.handlers.onPointerDown(event);assert.equal(rays,1);state.events.handlers.onPointerUp(event);assert.equal(rays,2);assert.deepEqual(choices.splice(0),[{layer:'skeleton',part:'Femur.l'}]);
+  // Native browser dispatch may run a microtask checkpoint after a window
+  // capture listener, before the canvas/R3F listener handles the same event.
+  native('pointerdown',event);await Promise.resolve();state.events.handlers.onPointerDown(event);
+  native('pointerup',event);await Promise.resolve();state.events.handlers.onPointerUp(event);
+  assert.deepEqual(choices.splice(0),[{layer:'skeleton',part:'Femur.l'}],'capture cleanup must wait until target listeners can consume the tap');
   const staleApproximate=approximate.current;state.events.handlers.onPointerDown(event);
   render('muscle');await until(()=>state.scene.children.some(o=>o.name==='loading'));state.scene.updateMatrixWorld(true);
   assert.equal(approximate.current,null);assert.equal(skeleton.mesh.visible,true,'mesh visibility alone is not a sufficient guard');

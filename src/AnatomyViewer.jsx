@@ -59,12 +59,15 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
   const pointerSelection=useMemo(()=>createPointerSelection(),[]);
   useLayoutEffect(()=>{
     const host=gl.domElement.ownerDocument?.defaultView||window;
+    const pendingReleases=new Set();
     const down=event=>pointerSelection.down(event),move=event=>pointerSelection.move(event);
-    const up=event=>{const token=pointerSelection.token(event.pointerId);queueMicrotask(()=>pointerSelection.finishOutside(event,token));};
+    // Browsers can drain microtasks between capture and target listeners.
+    // Defer to the next task so R3F can consume this pointer-up first.
+    const up=event=>{const token=pointerSelection.token(event.pointerId);const timer=setTimeout(()=>{pendingReleases.delete(timer);pointerSelection.finishOutside(event,token);},0);pendingReleases.add(timer);};
     const cancel=event=>pointerSelection.cancel(event),blur=()=>pointerSelection.clear();
     const handlers={pointerdown:down,pointermove:move,pointerup:up,pointercancel:cancel,blur};
     for(const [name,handler] of Object.entries(handlers))host.addEventListener(name,handler,true);
-    return()=>{for(const [name,handler] of Object.entries(handlers))host.removeEventListener(name,handler,true);pointerSelection.clear();};
+    return()=>{for(const [name,handler] of Object.entries(handlers))host.removeEventListener(name,handler,true);for(const timer of pendingReleases)clearTimeout(timer);pointerSelection.clear();};
   },[gl,root,pointerSelection]);
   // All published atlases use the same centered, human-scale frame. Combined
   // with the shared camera, a layer change preserves each anatomical location.
