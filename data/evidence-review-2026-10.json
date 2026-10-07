@@ -1702,14 +1702,17 @@
           "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/neck-and-back-pain/overview-of-neck-and-back-pain"
         }
       ],
-      "decision": "The existing night-pain label already reports pain. Within neck/back pathways it satisfies the existing pain component for fever/chills (same-day) and unintentional weight loss (prompt), without requiring another generic pain checkbox.",
+      "decision": "The existing night-pain label already reports pain. Within neck/back pathways it satisfies the existing pain component for fever/chills (same-day) and unintentional weight loss (prompt), without requiring another generic pain checkbox. In the existing neck/back basic fallback only, night pain plus reported impact/twisting injury also receives the existing neutral injury wording instead of posture attribution.",
       "positiveExamples": [
         "Vertebra L3 and Vertebra C3: 夜间痛 + 发热/发冷",
-        "Vertebra L3 and Vertebra C3: 夜间痛 + 体重下降"
+        "Vertebra L3 and Vertebra C3: 夜间痛 + 体重下降",
+        "Vertebra L3 and Vertebra C3: 夜间痛 + 外伤后/扭伤后 gives neutral basic injury guidance"
       ],
       "negativeExamples": [
         "Night pain alone is not severe night pain and does not automatically raise urgency",
-        "Fever alone and pure duration do not acquire a pain fact"
+        "Fever alone and pure duration do not acquire a pain fact",
+        "Injury alone does not add pain; night pain alone does not add injury",
+        "Other areas and remote shoulder pain do not enter this neck/back-specific fallback"
       ],
       "notEstablished": [
         "No infection or malignancy diagnosis; no added severity, laterality or examination finding.",

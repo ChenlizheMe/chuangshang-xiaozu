@@ -51,21 +51,21 @@ before(async () => {
 
 test('real built modules pass all retained inputs and optional reports contain verifiable hashes', () => {
   assert.equal(report.status, 'PASS');
-  assert.equal(report.coverage.uniqueInputs, 7647);
-  assert.equal(report.coverage.rawEntries, 9686);
-  assert.equal(report.coverage.existingFixtureExpectationsChecked, 153);
-  assert.deepEqual(report.coverage.groups['reported observation boundaries'], {raw:14,newUnique:14});
+  assert.equal(report.coverage.uniqueInputs, 7649);
+  assert.equal(report.coverage.rawEntries, 9688);
+  assert.equal(report.coverage.existingFixtureExpectationsChecked, 155);
+  assert.deepEqual(report.coverage.groups['reported observation boundaries'], {raw:16,newUnique:16});
   assert.equal(report.sourceSHA, sha(JSON.stringify(report.stability.sourceHashes)));
   for (const module of report.actualCompiledModules) assert.equal(module.sha256, sha(fs.readFileSync(path.join(repo, module.file))));
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(scratch, 'report/report.json'), 'utf8')), report);
-  assert.equal(JSON.parse(fs.readFileSync(path.join(scratch, 'report/case-manifest.json'), 'utf8')).length, 7647);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(scratch, 'report/case-manifest.json'), 'utf8')).length, 7649);
 });
 
 test('the default CLI resolves the repo from its own path and writes no files', () => {
   const before = snapshot(repo);
   const output = execFileSync(process.execPath, ['--experimental-vm-modules', path.join(repo, 'scripts/verify-built-assessment.mjs')],
     {cwd:os.tmpdir(), encoding:'utf8', stdio:['ignore','pipe','pipe'], timeout:60000});
-  assert.match(output, /^Built assessment parity PASS: 7,647 unique inputs, 153 fixture expectations, \d+ actual modules;/);
+  assert.match(output, /^Built assessment parity PASS: 7,649 unique inputs, 155 fixture expectations, \d+ actual modules;/);
   assert.equal(output.trim().split('\n').length, 1);
   assert.deepEqual(snapshot(repo), before);
 });

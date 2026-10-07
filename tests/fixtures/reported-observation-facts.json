@@ -321,6 +321,52 @@
         ],
         "warningIds": []
       }
+    },
+    {
+      "name": "back-night-twisting-injury",
+      "report": {
+        "part": "Vertebra L3",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "扭伤后"
+        ]
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "basic-spine-spine"
+        ],
+        "warningIds": []
+      }
+    },
+    {
+      "name": "back-night-impact-injury",
+      "report": {
+        "part": "Vertebra L3",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "expected": {
+        "triageLevel": null,
+        "itemIds": [
+          "basic-spine-spine"
+        ],
+        "warningIds": []
+      }
     }
   ]
 }

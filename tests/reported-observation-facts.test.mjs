@@ -22,7 +22,7 @@ const has=(result,id)=>result.items.some(item=>item.id===id);
 const assertPriorityAdvice=result=>{for(const item of result.items)for(const lang of ['zh','en'])assert.equal(item.advice[lang],result.urgent[0][lang]);};
 test('the minimal built-parity fixtures use real selectable anatomy and retain both positive and negative outcomes',()=>{
  const fixture=JSON.parse(fs.readFileSync(new URL('./fixtures/reported-observation-facts.json',import.meta.url)));
- assert.equal(fixture.cases.length,14);
+ assert.equal(fixture.cases.length,16);
  for(const {name,report,expected}of fixture.cases){
   assertSelectableStructure(report.part,report.layer);
   for(const field of fields){
@@ -113,4 +113,23 @@ test('remote shoulder context does not displace independent fatigue, skin or uri
  for(const [part,layer,tag,expected]of [['Patella.l','skeleton','疲劳乏力','fatigue'],['Patella.l','skeleton','皮疹','skin'],['Pectineus muscle.r','muscle','尿频','urinary']]){
   const r=assess(part,layer,['侧卧肩痛',tag]);assert.match(r.items[0].id,new RegExp('^basic-'+expected+'-'));assert.ok(!r.items[0].why.includes('侧卧肩痛'));assert.ok(r.items[0].why.includes(tag));assert.ok(r.reportedSymptoms.includes('侧卧肩痛'));
  }
+});
+
+for(const part of ['Vertebra L3','Vertebra C3'])test(`${part}: night pain after injury uses neutral injury guidance without widening disease gates`,()=>{
+ const neutral=assess(part,'skeleton',['疼痛','扭伤后']).items[0];
+ for(const injury of ['外伤后','扭伤后']){
+  const r=assess(part,'skeleton',['夜间痛',injury]);assert.equal(r.triageLevel,null);assert.equal(r.items.length,1);assert.ok(r.items[0].basic);
+  assert.deepEqual(r.items[0].name,neutral.name);assert.deepEqual(r.items[0].advice,neutral.advice);assert.ok(!has(r,'minor-injury-bruise'));
+  assert.notDeepEqual(assess(part,'skeleton',[injury]).items[0].name,neutral.name,'injury alone does not fabricate pain');
+  assert.equal(assess(part,'skeleton',['夜间痛',injury,'发热']).triageLevel,'same-day');
+  assert.equal(assess(part,'skeleton',['夜间痛',injury,'体重下降']).triageLevel,'prompt');
+  assert.equal(assess(part,'skeleton',['夜间痛',injury,'突然单侧无力']).triageLevel,'emergency');
+ }
+ assert.notDeepEqual(assess(part,'skeleton',['夜间痛']).items[0].name,neutral.name);
+});
+test('the neck/back night-pain injury equivalence does not broaden other areas or use remote pain',()=>{
+ const arm=assess('Humerus.l','skeleton',['夜间痛','外伤后']);assert.equal(arm.items[0].id,'basic-upper-limb-upper-limb');assert.equal(arm.triageLevel,null);
+ // Legacy/API-only: shoulder-specific pain is not currently selectable on this vertebra.
+ const remote=assessSymptoms(k,{reports:[{part:'Vertebra L3',layer:'skeleton',triggers:['侧卧肩痛','扭伤后']}]});
+ assert.doesNotMatch(remote.items[0].name.en,/Neck\/back discomfort after injury/);assert.equal(remote.triageLevel,null);
 });
