@@ -66,8 +66,9 @@ function App({lang,setLang,active=true,aboutLinkRef}){
   if(focusedElement?.tagName==='BUTTON'&&!focusedElement.closest('.sticker-sheet'))sheetOpenerRef.current=focusedElement;
   return bindPanelKeyboard(drawerRef.current,sheetOpenerRef.current,()=>setSheet(null));
  },[sheet,active]);
- // New panels and regenerated results always start at their priority content.
- useEffect(()=>{if(drawerRef.current)drawerRef.current.scrollTop=0;},[sheet,selection.focusId,result]);
+ // New panels and assessment results start at the top. Invalidating a stale
+ // result while editing keeps the current input and its focus in view.
+ useEffect(()=>{if(drawerRef.current)drawerRef.current.scrollTop=0;},[sheet,selection.focusId,sheet==='diagnosis'?result:null]);
  const priorityPresentation=useMemo(()=>presentPriorityGuidance(result?.urgent,result?.reportedSymptoms,result?.profiles),[result]);
  const displayWhy=useCallback(w=>{const tag=[...knowledge.feelings,...knowledge.signs,...knowledge.timing,...knowledge.triggers].find(item=>item.id===w);return tag?tagLabel(tag,lang):w},[lang]);
  const partLabel=useCallback(ref=>bilingualPartText(ref.part,ref.layer,lang),[lang]);
