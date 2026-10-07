@@ -12,7 +12,7 @@ export default function AboutPage({lang,setLang}){
    <header className="about-heading"><span className="about-kicker">TRAUMA TEAM INTERNATIONAL / ABOUT</span><h1 ref={heading} tabIndex={-1}>{c.title}</h1></header>
    <div className="about-story"><p className="about-intro">{c.intro}</p><p>{c.body}</p></div>
    <aside className="about-limits"><h2>{c.limitTitle}</h2><p>{c.limit}</p></aside>
-   <footer className="about-footer"><span>{c.author}</span><a href="https://www.chenlizhe.cn" target="_blank" rel="noopener noreferrer">{c.home} <span aria-hidden="true">↗</span><small>www.chenlizhe.cn</small></a></footer>
+   <footer className="about-footer"><span>{c.author}</span><a href="https://www.chenlizhe.cn" target="_blank" rel="noopener noreferrer">{c.home} <span aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" focusable="false" style={{display:'block'}}><path d="M5 19 19 5M6 5h13v13" stroke="currentColor" strokeWidth="2" strokeLinecap="square"/></svg></span><small>www.chenlizhe.cn</small></a></footer>
   </div>
  </main>;
 }
