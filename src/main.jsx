@@ -1,4 +1,4 @@
-import React,{useEffect,useMemo,useState,useRef,useReducer,Suspense,lazy} from 'react';
+import React,{useEffect,useMemo,useState,useRef,useReducer,useCallback,Suspense,lazy} from 'react';
 import {createRoot} from 'react-dom/client';
 import {bindPanelKeyboard,dismissPanel} from './panelNavigation.js';
 import DiagnosisCard from './DiagnosisCard.jsx';
@@ -49,7 +49,7 @@ function App(){
  useEffect(()=>{if(drawerRef.current)drawerRef.current.scrollTop=0;},[sheet,selection.focusId,result]);
  const displayWhy=w=>{const tag=[...knowledge.feelings,...knowledge.signs,...knowledge.timing,...knowledge.triggers].find(item=>item.id===w);return tag?tagLabel(tag,lang):w};
  const run=()=>{setSheet('diagnosis');if(!reports.length){setResult({error:true});return}setResult(assessSymptoms(knowledge,{reports:assessmentReports(selection)}));};
- const selectPart=({part,object})=>{dispatchSelection({type:'toggle',part,layer,object});setResult(null)};
+ const selectPart=useCallback(({part,object})=>{dispatchSelection({type:'toggle',part,layer,object});setResult(null)},[layer]);
  const approximatePickRef=useRef(null); const dragRef=useRef(null); const [viewerInteraction,setViewerInteraction]=useState('idle');
  const cancelInertia=()=>{if(inertiaFrameRef.current!==null){cancelAnimationFrame(inertiaFrameRef.current);inertiaFrameRef.current=null}orbitVelocityRef.current={azimuth:0,elevation:0};zoomVelocityRef.current=0};
  const startInertia=()=>{if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){cancelInertia();return}if(inertiaFrameRef.current!==null)return;const tick=()=>{let active=false;const orbitV=orbitVelocityRef.current;const zoomV=zoomVelocityRef.current;if(Math.abs(orbitV.azimuth)>.002||Math.abs(orbitV.elevation)>.002){setOrbit(v=>v+orbitV.azimuth);setElevation(v=>Math.max(-38,Math.min(38,v+orbitV.elevation)));orbitV.azimuth*=.9;orbitV.elevation*=.9;active=true}else{orbitV.azimuth=0;orbitV.elevation=0}if(Math.abs(zoomV)>.001){setZoom(v=>Math.max(MIN_ZOOM,Math.min(MAX_ZOOM,v+zoomV)));zoomVelocityRef.current=zoomV*.84;active=true}else zoomVelocityRef.current=0;if(active)inertiaFrameRef.current=requestAnimationFrame(tick);else inertiaFrameRef.current=null};inertiaFrameRef.current=requestAnimationFrame(tick)};

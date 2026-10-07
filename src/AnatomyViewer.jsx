@@ -4,15 +4,17 @@ import {Html} from '@react-three/drei';
 import * as THREE from 'three';
 import {MeshBVH,acceleratedRaycast} from 'three-mesh-bvh';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
-import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader.js';
+import {createSharedDraco} from './dracoLoader.js';
 import SignalDisplay from './SignalDisplay.jsx';
 import {decodeName,safePartLabel,anatomyIdentity} from './anatomyLabels.js';
 import {ANATOMY_MODELS,isVisibleAnatomyMesh} from './anatomyModels.js';
 import {ORGAN_ATLAS} from './organAtlas.js';
 import {renderProfile} from './renderProfile.js';
+import {isVisibleInScene,isPickableAnatomy} from './anatomyPicking.js';
 const quality=renderProfile({mobile:window.matchMedia('(max-width:700px), (pointer:coarse)').matches,memory:navigator.deviceMemory,cores:navigator.hardwareConcurrency,saveData:navigator.connection?.saveData});
 const MODEL_URLS=Object.fromEntries(Object.entries(ANATOMY_MODELS).map(([layer,model])=>[layer,`./anatomy/${quality.light?model.mobileFile:model.file}?v=5`]));
-const configureGLTF=loader=>{const draco=new DRACOLoader();draco.setDecoderPath('./draco/');draco.setWorkerLimit(quality.workers);loader.setDRACOLoader(draco)};
+const getDracoLoader=createSharedDraco({workerLimit:quality.workers});
+const configureGLTF=loader=>loader.setDRACOLoader(getDracoLoader());
 useLoader.preload(GLTFLoader,MODEL_URLS.skeleton,configureGLTF);
 function semanticPartName(object){let current=object;while(current){const name=decodeName(current.userData?.clinicalName||current.userData?.anatomyName||current.name||'');if(name&&!/^mesh(?:[_-]|$)/i.test(name)&&!/^scene$/i.test(name))return name;current=current.parent}return ''}
 const CANONICAL_FRAME={center:[0,0.857,0.005],height:1.7};
@@ -65,21 +67,22 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
     groupRef.current.position.set(0,0,0);
     markDirty();return markDirty;
   },[root]);
-  const commitSelection=object=>{if(!object?.visible||!object.userData.inActiveLayer)return;onPart({part:meshPart({object}),object});};
-  useEffect(()=>{
+  const commitSelection=object=>{if(!isPickableAnatomy(object,root,scene))return;onPart({part:meshPart({object}),object});};
+  useLayoutEffect(()=>{
     if(!registerApproximatePick)return;
     const pickNearest=(event)=>{
+      if(!isVisibleInScene(root,scene))return;
       const rect=gl.domElement.getBoundingClientRect();
       const x=Number(event.clientX);const y=Number(event.clientY);
       if(!Number.isFinite(x)||!Number.isFinite(y)||!rect.width||!rect.height)return;
       const ndc=new THREE.Vector2(((x-rect.left)/rect.width)*2-1,-(((y-rect.top)/rect.height)*2-1));
       const raycaster=new THREE.Raycaster();raycaster.firstHitOnly=true;raycaster.setFromCamera(ndc,camera);
-      const rayHit=raycaster.intersectObjects(pickableMeshes,false)[0];
+      const rayHit=raycaster.intersectObjects(pickableMeshes.filter(object=>isPickableAnatomy(object,root,scene)),false)[0];
       if(rayHit){commitSelection(rayHit.object);return;}
       let nearest=null;
       root.updateWorldMatrix(true,true);
       root.traverse(object=>{
-        if(!object.isMesh||!object.visible||!object.geometry)return;
+        if(!object.geometry||!isPickableAnatomy(object,root,scene))return;
         if(!object.geometry.boundingSphere)object.geometry.computeBoundingSphere();
         const sphere=object.geometry.boundingSphere?.clone();if(!sphere)return;
         sphere.applyMatrix4(object.matrixWorld);
@@ -96,8 +99,8 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
       if(nearest&&nearest.score<1.15)commitSelection(nearest.object);
     };
     registerApproximatePick.current=pickNearest;
-    return()=>{if(registerApproximatePick.current===pickNearest)registerApproximatePick.current=null;};
-  },[camera,gl,root,pickableMeshes,registerApproximatePick,selectedParts,onPart]);
+    return()=>{clickRef.current=null;if(registerApproximatePick.current===pickNearest)registerApproximatePick.current=null;};
+  },[camera,gl,scene,root,pickableMeshes,registerApproximatePick,onPart]);
   // Prepare shared base materials once per asset, rather than flagging every
   // material for shader updates after each selection.
   useLayoutEffect(()=>{
@@ -151,11 +154,11 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
     markDirty();return()=>{restore.forEach(fn=>fn());markDirty();};
   },[root,selectedParts,pickableMeshes]);
   const meshPart=e=>decodeName(e.object?.userData?.part||e.object?.name||'general');
-  const onMeshPointerDown=e=>{if(e.button!==0||clickRef.current?.pointerId===e.pointerId)return;const object=e.intersections?.find(hit=>hit.object.visible&&hit.object.userData.inActiveLayer)?.object;if(!object)return;clickRef.current={pointerId:e.pointerId,part:meshPart({object}),object,x:e.clientX,y:e.clientY,startedAt:performance.now(),moved:false};};
+  const onMeshPointerDown=e=>{if(e.button!==0||clickRef.current?.pointerId===e.pointerId)return;const object=e.intersections?.find(hit=>isPickableAnatomy(hit.object,root,scene))?.object;if(!object)return;clickRef.current={pointerId:e.pointerId,part:meshPart({object}),object,x:e.clientX,y:e.clientY,startedAt:performance.now(),moved:false};};
   const onMeshPointerMove=e=>{const candidate=clickRef.current;if(!candidate||candidate.pointerId!==e.pointerId)return;const distance=Math.hypot(e.clientX-candidate.x,e.clientY-candidate.y);if(distance>6)candidate.moved=true;};
   const onMeshPointerUp=e=>{const candidate=clickRef.current;if(!candidate||candidate.pointerId!==e.pointerId){clickRef.current=null;return;}const elapsed=performance.now()-candidate.startedAt;const distance=Math.hypot(e.clientX-candidate.x,e.clientY-candidate.y);if(!candidate.moved&&elapsed<=520&&distance<=14)commitSelection(candidate.object);clickRef.current=null;};
   const onMeshPointerCancel=()=>{clickRef.current=null;};
-  return <group ref={groupRef} onPointerDown={onMeshPointerDown} onPointerMove={onMeshPointerMove} onPointerUp={onMeshPointerUp} onPointerCancel={onMeshPointerCancel}><primitive object={root} onPointerDown={onMeshPointerDown} onPointerMove={onMeshPointerMove} onPointerUp={onMeshPointerUp} onPointerCancel={onMeshPointerCancel}/></group>;
+  return <group ref={groupRef} onPointerDown={onMeshPointerDown} onPointerMove={onMeshPointerMove} onPointerUp={onMeshPointerUp} onPointerCancel={onMeshPointerCancel}><primitive object={root}/></group>;
 }
 export function clearAnatomyCache(layer){useLoader.clear(GLTFLoader,MODEL_URLS[layer]);}
 export default function AnatomyViewer({layer,modelNonce,loading,selectedParts,onPart,approximatePickRef,orbit,lift,elevation,zoom}){
