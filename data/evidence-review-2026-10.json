@@ -1692,6 +1692,108 @@
         "tests/contact-urgency.test.mjs",
         "tests/priority-guidance.test.mjs"
       ]
+    },
+    {
+      "id": "reported-night-pain-neck-back",
+      "type": "Existing observation semantics within reviewed neck/back triage",
+      "sources": [
+        {
+          "title": "MSD Professional: Overview of Neck and Back Pain, Red flags",
+          "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/neck-and-back-pain/overview-of-neck-and-back-pain"
+        }
+      ],
+      "decision": "The existing night-pain label already reports pain. Within neck/back pathways it satisfies the existing pain component for fever/chills (same-day) and unintentional weight loss (prompt), without requiring another generic pain checkbox.",
+      "positiveExamples": [
+        "Vertebra L3 and Vertebra C3: 夜间痛 + 发热/发冷",
+        "Vertebra L3 and Vertebra C3: 夜间痛 + 体重下降"
+      ],
+      "negativeExamples": [
+        "Night pain alone is not severe night pain and does not automatically raise urgency",
+        "Fever alone and pure duration do not acquire a pain fact"
+      ],
+      "notEstablished": [
+        "No infection or malignancy diagnosis; no added severity, laterality or examination finding.",
+        "The change is limited to neck/back triage; PAIN_TAGS, LOCAL_PAIN_TAGS, evidence families and disease gates remain unchanged."
+      ],
+      "rules": [
+        "neck-back-pain-fever",
+        "neck-back-weight-change-review"
+      ],
+      "status": "implemented-with-stated-limits",
+      "tests": [
+        "tests/reported-observation-facts.test.mjs"
+      ]
+    },
+    {
+      "id": "reported-composite-numbness",
+      "type": "Visible-label facts and acute-symptom safety review",
+      "sources": [
+        {
+          "title": "Merck Professional: Numbness, evaluation and red flags",
+          "url": "https://www.merckmanuals.com/professional/neurologic-disorders/symptoms-of-neurologic-disorders/numbness"
+        },
+        {
+          "title": "Merck Professional: Cubital Tunnel Syndrome",
+          "url": "https://www.merckmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/hand-disorders/cubital-tunnel-syndrome"
+        },
+        {
+          "title": "CDC: Signs and Symptoms of Stroke",
+          "url": "https://www.cdc.gov/stroke/signs-symptoms/index.html"
+        },
+        {
+          "title": "American Stroke Association: Stroke Symptoms",
+          "url": "https://www.stroke.org/en/about-stroke/stroke-symptoms"
+        }
+      ],
+      "decision": "The actual elbow-bending label states worsening numbness, and facial numbness explicitly reports a sensory change. Both use the existing broad sensory direction; facial wording asks for actual onset/distribution rather than assuming headache or compression. Explicit facial numbness together with explicit sudden onset receives immediate assessment independent of model side or additional weakness/speech findings.",
+      "positiveExamples": [
+        "Humerus.l: 屈肘加重 alone uses a basic sensory direction; actual ring/little-finger numbness retains the existing ulnar reference gate",
+        "Frontal bone, Mandible and Incus.l: 面部麻木 alone uses a basic sensory direction; adding 突然起病 gives emergency guidance"
+      ],
+      "negativeExamples": [
+        "Facial numbness alone or with recurring-for-months does not establish sudden onset",
+        "Elbow-provoked numbness alone or with sudden onset does not satisfy the facial-specific trigger"
+      ],
+      "notEstablished": [
+        "The model side does not prove symptom laterality. No stroke, palsy, peripheral entrapment or nerve distribution is diagnosed from these choices.",
+        "Sudden facial numbness is an observed warning combination, not a validated scoring rule. Unknown onset is not evidence of chronic or benign symptoms."
+      ],
+      "rules": [
+        "sudden-facial-numbness"
+      ],
+      "status": "implemented-with-stated-limits",
+      "tests": [
+        "tests/reported-observation-facts.test.mjs"
+      ]
+    },
+    {
+      "id": "bursitis-site-specific-observation",
+      "type": "Locality of reported evidence and qualified reference copy",
+      "sources": [
+        {
+          "title": "Merck Professional: Bursitis, symptoms and diagnosis",
+          "url": "https://www.merckmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/bursa-muscle-and-tendon-disorders/bursitis"
+        }
+      ],
+      "decision": "The shoulder-specific side-lying pain label can support the shoulder bursitis reference only. It cannot supply hip/knee/ankle local evidence or a missing local-evidence suggestion. Actual local tenderness remains usable. The reference description presents possible features and requests examination rather than asserting unreported tenderness. Non-shoulder basic cards also exclude that remote observation from local evidence and retain an explicit shoulder-context note; a lone shoulder observation uses neutral actual-site clarification, while independent fatigue, skin or urinary directions remain available.",
+      "positiveExamples": [
+        "Scapula.l: 局部肿胀 + 侧卧肩痛 retains the existing reference",
+        "Patella.l, Talus.r and Pectineus muscle.r: 局部肿胀 + 局部压痛 retains the existing reference"
+      ],
+      "negativeExamples": [
+        "Patella.l, Talus.r and Pectineus muscle.r: 局部肿胀 + 侧卧肩痛 does not establish bursitis at the selected site"
+      ],
+      "notEstablished": [
+        "No new condition or observation ID; visibility lists remain unchanged. The original shoulder observation remains in reportedSymptoms.",
+        "Other existing kneeling/location pathways are preserved, not newly clinically validated by this review."
+      ],
+      "rules": [
+        "bursitis-pattern"
+      ],
+      "status": "implemented-with-stated-limits",
+      "tests": [
+        "tests/reported-observation-facts.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [

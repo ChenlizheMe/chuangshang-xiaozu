@@ -2,6 +2,7 @@ import {evidenceFamily,SYSTEMIC_TAGS,hasReportedPain} from './symptomLanguage.js
 
 const bi=(zh,en)=>({zh,en});
 export const BITE_PAIN_CONTEXT=bi('已报告咬东西时痛，应核实牙齿、下颌及可能牵涉的耳、头颈来源；这条信息本身不能证明所选模型结构有局部疼痛。','Pain on biting has been reported. Assess dental/jaw and possible referred ear, head or neck sources; this observation alone does not establish local pain in the selected model structure.');
+const SHOULDER_PAIN_CONTEXT=bi('已报告侧躺压肩时疼，应核实实际肩部痛点；这条信息不能证明所选非肩部结构有局部疼痛。','Shoulder pain when lying on that side has been reported. Clarify the actual shoulder pain site; this observation does not establish local pain in the selected non-shoulder structure.');
 const dentalThreshold=bi('持续超过2天、咬合痛或牙龈肿胀应看牙医；肿胀影响呼吸、吞咽，立即急诊。','See a dentist for symptoms lasting over 2 days, bite pain or gum swelling. Swelling affecting breathing or swallowing needs emergency care.');
 const abdominalThreshold=bi('持续、反复或加重应就医；突然剧痛、出血、腹部僵硬或晕厥立即急诊。','Seek assessment if persistent, recurrent or worsening. Sudden severe pain, bleeding, rigidity or fainting needs emergency care.');
 const movementCare=bi('暂减引起不适的负荷，保持舒适范围内的活动；观察动作、休息与症状的关系。','Reduce provoking loads and keep movement within a comfortable range. Observe how activity and rest affect symptoms.');
@@ -61,7 +62,8 @@ export function basicAssessment(profile,report,urgent=[],knowledge){
  const timeOnly=new Set(['刚刚开始','持续数小时','持续1至3天','持续超过3天','持续加重','反复数月','短暂发作','突然起病','持续超过10天','经期相关','可能怀孕']);
  if([...tags].every(t=>timeOnly.has(t)))return null;
  const nonOralBiting=tags.has('咬合痛')&&!['tooth','jaw'].includes(profile.region);
- const routingTags=nonOralBiting?[...tags].filter(tag=>tag!=='咬合痛'):[...tags];
+ const remoteShoulder=tags.has('侧卧肩痛')&&profile.region!=='shoulder';
+ const routingTags=[...tags].filter(tag=>(!nonOralBiting||tag!=='咬合痛')&&(!remoteShoulder||tag!=='侧卧肩痛'));
  // Preserve only one real selected observation per family, with symptoms
  // before timing/triggers. A broad card is visibly marked as basic.
  const evidence=new Map();for(const tag of tags)if(!evidence.has(evidenceFamily(tag)))evidence.set(evidenceFamily(tag),tag);
@@ -75,10 +77,18 @@ export function basicAssessment(profile,report,urgent=[],knowledge){
  }else if(hasAny(tags,['牙龈出血','牙龈肿胀','牙齿松动','牙龈退缩'])&&['tooth','jaw'].includes(profile.region)){key='dental-gum';content=profiles[key];
  }else if(profile.region==='tooth'&&hasAny(tags,['紧绷','酸胀','压迫感','磨牙'])){key='dental-load';content=profiles[key];
  }else if(hasAny(tags,['痒','灼痒','皮疹','红斑','水泡','脱皮','渗液','破皮'])){key='skin';content=profiles[key];
- }else if(hasAny(tags,['麻木','麻刺','感觉减退','电击','拇食中指麻木','无名小指麻木','夜间麻木'])){key='sensory';content=profiles[key];
+ }else if(hasAny(tags,['麻木','麻刺','感觉减退','电击','拇食中指麻木','无名小指麻木','夜间麻木','屈肘加重','面部麻木'])){
+  key='sensory';content=profiles[key];
+  if(tags.has('面部麻木'))content={...content,
+   shortDescription:bi('已报告面部麻木，需要核实起病、持续时间和实际分布；模型侧别不能确认症状侧别，也不能确定神经受压或其他病因。','Facial numbness has been reported. Clarify its onset, duration and actual distribution; the model side does not establish the symptom side, nerve compression or another cause.'),
+   triggers:bi('记录感觉变化的起病、持续或反复情况，以及同时出现的其他变化。','Record how the sensory change began, whether it persists or recurs, and any accompanying changes.'),
+   advice:bi('记录实际麻木范围和变化；原因不明且持续、扩散或反复时安排医疗评估，不先按头痛、紧张或局部受压处理。','Record the actual numb area and changes. Arrange medical assessment for unexplained persistent, spreading or recurrent symptoms rather than assuming headache, tension or local compression.'),
+   threshold:bi('若面部麻木突然出现，或伴面部歪斜、说话变化或突然无力，立即联系急救并记录起病时间。','If facial numbness begins suddenly, or accompanies facial droop, speech changes or sudden weakness, call emergency services and note the onset time.')};
  }else if(routingTags.length&&!routingTags.every(t=>timeOnly.has(t))&&routingTags.every(t=>SYSTEMIC_TAGS.has(t))){key=routingTags.every(t=>['疲劳乏力','白天困倦','睡眠不足','失眠'].includes(t))?'fatigue':'systemic';content=profiles[key];
  }else if(nonOralBiting&&!hasReportedPain(tags)&&![...tags].some(tag=>tag!=='咬合痛'&&!timeOnly.has(tag)&&['feelings','signs'].some(field=>knowledge?.[field]?.some(option=>option.id===tag)))){
   content={...profiles.general,name:bi('咬合痛：需核实实际部位','Pain on biting: confirm the actual area'),shortDescription:BITE_PAIN_CONTEXT,triggers:bi('留意咬合、咀嚼与实际痛点及其他变化的关系。','Note the relation of biting and chewing to the actual pain site and other changes.'),advice:bi('安排牙科或医疗检查，说明实际痛点和咬合诱因，并一起说明其他已选变化。','Arrange dental or medical assessment, describe the actual site and biting trigger, and mention other reported changes.'),threshold:bi('伴发热或寒战应当天评估；呼吸或吞咽困难、迅速加重的肿胀应立即就医。','Fever or chills need same-day assessment. Breathing or swallowing difficulty or rapidly worsening swelling needs immediate care.')};
+ }else if(remoteShoulder&&!hasReportedPain(tags)&&!routingTags.some(tag=>!timeOnly.has(tag)&&['feelings','signs'].some(field=>knowledge?.[field]?.some(option=>option.id===tag)))){
+  content={...profiles.general,name:bi('肩部受压疼痛：需核实实际部位','Shoulder pressure pain: confirm the actual area'),shortDescription:SHOULDER_PAIN_CONTEXT};
  }else if(['neck','spine'].includes(key)&&hasAny(tags,['外伤后','扭伤后'])&&hasReportedPain(tags)){
   content={name:bi('受伤后的颈背不适','Neck/back discomfort after injury'),shortDescription:bi('受伤后的颈背疼痛需要结合受伤经过和功能变化判断，不能仅按姿势或肌肉紧张解释。','Neck/back pain after injury needs assessment of the mechanism and functional changes rather than a posture-only explanation.'),triggers:bi('核实碰撞或扭转的经过、起病及活动能力；当前信息不能确认受损组织。','Clarify the impact or twisting mechanism, onset and function; the affected tissue is not established.'),advice:bi('先保护受伤部位，避免加重动作或强行拉伸；疼痛持续、反复或影响功能时及时就医评估。','Protect the injured area and avoid provoking movements or forced stretching. Arrange assessment for persistent, recurrent or function-limiting pain.'),threshold:bi('明显外伤、剧痛、麻木无力或不能正常活动需尽快评估；新发排尿困难、会阴麻木或突然力量下降立即急诊。','Significant trauma, severe pain, numbness, weakness or inability to move normally needs urgent assessment. New difficulty urinating, saddle numbness or sudden strength loss needs emergency care.')};
  }else if(movementDirections[key]){
@@ -98,7 +108,11 @@ export function basicAssessment(profile,report,urgent=[],knowledge){
   for(const tag of [...anchors.filter(tag=>tags.has(tag)),...tags])if((!nonOralBiting||tag!=='咬合痛')&&!ordered.has(evidenceFamily(tag)))ordered.set(evidenceFamily(tag),tag);
   why=[...ordered.values()].slice(0,3);
  }
- if(!urgent.length&&content.shortDescription!==BITE_PAIN_CONTEXT&&!['fatigue','systemic','sensory','skin','urinary','flank'].includes(key)&&profile.organ&&organDescriptions[profile.organ])content={...profiles.abdomen,name:bi(`${profile.label.zh}区域不适方向`,`${profile.label.en} area discomfort`),shortDescription:organDescriptions[profile.organ]};
+ if(!urgent.length&&content.shortDescription!==BITE_PAIN_CONTEXT&&content.shortDescription!==SHOULDER_PAIN_CONTEXT&&!['fatigue','systemic','sensory','skin','urinary','flank'].includes(key)&&profile.organ&&organDescriptions[profile.organ])content={...profiles.abdomen,name:bi(`${profile.label.zh}区域不适方向`,`${profile.label.en} area discomfort`),shortDescription:organDescriptions[profile.organ]};
+ if(remoteShoulder&&content.shortDescription!==SHOULDER_PAIN_CONTEXT){
+  why=why.filter(tag=>tag!=='侧卧肩痛');
+  content={...content,shortDescription:bi(`${content.shortDescription.zh} ${SHOULDER_PAIN_CONTEXT.zh}`,`${content.shortDescription.en} ${SHOULDER_PAIN_CONTEXT.en}`)};
+ }
  // The organ-specific wording must never replace urgency or a selected
  // systemic/sensory/skin direction.
  return {...content,id:`basic-${key}-${profile.organ||profile.region}`,basic:true,why,evidenceFamilies:why.map(evidenceFamily),matchedSymptoms:[...tags],partRefs:[{part:report.part,layer:report.layer}]};

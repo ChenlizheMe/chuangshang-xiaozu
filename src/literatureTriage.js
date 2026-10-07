@@ -2,6 +2,9 @@ import {hasReportedPain,LOCAL_PAIN_TAGS} from './symptomLanguage.js';
 import {referenceLocation} from './reportLocation.js';
 const has=(report,...tags)=>tags.some(tag=>report.tags.has(tag));
 const pain=report=>hasReportedPain(report.tags);
+// Night pain already reports pain. Keep this equivalence within the reviewed
+// neck/back pathways; it does not add disease evidence or imply severe pain.
+const neckBackPain=report=>pain(report)||has(report,'夜间痛');
 const upperAbdominalPain=report=>[...LOCAL_PAIN_TAGS,'向背部放射','进食后腹痛','油腻餐后痛'].some(tag=>report.tags.has(tag));
 const jointRegions=['shoulder','upper-limb','hand','hip','knee','ankle','foot'];
 const musculoskeletalRegions=['neck','spine','chest','abdomen','pelvis','lower-limb',...jointRegions];
@@ -10,6 +13,9 @@ const musculoskeletalRegions=['neck','spine','chest','abdomen','pelvis','lower-l
 // related review entries in data/evidence-review-2026-10.json. These predicates
 // route assessment; they do not create diagnoses or require missing checkboxes.
 const rules=[
+ {id:'sudden-facial-numbness',level:'emergency',matches:(p,r)=>has(r,'面部麻木')&&has(r,'突然起病'),
+  zh:'已报告突然出现面部麻木：立即联系急救，记录起病时间，需要排查急性神经问题。不要等待出现无力或说话变化；模型侧别不能确定症状侧别，也不能据此确诊卒中。',
+  en:'Sudden facial numbness has been reported: call emergency services now and note the onset time for assessment of an acute neurological problem. Do not wait for weakness or speech changes. The model side does not establish the symptom side or diagnose a stroke.'},
  {id:'biting-pain-fever-review',level:'same-day',matches:(p,r)=>!['tooth','jaw'].includes(p.region)&&has(r,'咬合痛')&&has(r,'发热','发冷'),
   zh:'咬东西时痛并伴发热或寒战：今天联系牙科或医疗机构评估，核实牙、颌及头颈等来源；模型点位不能确定病因。',
   en:'Pain on biting with fever or chills needs same-day dental or medical assessment to clarify dental, jaw, head/neck and other sources. The selected model site does not establish the cause.'},
@@ -19,7 +25,7 @@ const rules=[
  {id:'reported-strength-loss-review',level:'prompt',matches:(p,r)=>has(r,'肌力下降'),
   zh:'已报告力量下降，应尽快检查并核实起病、进展及分布；不能仅以疲劳或局部受压解释。若突然出现或快速加重，立即就医评估。',
   en:'Reported reduced strength needs prompt examination of onset, progression and distribution rather than assuming fatigue or local compression. Sudden onset or rapid worsening needs immediate assessment.'},
- {id:'neck-back-weight-change-review',level:'prompt',matches:(p,r)=>['neck','spine'].includes(p.region)&&pain(r)&&has(r,'体重下降'),
+ {id:'neck-back-weight-change-review',level:'prompt',matches:(p,r)=>['neck','spine'].includes(p.region)&&neckBackPain(r)&&has(r,'体重下降'),
   zh:'已报告颈背痛和无意中体重下降：请尽快就医核实原因，不能仅按姿势问题解释；这些选择不能确定具体疾病。',
   en:'Neck/back pain and unintentional weight loss have been reported. Arrange prompt assessment of the cause rather than assuming posture alone. These selections do not establish a specific disease.'},
  {id:'facial-neuralgic-sensory-review',level:'prompt',matches:(p,r)=>['head','jaw','tooth'].includes(p.region)&&has(r,'电击','刀割感')&&has(r,'触碰诱发')&&has(r,'短暂发作')&&has(r,'感觉减退'),
@@ -112,7 +118,7 @@ const rules=[
  {id:'sudden-motor-or-head-neurological-change',level:'emergency',matches:(p,r)=>has(r,'突然起病')&&(has(r,'肌力下降')||p.region==='head'&&pain(r)&&has(r,'复视')),
   zh:'突然出现力量下降，或突然头痛伴复视：立即联系急救或急诊评估，记录起病时间；不要按局部神经受压先观察。',
   en:'Sudden loss of strength, or sudden head pain with double vision, needs emergency assessment. Record onset time rather than observing it as local nerve compression.'},
- {id:'neck-back-pain-fever',level:'same-day',matches:(p,r)=>['neck','spine'].includes(p.region)&&pain(r)&&has(r,'发热','发冷'),
+ {id:'neck-back-pain-fever',level:'same-day',matches:(p,r)=>['neck','spine'].includes(p.region)&&neckBackPain(r)&&has(r,'发热','发冷'),
   zh:'颈背疼痛伴发热或寒战：当天尽快就医排查感染等原因，不能只用久坐或肌肉负荷解释。',
   en:'Neck or back pain with fever or chills needs same-day assessment for infection and other causes; posture or muscle load alone is not an adequate explanation.'},
  {id:'exercise-muscle-urine-warning',level:'emergency',matches:(p,r)=>musculoskeletalRegions.includes(p.region)&&pain(r)&&has(r,'运动后','新运动后1至3天')&&has(r,'尿色深')&&has(r,'肌力下降','局部肿胀','持续加重'),

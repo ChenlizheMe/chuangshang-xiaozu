@@ -43,7 +43,7 @@ export const CLINICAL_RULES={
  'peripheral-neuropathy':r(['hand','lower-limb','foot'],'neural',[['麻木','麻刺','灼烧','感觉减退'],['双侧手足对称']],{priority:3}),
  'facial-nerve-palsy':r(['head','eye','jaw'],'cranial',[['面部歪斜'],['闭眼困难']],{priority:4}),
  'tendon-overuse':r(joints,'tendon',[P,['反复用力'],['活动诱发','局部压痛']],{optional:['局部肿胀']}),
- 'bursitis-pattern':r(['shoulder','hip','knee','ankle'],'joint',[['局部肿胀'],['局部压痛','侧卧肩痛','跪地加重']],{optional:['反复用力'],priority:1}),
+ 'bursitis-pattern':r(['shoulder','hip','knee','ankle'],'joint',[['局部肿胀'],['局部压痛','侧卧肩痛','跪地加重']],{tagRegions:{'侧卧肩痛':['shoulder']},optional:['反复用力'],priority:1}),
  'knee-meniscus-ligament':r(['knee'],'injury',[['扭伤后'],['关节卡住','关节不稳','无法承重']],{optional:['局部肿胀'],priority:4}),
  'gastroenteritis-pattern':r(['abdomen'],'bowel-acute',[['腹泻'],['呕吐','恶心','绞痛','发热']],{exclude:['反复数月']}),
  'appendicitis-pattern':r(['abdomen'],'appendix',[P,['腹痛迁移至右下腹','持续加重']],{locations:['rlq'],optional:['发热','恶心','呕吐'],priority:4}),

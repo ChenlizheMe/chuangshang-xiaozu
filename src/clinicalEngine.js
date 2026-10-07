@@ -72,8 +72,11 @@ export function assessSymptoms(knowledge,input={}){
    const location=referenceLocation(profile,report);
    const locations=(!rule.locationRegions||rule.locationRegions.includes(profile.region))?rule.locations:null;
    if(locations&&location!=='diffuse'&&location!=='unknown'&&!locations.includes(location))continue;
-   const groups=rule.required.map(group=>group.filter(tag=>tags.has(tag)));
-   const unmatched=rule.required.filter((_,index)=>!groups[index].length);
+   // A site-specific observation cannot satisfy another site's evidence gate
+   // or be suggested as the missing local finding there.
+   const required=rule.required.map(group=>group.filter(tag=>!rule.tagRegions?.[tag]||rule.tagRegions[tag].includes(profile.region)));
+   const groups=required.map(group=>group.filter(tag=>tags.has(tag)));
+   const unmatched=required.filter((_,index)=>!groups[index].length);
    const matched=[...new Set([...groups.flat(),...rule.optional.filter(t=>tags.has(t))])];
    const families=new Set(matched.map(evidenceFamily));
    const unknownLocation=locations&&['unknown','diffuse'].includes(location)&&!(condition.id==='appendicitis-pattern'&&tags.has('腹痛迁移至右下腹'));
