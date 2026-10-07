@@ -13,6 +13,6 @@ export class ModelErrorBoundary extends React.Component{
 export class AppErrorBoundary extends React.Component{
  state={error:null};
  static getDerivedStateFromError(error){return {error};}
- render(){const c=text(this.props.lang);return this.state.error?<main className="app-error" role="alert"><h1>{c.brand}</h1><p>{c.app}</p><details><summary>{c.details}</summary><pre>{String(this.state.error?.message||this.state.error)}</pre></details></main>:this.props.children;}
+ render(){const c=text(this.props.lang);return this.state.error?<main className="app-error" role="alert"><h1>{c.brand}</h1><p>{c.app}</p><button type="button" onClick={()=>window.location.reload()}>{c.retryPage}</button><details><summary>{c.details}</summary><pre>{String(this.state.error?.message||this.state.error)}</pre></details></main>:this.props.children;}
 }
 export function ViewerUnavailable({lang,onRetry}){const c=text(lang);return <div className="model-error" role="alert"><p>{c.viewer}</p><button type="button" onClick={onRetry}>{c.retryViewer}</button></div>;}
