@@ -45,7 +45,7 @@ export function assessSymptoms(knowledge,input={}){
  // Selected urinary warning signs must not fall through to mechanical back care.
  if(profiles.some((p,i)=>['abdomen','pelvis','spine','hip'].includes(p.region)&&(localHas(i,'侧腰痛','尿痛','尿频','尿急')||normalized[i].location==='flank'&&localHas(i,...LOCAL_PAIN_TAGS))&&localHas(i,'发热','发冷')))warn('侧腰痛或排尿变化伴发热、寒战：当日尽快就医排查肾脏/尿路感染，不按普通腰背劳损处理。','Flank pain or urinary changes with fever or chills need urgent same-day assessment for kidney/urinary infection; do not treat it as ordinary back strain.','same-day');
  if(has('血尿')&&has('发热','发冷'))warn('血尿伴发热或寒战：当天尽快就医排查感染等原因；如剧痛、不能排尿或明显不适，立即急诊。','Blood in urine with fever or chills needs same-day assessment for infection and other causes; severe pain, inability to urinate or feeling very unwell needs emergency care.','same-day');
- else if(has('血尿'))warn('出现血尿：尽快就医检查；伴发热或排尿变化应当日评估；如剧痛或无法排尿，立即急诊。','Blood in urine needs prompt medical assessment; fever or urinary changes need same-day assessment; severe pain or inability to pass urine needs emergency care.','prompt');
+ else if(has('血尿'))warn('已报告血尿：今天联系医疗机构分诊，说明发现方式和既往检查/随访安排，由医护确定就诊时间。伴发热或排尿变化应当日评估；如剧痛或无法排尿，立即急诊。','Reported blood in urine: contact a medical service today for triage. Explain how it was found and any previous assessment or follow-up plan so a clinician can arrange when you need to be seen. Fever or urinary changes need same-day assessment; severe pain or inability to pass urine needs emergency care.','prompt');
 
  if(has('突发最严重头痛'))warn('突发最严重头痛：立即急诊，记录开始时间。','Sudden worst-ever headache: seek emergency care and note onset time.');
  if(has('呼吸困难','静息气短'))warn('呼吸困难或静息气短：立即就医；严重呼吸困难联系急救。','Breathing difficulty or breathlessness at rest needs immediate care; severe breathing difficulty is an emergency.');
@@ -57,7 +57,7 @@ export function assessSymptoms(knowledge,input={}){
  if(profiles.some((p,i)=>['shoulder','upper-limb','hand','hip','knee','ankle','foot'].includes(p.region)&&['红肿','局部肿胀'].some(t=>normalized[i].tags.has(t))&&has('发热','发冷')))
   warn('关节区域肿胀伴发烧或寒战：当日急诊排查关节感染。','Swelling around a joint with fever or chills needs same-day urgent assessment for infection.','same-day');
  if(has('黄疸')&&has('发热','发冷'))warn('黄疸伴发热或寒战：当天尽快就医检查肝胆；如明显腹痛、意识变化或晕厥，立即急诊。','Jaundice with fever or chills needs same-day liver/biliary assessment; significant abdominal pain, altered awareness or fainting needs emergency care.','same-day');
- else if(has('黄疸'))warn('眼白或皮肤发黄：尽快就医检查肝胆；伴发热或明显腹痛应急诊。','Yellow eyes or skin needs prompt liver/biliary assessment; fever or significant abdominal pain needs urgent care.','prompt');
+ else if(has('黄疸'))warn('已报告黄疸：今天联系医疗机构分诊，说明发现时间和既往诊断/随访安排，由医护确定就诊地点与检查时间。伴发热或明显腹痛应急诊。','Reported jaundice: contact a medical service today for triage. Explain when it was noticed and any established diagnosis or follow-up plan so a clinician can decide where and when assessment is needed. Fever or significant abdominal pain needs urgent care.','prompt');
  urgent.push(...literatureWarnings(profiles,normalized));
  const orderedUrgent=orderPriorityGuidance(urgent);
  const missing=[],candidates=[];

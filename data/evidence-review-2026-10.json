@@ -1594,6 +1594,104 @@
         "tests/sheet-context.test.mjs",
         "tests/provisional-anatomy-context.test.mjs"
       ]
+    },
+    {
+      "id": "isolated-hematuria-jaundice-contact-timing",
+      "reviewedOn": "2026-10-07",
+      "type": "Source-informed contact wording; no change to assessment tier or diagnostic gates",
+      "sources": [
+        {
+          "title": "NHS: Blood in urine",
+          "url": "https://www.nhs.uk/symptoms/blood-in-urine/",
+          "use": "Urgent GP/111 contact for seen or suspected blood supports timely triage. This public advice does not establish that every untyped report is visible hematuria or requires hospital emergency assessment."
+        },
+        {
+          "title": "NHS: Jaundice",
+          "url": "https://www.nhs.uk/conditions/jaundice/",
+          "use": "Yellow skin/eyes warrant urgent GP/111 contact. The route is access to clinical triage, not a validated severity score for the app."
+        },
+        {
+          "title": "MSD Professional: Hematuria",
+          "url": "https://www.msdmanuals.com/professional/nephrology/symptoms-of-nephrologic-disorders/hematuria",
+          "use": "Visible and microscopic hematuria have different evaluation pathways. Low-risk follow-up depends on history, testing and clinical risk assessment, none of which can be inferred from unselected checkboxes."
+        },
+        {
+          "title": "MSD Professional: Jaundice",
+          "url": "https://www.msdmanuals.com/professional/hepatic-and-biliary-disorders/approach-to-the-patient-with-liver-disease/jaundice",
+          "use": "Associated abdominal symptoms, altered awareness and bleeding affect urgency; history, examination and laboratory findings are needed to assess cause."
+        },
+        {
+          "title": "BSG: Guidelines on the management of abnormal liver blood tests (2017), PDF page 9",
+          "url": "https://www.bsg.org.uk/getmedia/b51bdc64-7145-43ad-828b-21f473b0a918/Guidelines-on-the-management-of-abnormal-liver-blood-tests.pdf",
+          "use": "Immediate referral for unexplained clinical jaundice supports early clinical triage. A self-selected app label does not establish clinically confirmed unexplained jaundice or prescribe the hospital destination."
+        }
+      ],
+      "decision": "For isolated blood in urine or jaundice, explicitly advise contacting a medical service today for triage and explaining how/when it was noticed and any prior assessment, diagnosis or follow-up plan. A clinician determines the place and timing of assessment. Keep the existing prompt assessment tier and all existing safety-net clauses and higher-priority predicates unchanged.",
+      "appliesTo": "The existing single-observation prompt branches, including their coexistence with independent higher-priority warnings. Contact today is a conservative application mapping for unstratified input, not a claim that all patients require a completed hospital assessment today.",
+      "positiveExamples": [
+        {
+          "part": "Kidney.l",
+          "layer": "organ",
+          "tags": [
+            "血尿"
+          ],
+          "expected": "Contact today for triage; prompt tier and basic reference retained."
+        },
+        {
+          "part": "Liver",
+          "layer": "organ",
+          "tags": [
+            "黄疸"
+          ],
+          "expected": "Contact today for triage; explain onset and prior care without asserting an unexplained new diagnosis."
+        }
+      ],
+      "negativeExamples": [
+        {
+          "part": "Urinary bladder",
+          "layer": "organ",
+          "tags": [
+            "血尿",
+            "排尿困难"
+          ],
+          "expected": "Existing immediate action for inability to pass urine remains first."
+        },
+        {
+          "part": "Liver",
+          "layer": "organ",
+          "tags": [
+            "黄疸",
+            "发热"
+          ],
+          "expected": "Existing same-day assessment remains unchanged."
+        },
+        {
+          "part": "Kidney.l",
+          "layer": "organ",
+          "tags": [
+            "尿色深"
+          ],
+          "expected": "Dark urine alone is not converted to reported blood."
+        },
+        {
+          "part": "Liver",
+          "layer": "organ",
+          "tags": [
+            "苍白便"
+          ],
+          "expected": "Pale stool alone is not converted to reported jaundice."
+        }
+      ],
+      "notEstablished": [
+        "The app does not collect blood visibility/testing subtype, age, full medical history, prior risk assessment or laboratory findings. Unticked warning signs do not establish a low-risk pathway.",
+        "No hematuria cancer pathway, jaundice cause, adult/infant identity or deadline for completed investigations is inferred. Existing follow-up plans are information to share with the clinician, not instructions to change treatment.",
+        "The sources do not validate the app tiers, scores or diagnostic accuracy. Today contact and same-day clinical assessment are distinct in this wording.",
+        "AUA/NICE official search excerpts informed the limitations review only; inaccessible full guideline text was not used to add a rule."
+      ],
+      "regressionTests": [
+        "tests/contact-urgency.test.mjs",
+        "tests/priority-guidance.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [
