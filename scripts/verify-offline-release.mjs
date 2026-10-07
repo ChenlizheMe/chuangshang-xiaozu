@@ -10,4 +10,5 @@ assert.deepEqual(page,release,'the built page and worker must describe the same 
 const runtime=fs.readdirSync(new URL('assets/',root)).filter(file=>/\.(?:js|mjs|css)$/.test(file)).sort().map(file=>'./assets/'+file);
 assert.deepEqual(page.assets,runtime,'all built runtime chunks, including lazy ones, must be covered');
 assert.match(page.id,/^[a-f0-9]{16}$/);
+assert.match(html,/<script\b[^>]*\sid="startup-recovery"[^>]*>/,'entry failures must retain an inline recovery path');
 console.log(`Offline release ${page.id}: all ${runtime.length} JS/CSS resources accounted for.`);
