@@ -1,0 +1,320 @@
+{
+  "scope": "Existing head safety predicates consume the night-pain observation without adding severity, side, disease evidence or a global pain token. All examples use actual selectable structures and existing field-visible inputs.",
+  "cases": [
+    {
+      "name": "head night pain alone",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "head night pain fever",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "head night pain chills",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "发冷"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": false
+    },
+    {
+      "name": "head night pain worsening",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛",
+          "持续加重"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "head night pain diplopia",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "复视"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "head night pain strength loss",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "肌力下降"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "head night pain sudden diplopia",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "复视"
+        ],
+        "timing": [
+          "夜间痛",
+          "突然起病"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "emergency",
+      "builtParity": true
+    },
+    {
+      "name": "head night pain sudden strength loss",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "肌力下降"
+        ],
+        "timing": [
+          "夜间痛",
+          "突然起病"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "emergency",
+      "builtParity": false
+    },
+    {
+      "name": "head night pain sudden alone",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛",
+          "突然起病"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "head duration fever without pain",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [
+          "持续数小时"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "head fever without pain",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": false
+    },
+    {
+      "name": "head worsening without pain",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "持续加重"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": false
+    },
+    {
+      "name": "diplopia alone",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "复视"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "wantLevel": "prompt",
+      "builtParity": true
+    },
+    {
+      "name": "sudden diplopia without pain",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "复视"
+        ],
+        "timing": [
+          "突然起病"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "strength loss alone",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "肌力下降"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "wantLevel": "prompt",
+      "builtParity": false
+    },
+    {
+      "name": "sudden strength loss without pain",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "肌力下降"
+        ],
+        "timing": [
+          "突然起病"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "emergency",
+      "builtParity": false
+    },
+    {
+      "name": "independent sudden facial numbness",
+      "report": {
+        "part": "Frontal bone",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [
+          "面部麻木"
+        ],
+        "signs": [],
+        "timing": [
+          "夜间痛",
+          "突然起病"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "emergency",
+      "builtParity": false
+    },
+    {
+      "name": "unreviewed arm night pain fever",
+      "report": {
+        "part": "Humerus.l",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    }
+  ]
+}

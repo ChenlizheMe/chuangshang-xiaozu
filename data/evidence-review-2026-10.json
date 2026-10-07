@@ -1856,6 +1856,61 @@
         "tests/build/verify-built-assessment.test.mjs"
       ],
       "status": "implemented-with-stated-limits"
+    },
+    {
+      "id": "head-night-pain-fact",
+      "reviewedOn": "2026-10-07",
+      "type": "Existing head safety predicates consuming an explicit pain observation",
+      "sources": [
+        {
+          "title": "MSD Professional: Approach to the Patient With Headache, history and red flags",
+          "url": "https://www.msdmanuals.com/professional/neurologic-disorders/headache/approach-to-the-patient-with-headache",
+          "use": "Pain timing is distinct from severity and onset. Fever, progressive worsening and neurological findings such as diplopia or weakness warrant assessment."
+        },
+        {
+          "title": "NHS: Double vision",
+          "url": "https://www.nhs.uk/symptoms/double-vision/",
+          "use": "Distinguishes urgent sudden diplopia from immediate advice for severe headache with diplopia. Night pain alone does not establish the severe-headache premise."
+        },
+        {
+          "title": "American Stroke Association: Stroke Symptoms",
+          "url": "https://www.stroke.org/en/about-stroke/stroke-symptoms",
+          "use": "Sudden visual changes, including double vision, are neurological warning signs requiring prompt emergency action. This does not diagnose stroke."
+        }
+      ],
+      "decision": "Within the three previously reviewed head-pain clauses only, the night pain observation satisfies the existing reported-pain premise. Fever/chills/progression and diplopia/reduced strength retain their existing same-day actions; explicit sudden onset with head pain and diplopia retains the existing conservative emergency action. The separate sudden-motor-loss clause is unchanged.",
+      "existingSourceScopes": [
+        "headache-and-motor-warning"
+      ],
+      "positiveExamples": [
+        "Frontal bone: night pain plus fever, chills or progressive worsening",
+        "Frontal bone: night pain plus diplopia or reduced strength",
+        "Frontal bone: night pain plus explicit sudden onset and diplopia"
+      ],
+      "negativeExamples": [
+        "Night pain alone or night pain with sudden onset alone does not automatically escalate.",
+        "Fever, worsening or duration alone does not establish head pain.",
+        "Isolated diplopia, sudden diplopia without pain, isolated weakness and sudden weakness retain their previous actions.",
+        "Humerus.l night pain with fever is outside this head-only extension; independent sudden facial numbness remains an emergency."
+      ],
+      "notEstablished": [
+        "Night pain does not establish severe pain, thunderclap onset, nocturnal awakening, symptom laterality, stroke, meningitis, tumour or an imaging indication.",
+        "NHS immediate advice requires severe headache, which the night-pain label does not report. The explicit sudden-head-pain/visual-change emergency mapping remains the previously reviewed conservative application policy, not a validated night-pain score.",
+        "Sources use different urgency wording for isolated diplopia; that separate policy is not changed in this batch.",
+        "No general pain tag is inserted, no global pain set or evidence family changes, and no condition P gate is widened. Night pain remains spontaneous in the existing evidence taxonomy.",
+        "All source fixtures use visible full/mobile GLB identities and field-visible labels. Generic pain is not available in the head UI; the software equivalence comparison uses the existing selectable stinging label. Synthetic software checks are not clinical validation."
+      ],
+      "rules": [
+        "headache-systemic-progressive",
+        "headache-neurological-change",
+        "sudden-motor-or-head-neurological-change"
+      ],
+      "tests": [
+        "tests/head-night-pain.test.mjs",
+        "tests/fixtures/head-night-pain.json",
+        "tests/build/verify-built-assessment.test.mjs"
+      ],
+      "status": "implemented-with-stated-limits"
     }
   ],
   "retainedBoundaries": [

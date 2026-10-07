@@ -157,6 +157,7 @@ export async function verifyBuiltAssessment({repo: repoOption = defaultRepo, dis
   const llq=json('tests/fixtures/confirmed-llq-cases.json');
   const observations=json('tests/fixtures/reported-observation-facts.json');
   const regionalNight=json('tests/fixtures/regional-night-pain.json');
+  const headNight=json('tests/fixtures/head-night-pain.json');
   const crossTestAst=parseAst(read('tests/cross-specialty-invariants.test.mjs'));
   const dangerDeclarations=crossTestAst.body.flatMap(n=>n.type==='VariableDeclaration'?n.declarations:[]).filter(n=>n.id.name==='danger');
   assert.equal(dangerDeclarations.length,1);
@@ -180,6 +181,7 @@ export async function verifyBuiltAssessment({repo: repoOption = defaultRepo, dis
   for(const c of llq.cases)add('confirmed LLQ boundaries',c.name,c.input,{kind:'llq',level:c.wantLevel,referenceIds:c.referenceIds});
   for(const c of observations.cases)add('reported observation boundaries',c.name,c.report,{kind:'observation',...c.expected});
   for(const c of regionalNight.cases.filter(c=>c.builtParity))add('regional night-pain boundaries',c.name,c.report,{kind:'triage',level:c.wantLevel});
+  for(const c of headNight.cases.filter(c=>c.builtParity))add('head night-pain boundaries',c.name,c.report,{kind:'triage',level:c.wantLevel});
   for(const c of cross.crossLayerCases)for(const [i,r]of c.reports.entries())add('cross-layer equivalent areas',`${c.name} #${i+1}`,r);
   for(const {name,report:r}of cross.seeds) {
     add('reversed input arrays',name,{...r,...Object.fromEntries(fields.map(f=>[f,[...(r[f]||[])].reverse()]))});

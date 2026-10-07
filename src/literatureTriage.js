@@ -5,6 +5,8 @@ const pain=report=>hasReportedPain(report.tags);
 // Night pain already reports pain. Keep this equivalence within the reviewed
 // neck/back pathways; it does not add disease evidence or imply severe pain.
 const neckBackPain=report=>pain(report)||has(report,'夜间痛');
+// The separately reviewed head clauses retain their original accompanying signs.
+const headPain=report=>pain(report)||has(report,'夜间痛');
 const regionalPain=[...LOCAL_PAIN_TAGS,'夜间痛'];
 const upperAbdominalPain=report=>[...regionalPain,'向背部放射','进食后腹痛','油腻餐后痛'].some(tag=>report.tags.has(tag));
 const jointRegions=['shoulder','upper-limb','hand','hip','knee','ankle','foot'];
@@ -110,13 +112,13 @@ const rules=[
  {id:'hot-swollen-joint',level:'same-day',matches:(p,r)=>jointRegions.includes(p.region)&&has(r,'红肿','局部肿胀')&&has(r,'局部发热','流脓'),
   zh:'局部肿胀或发红伴热感或流脓：当天尽快就医评估关节及周围组织，不能仅按痛风或滑囊劳损处理；未报告发烧也不能排除感染。',
   en:'Swelling or redness with local heat or purulent drainage needs same-day assessment of the joint and nearby tissues. Do not assume gout or bursal strain; unreported fever does not rule out infection.'},
- {id:'headache-systemic-progressive',level:'same-day',matches:(p,r)=>p.region==='head'&&pain(r)&&has(r,'发热','发冷','持续加重'),
+ {id:'headache-systemic-progressive',level:'same-day',matches:(p,r)=>p.region==='head'&&headPain(r)&&has(r,'发热','发冷','持续加重'),
   zh:'头部疼痛伴发热、寒战或持续加重：当天尽快就医评估，不先按普通紧张或偏头痛自行处理。',
   en:'Head pain with fever, chills or progressive worsening needs same-day assessment before routine tension-type or migraine self-care.'},
- {id:'headache-neurological-change',level:'same-day',matches:(p,r)=>p.region==='head'&&pain(r)&&has(r,'复视','肌力下降'),
+ {id:'headache-neurological-change',level:'same-day',matches:(p,r)=>p.region==='head'&&headPain(r)&&has(r,'复视','肌力下降'),
   zh:'头部疼痛伴复视或力量下降：当天尽快接受神经系统评估；不能把未核实的神经变化当作普通先兆。',
   en:'Head pain with double vision or reduced strength needs same-day neurological assessment; do not assume an unassessed neurological change is a routine aura.'},
- {id:'sudden-motor-or-head-neurological-change',level:'emergency',matches:(p,r)=>has(r,'突然起病')&&(has(r,'肌力下降')||p.region==='head'&&pain(r)&&has(r,'复视')),
+ {id:'sudden-motor-or-head-neurological-change',level:'emergency',matches:(p,r)=>has(r,'突然起病')&&(has(r,'肌力下降')||p.region==='head'&&headPain(r)&&has(r,'复视')),
   zh:'突然出现力量下降，或突然头痛伴复视：立即联系急救或急诊评估，记录起病时间；不要按局部神经受压先观察。',
   en:'Sudden loss of strength, or sudden head pain with double vision, needs emergency assessment. Record onset time rather than observing it as local nerve compression.'},
  {id:'neck-back-pain-fever',level:'same-day',matches:(p,r)=>['neck','spine'].includes(p.region)&&neckBackPain(r)&&has(r,'发热','发冷'),
