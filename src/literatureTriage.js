@@ -76,7 +76,7 @@ const rules=[
  {id:'right-upper-pain-fever',level:'same-day',matches:(p,r)=>p.region==='abdomen'&&referenceLocation(p,r)==='ruq'&&upperAbdominalPain(r)&&has(r,'发热','发冷'),
   zh:'右上腹/肝胆区域疼痛伴发热或寒战：当天尽快就医检查，不需要等油腻餐后发作或出现黄疸才评估。',
   en:'Right upper abdominal/liver-biliary area pain with fever or chills needs same-day assessment. Do not wait for fatty-meal association or jaundice.'},
- {id:'confirmed-left-lower-pain-warning',level:'same-day',matches:(p,r)=>p.region==='abdomen'&&r.location==='llq'&&[...LOCAL_PAIN_TAGS].some(tag=>r.tags.has(tag))&&has(r,'发热','发冷','持续加重'),
+ {id:'confirmed-left-lower-pain-warning',level:'same-day',matches:(p,r)=>['abdomen','pelvis'].includes(p.region)&&r.location==='llq'&&[...LOCAL_PAIN_TAGS].some(tag=>r.tags.has(tag))&&has(r,'发热','发冷','持续加重'),
   zh:'已确认左下腹疼痛或压痛，并伴发热、寒战或持续加重：今天尽快就医评估，不只按普通肠道不适观察。这些线索不能确定憩室炎或其他具体原因。',
   en:'Confirmed left-lower abdominal pain or tenderness with fever, chills or progressive worsening needs same-day medical assessment rather than observation as ordinary bowel discomfort. These findings do not establish diverticulitis or another specific cause.'},
  {id:'right-upper-pain-fever-jaundice',level:'emergency',matches:(p,r)=>p.region==='abdomen'&&referenceLocation(p,r)==='ruq'&&upperAbdominalPain(r)&&has(r,'发热','发冷')&&has(r,'黄疸'),

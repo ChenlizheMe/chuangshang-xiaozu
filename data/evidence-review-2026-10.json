@@ -1226,11 +1226,12 @@
           "use": "Left-lower pain or tenderness may occur with fever; diagnosis requires assessment."
         }
       ],
-      "decision": "Explicitly confirmed LLQ location plus local pain/tenderness and fever, chills or progressive worsening receives same-day assessment. A selected organ does not supply actual LLQ location. The existing reference card now describes bowel changes and fever as possible associated features, not guaranteed patient facts.",
+      "decision": "Explicitly confirmed LLQ location plus local pain/tenderness and fever, chills or progressive worsening receives same-day assessment. A selected organ does not supply actual LLQ location. The existing reference card now describes bowel changes and fever as possible associated features, not guaranteed patient facts. The existing pelvic model entry can confirm the same actual LLQ location, so it receives the same action without gaining a bowel diagnosis.",
       "positiveExamples": [
         "Abdominal wall: confirmed llq + 疼痛 + 发热",
         "Confirmed llq + 局部压痛 + 发冷",
-        "Confirmed llq + 疼痛 + 持续加重, without a bowel-change checkbox"
+        "Confirmed llq + 疼痛 + 持续加重, without a bowel-change checkbox",
+        "Levator ani.or: existing LLQ selector + 疼痛 + 发热, equivalent action to the abdominal entry."
       ],
       "negativeExamples": [
         "LLQ plus fever/progression alone does not establish pain.",
@@ -1241,6 +1242,41 @@
       ],
       "notEstablished": [
         "No diagnosis, diagnostic gate relaxation, bowel-change fact or organ-source inference. Existing higher-priority bleeding guidance remains in force."
+      ],
+      "tests": [
+        "tests/confirmed-llq-state.test.mjs"
+      ]
+    },
+    {
+      "id": "confirmed-lower-abdominal-pelvic-entry-equivalence",
+      "reviewedOn": "2026-10-07",
+      "status": "implemented-with-stated-limits",
+      "type": "Existing actual-location observation takes precedence over the selected model region",
+      "rules": [],
+      "sources": [
+        {
+          "title": "NHS: Appendicitis, urgent advice",
+          "url": "https://www.nhs.uk/conditions/appendicitis/",
+          "use": "Progressively worsening abdominal pain or pain moving to the right lower abdomen warrants urgent assessment."
+        },
+        {
+          "title": "NHS: Diverticular disease and diverticulitis, urgent advice",
+          "url": "https://www.nhs.uk/conditions/diverticular-disease-and-diverticulitis/",
+          "use": "The same explicit left-lower pain and systemic/progression facts must receive the same action through either existing location selector."
+        }
+      ],
+      "decision": "The abdominal and pelvic model entries already offer actual RLQ/LLQ choices. A user-confirmed location plus the same real pain and danger observations now receives the same existing same-day action through either entry. No bowel/appendix disease rule is broadened.",
+      "positiveExamples": [
+        "Levator ani.or: explicit rlq + 疼痛 or 局部压痛 + 持续加重",
+        "Levator ani.or: explicit llq + 疼痛 + 发热"
+      ],
+      "negativeExamples": [
+        "Unknown/diffuse location, missing pain or missing worsening does not trigger the RLQ action.",
+        "Remote shoulder-tip/back-radiation pain is not silently relabeled as actual lower abdominal pain.",
+        "The organ or pelvic model itself does not establish a diagnosis."
+      ],
+      "notEstablished": [
+        "Bowel/appendix reference gates and symptom choices are unchanged. A higher emergency observation remains dominant."
       ],
       "tests": [
         "tests/confirmed-llq-state.test.mjs"
