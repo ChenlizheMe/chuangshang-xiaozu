@@ -32,7 +32,7 @@ function browserCache(){
   async match(request){if(state.unavailable)throw new Error('Storage unavailable');for(const store of stores.values()){const response=store.get(key(request));if(response)return response.clone();}}
  };
  const self={location:{origin},clients:{claim:async()=>{}},skipWaiting:async()=>{},addEventListener:(type,handler)=>{listeners[type]=handler;}};
- vm.runInNewContext(source,{self,caches,fetch,URL,Response});
+ vm.runInNewContext(source,{self,caches,fetch,URL,Response,setTimeout,clearTimeout});
  const lifecycle=async type=>{let pending;listeners[type]({waitUntil:promise=>{pending=promise;}});await pending;};
  const request=async(path,mode='cors')=>{let pending;listeners.fetch({request:{url:key(path),mode,method:'GET'},respondWith:promise=>{pending=promise;},waitUntil:promise=>background.push(promise)});return pending;};
  const flushWrites=async()=>{while(background.length)await Promise.all(background.splice(0));};

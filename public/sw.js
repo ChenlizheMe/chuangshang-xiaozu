@@ -50,20 +50,27 @@ async function pageRelease(response) {
   if (RELEASE.assets.length || /<script\b[^>]*\ssrc=|<link\b[^>]*\b(?:modulepreload|stylesheet)\b/i.test(html)) throw new Error('Missing offline asset manifest');
   return {id:RELEASE.id,assets:[]};
 }
-async function cachedResponse(request, primary, primaryName, valid) {
+async function cachedResponse(request, primary, primaryName, valid, runtime = false) {
   const local = await primary?.match(request).catch(() => undefined);
   if (local && valid(local)) return local;
   for (const name of await caches.keys().catch(() => [])) {
-    if (name === primaryName || !name.startsWith(PREFIX)) continue;
+    if (name === primaryName || !name.startsWith(runtime ? PREFIX + 'shell-' : PREFIX)) continue;
     const response = await caches.open(name).then(cache => cache.match(request)).catch(() => undefined);
     if (response && valid(response)) return response;
   }
+}
+async function cacheReadOrNetwork(read) {
+  // CacheStorage can queue reads behind writes. A successful online script or
+  // stylesheet must not wait indefinitely for optional disk storage.
+  let timer;
+  try { return await Promise.race([read, new Promise(resolve => { timer = setTimeout(resolve, 1500); })]); }
+  finally { clearTimeout(timer); }
 }
 async function cacheRuntime(cache, assets) {
   await Promise.all(assets.map(async url => {
     const local = await cache.match(url);
     if (local && validRuntimeResponse(local, url)) return;
-    const previous = await cachedResponse(url, cache, CACHE, response => validRuntimeResponse(response, url));
+    const previous = await cachedResponse(url, cache, CACHE, response => validRuntimeResponse(response, url), true);
     const response = previous || await fetch(url);
     if (!validRuntimeResponse(response, url)) throw new Error('Invalid offline runtime resource');
     await cache.put(url, response);
@@ -198,17 +205,26 @@ self.addEventListener('fetch', event => {
     // Private browsing, exhausted storage and evicted caches are all optional
     // enhancements: they must not stop a successful network response.
     const runtime = isRuntimeAsset(new URL(request.url));
-    const cached = await caches.open(CACHE).then(cache => cachedResponse(request, cache, CACHE, response => !runtime || validRuntimeResponse(response, request))).catch(() => undefined);
+    const read = caches.open(CACHE).then(cache => cachedResponse(request, cache, CACHE, response => !runtime || validRuntimeResponse(response, request), runtime)).catch(() => undefined);
+    const cached = runtime ? await cacheReadOrNetwork(read) : await read;
     if (cached) return cached;
     try {
       const response = await fetch(request);
-      if (runtime && response.ok && !validRuntimeResponse(response, request)) return new Response('Invalid script or stylesheet resource', { status: 502 });
+      if (runtime && !validRuntimeResponse(response, request)) {
+        const lateCached = await read;
+        if (lateCached) return lateCached;
+        return response.ok ? new Response('Invalid script or stylesheet resource', { status: 502 }) : response;
+      }
       if (response.ok) {
         const copy = response.clone();
         event.waitUntil(caches.open(CACHE).then(cache => cache.put(request, copy)).catch(() => {}));
       }
       return response;
     } catch {
+      // A slow cache may still be the only available copy when the network is
+      // offline. Do not discard its eventual valid response after the budget.
+      const lateCached = runtime ? await read : undefined;
+      if (lateCached) return lateCached;
       // Returning index.html for JS/CSS hides the actual outage behind parse
       // and MIME errors, and can poison the next cached resource response.
       return new Response('Resource unavailable offline', { status: 503 });
