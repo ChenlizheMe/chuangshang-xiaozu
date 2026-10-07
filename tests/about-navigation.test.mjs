@@ -31,3 +31,13 @@ test('a direct about entry and refresh defer the viewer until first visiting ass
 test('the inactive application explicitly leaves the layout and focus tree',()=>{
  const css=fs.readFileSync(new URL('../src/cassette.css',import.meta.url),'utf8');assert.match(css,/\.app\[hidden\]\{display:none!important\}/);
 });
+test('About exposes the model notice separately from the user homepage in both languages',async t=>{
+ const app=await mountEditorApp({initialHash:'#/about'});t.after(()=>app.destroy());
+ const credits=app.cls('about-source-link'),home=app.cls('about-home');
+ assert.equal(textOf(credits),'模型来源与署名');assert.equal(credits.props.href,'https://github.com/ChenlizheMe/trauma-team-international/blob/main/public/anatomy/NOTICE');
+ assert.equal(home.props.href,'https://www.chenlizhe.cn');
+ for(const link of [credits,home]){assert.equal(link.props.target,'_blank');assert.match(link.props.rel,/noopener noreferrer/);}
+ app.click(app.find(node=>node.type==='button'&&node.props['aria-label']==='切换语言'));
+ assert.equal(textOf(app.cls('about-source-link')),'Model sources & credits');assert.match(textOf(app.cls('about-home')),/My homepage/);
+ assert.equal(app.state,null,'reading the credits entry does not initialize the hidden model app');
+});

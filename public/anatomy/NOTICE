@@ -1,3 +1,59 @@
+Trauma Team International — deployed anatomy assets
+===================================================
+
+Scope of this distribution
+--------------------------
+Only male-atlas source models and their derivatives are shipped in this
+anatomy directory. No female-atlas files or manifests are included.
+
+The local modification record below is copied from this repository's existing
+NOTICE. The following upstream appendix is retained unchanged for attribution;
+its descriptions of both atlases, upstream paths and upstream software refer
+to that upstream project, not to the contents or behaviour of this application.
+
+Asset licence reference: ./LICENSE
+CC BY-SA 4.0 legal text:
+https://creativecommons.org/licenses/by-sa/4.0/legalcode
+Pinned upstream asset directory:
+https://github.com/Nurkan1/Anatria-3D/tree/6f464dfec563352ea4eebd1219f4866a14e7dbf8/public/anatomy
+
+Local modification record (existing repository NOTICE)
+------------------------------------------------------
+
+WhereHurt
+
+This repository includes or references third-party anatomy assets from
+Anatria-3D:
+https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
+
+The upstream project identifies the anatomy data as derived from Z-Anatomy /
+BodyParts3D and distributed under the Creative Commons Attribution-ShareAlike
+4.0 International license (CC BY-SA 4.0):
+https://creativecommons.org/licenses/by-sa/4.0/
+
+The anatomy assets are separate from the original WhereHurt source code. Their
+license and attribution requirements continue to apply. Refer to the upstream
+project for the complete attribution chain and source terms.
+
+muscle-optimized.glb and muscle-mobile.glb are modified derivatives of
+nervous_male.glb and muscular_male.glb: muscle-only filtering, missing-muscle
+supplementation, decimation and recompression with original part coordinates.
+skeleton-mobile.glb is a simplified derivative of skeletal_male.glb.
+organs-optimized.glb and organs-mobile.glb derive from visceral_male.glb plus
+heart chambers from cardiovascular_male.glb and Spleen from lymphatic_male.glb.
+The chambers form one Heart mesh; lobes form one Left lung and one Right lung
+mesh. World transforms are baked before joining, then meshes are simplified.
+organ-supplement-source.glb contains the extracted original chambers and spleen.
+
+All of these male-atlas assets retain CC BY-SA 4.0 attribution and share-alike
+terms. The upstream attribution chain is included in public/anatomy/NOTICE.
+Source commit: 6f464dfec563352ea4eebd1219f4866a14e7dbf8.
+Regeneration instructions are in README.md; statistics and processing parameters
+are in public/anatomy/optimization-report.json.
+
+Unmodified upstream NOTICE
+==========================
+
 Anatria3D — anatomical mesh assets
 ==================================
 

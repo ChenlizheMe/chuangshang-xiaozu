@@ -119,15 +119,19 @@ button:active{transform:translateY(1px) scale(.98)}
 .about-limits h2{font:700 11px/1.4 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#b7bd9e;margin:0 0 10px}
 .about-limits p{font-size:13px;line-height:1.8;color:#bbc3a5;margin:0}
 .about-footer{grid-area:footer;display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:26px;border-top:1px solid #535943}
-.about-footer>span{font:12px/1.6 ui-monospace,monospace;letter-spacing:.04em;color:#aaaF93}
-.about-footer a{display:grid;grid-template-columns:1fr auto;gap:4px 30px;min-width:230px;min-height:64px;padding:14px 18px;border:1px solid #6b7054;border-radius:6px 2px;background:#343d2b;box-shadow:0 2px 0 #11180c;color:#efedda;text-decoration:none;font-size:15px;font-weight:700}
-.about-footer a span{color:var(--red);font-size:22px;line-height:1}
-.about-footer a small{grid-column:1/-1;color:#b5bea1;font:11px/1.4 ui-monospace,monospace}
-.about-footer a:hover{background:#424e34;border-color:#d08553}
-@media(max-width:760px){.about-page{padding:12px 12px 22px}.about-shell{padding:22px 20px;grid-template-columns:minmax(0,1fr);grid-template-areas:'nav' 'heading' 'story' 'limits' 'footer';gap:0;box-shadow:5px 7px 0 #11160e}.about-navigation{padding-bottom:22px}.about-heading{padding-top:28px}.about-heading h1{font-size:clamp(34px,8vw,48px);margin:20px 0 24px}.about-story{padding-top:0;font-size:16px;line-height:1.9}.about-story .about-intro{font-size:18px}.about-limits{margin:0 0 24px}.about-footer{align-items:stretch;flex-direction:column;gap:14px;padding-top:22px}.about-footer a{min-width:0}.about-kicker{font-size:9px}}
+.about-author>span{font:12px/1.6 ui-monospace,monospace;letter-spacing:.04em;color:#aaaF93}
+.about-home{display:grid;grid-template-columns:1fr auto;gap:4px 30px;min-width:230px;min-height:64px;padding:14px 18px;border:1px solid #6b7054;border-radius:6px 2px;background:#343d2b;box-shadow:0 2px 0 #11180c;color:#efedda;text-decoration:none;font-size:15px;font-weight:700}
+.about-home span{color:var(--red);font-size:22px;line-height:1}
+.about-home small{grid-column:1/-1;color:#b5bea1;font:11px/1.4 ui-monospace,monospace}
+.about-home:hover{background:#424e34;border-color:#d08553}
+@media(max-width:760px){.about-page{padding:12px 12px 22px}.about-shell{padding:22px 20px;grid-template-columns:minmax(0,1fr);grid-template-areas:'nav' 'heading' 'story' 'limits' 'footer';gap:0;box-shadow:5px 7px 0 #11160e}.about-navigation{padding-bottom:22px}.about-heading{padding-top:28px}.about-heading h1{font-size:clamp(34px,8vw,48px);margin:20px 0 24px}.about-story{padding-top:0;font-size:16px;line-height:1.9}.about-story .about-intro{font-size:18px}.about-limits{margin:0 0 24px}.about-footer{align-items:stretch;flex-direction:column;gap:14px;padding-top:22px}.about-home{min-width:0}.about-kicker{font-size:9px}}
 
 .anatomy-name-note{display:block;margin-top:4px;overflow-wrap:anywhere;font-size:11px;font-weight:400;line-height:1.4;letter-spacing:0;color:#d0d3c6}
 
 /* Native headings keep the existing instrument-label dimensions. */
 .screen-label h1,.sheet-heading>h2,.urgent-strip>h3,.condition{margin:0}
 .sticker-sheet{scroll-padding-block-start:calc(var(--sheet-header-height,64px) + 6px);scroll-padding-block-end:6px}
+
+.about-author{display:grid;justify-items:start;min-width:0}
+.about-source-link{display:inline-flex;align-items:center;min-height:44px;max-width:100%;font-size:12px;line-height:1.5;color:#b7bd9e;text-decoration:underline;text-underline-offset:3px}
+.about-source-link:hover{color:#efedda}.about-source-link:focus-visible{outline:2px solid var(--red);outline-offset:3px}

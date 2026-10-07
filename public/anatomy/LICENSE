@@ -1,0 +1,20 @@
+Anatomy asset licence reference
+===============================
+
+The shipped male-atlas source GLBs and their model derivatives listed in NOTICE
+retain the CC BY-SA 4.0 terms identified by the upstream source. This file adds
+an accessible licence reference; it does not replace or change those terms.
+
+Creative Commons Attribution-ShareAlike 4.0 International
+Full legal text: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+Summary: https://creativecommons.org/licenses/by-sa/4.0/
+
+Upstream asset licence at the recorded source revision:
+https://github.com/Nurkan1/Anatria-3D/blob/6f464dfec563352ea4eebd1219f4866a14e7dbf8/public/anatomy/LICENSE
+
+See NOTICE for the BodyParts3D / Z-Anatomy / Anatria-3D attribution chain,
+original-source links and this project's filtering, merging and simplification
+record. The female atlas described in the upstream appendix is not shipped.
+
+The application source has a separate repository licence, unchanged here:
+https://github.com/ChenlizheMe/trauma-team-international/blob/main/LICENSE
