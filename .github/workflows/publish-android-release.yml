@@ -1,0 +1,72 @@
+name: Publish verified Android preview
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'android/releases/1.0.0/**'
+      - '.github/workflows/publish-android-release.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: publish-android-v1.0.0
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'ChenlizheMe/trauma-team-international' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Test public reconstruction boundaries
+        run: node --test android/scripts/reconstruct-signed-apk.test.mjs
+      - name: Check the fixed release and refuse conflicting publication
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node android/scripts/check-preview-release.mjs
+      - name: Download the verified unsigned build
+        if: steps.existing.outputs.present == 'false'
+        uses: actions/download-artifact@v4
+        with:
+          name: trauma-team-android-unsigned-b317f650dd5aae8fa2d1c3d1ad1b9c49a2acb9dc
+          run-id: 37659426133
+          github-token: ${{ github.token }}
+          path: unsigned
+      - name: Reconstruct using public APK signature data only
+        if: steps.existing.outputs.present == 'false'
+        run: |
+          test "$(cat unsigned/source-commit.txt)" = b317f650dd5aae8fa2d1c3d1ad1b9c49a2acb9dc
+          node android/scripts/reconstruct-signed-apk.mjs unsigned/trauma-team-1.0.0-unsigned.apk android/releases/1.0.0/public-signature.json signed
+      - name: Download an existing preview for idempotent verification
+        if: steps.existing.outputs.present == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download android-v1.0.0 --repo ChenlizheMe/trauma-team-international --pattern trauma-team-1.0.0.apk --pattern SHA256SUMS --pattern certificate-sha256.txt --dir signed
+      - name: Verify checksum, signing certificate, alignment and packaged resources
+        run: |
+          node --input-type=module -e "import fs from 'node:fs';import assert from 'node:assert/strict';const m=JSON.parse(fs.readFileSync('android/releases/1.0.0/public-signature.json','utf8'));assert.equal(fs.readFileSync('signed/SHA256SUMS','utf8'),m.signed.sha256+'  '+m.signed.file+'\\n');assert.equal(fs.readFileSync('signed/certificate-sha256.txt','utf8'),m.signed.certificateSha256+'\\n');"
+          printf '%s  %s\n' 25397d9a71f7ee49ef628073f2eef68c084ffa896f63320bfeddcac86140d2f8 signed/trauma-team-1.0.0.apk | sha256sum --check --strict
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs signed/trauma-team-1.0.0.apk > signed/signature-verification.txt
+          node --input-type=module -e "import fs from 'node:fs';import assert from 'node:assert/strict';const report=fs.readFileSync('signed/signature-verification.txt','utf8');const hashes=[...report.matchAll(/Signer #[0-9]+ certificate SHA-256 digest: ([a-f0-9]+)/g)].map(x=>x[1]);assert.deepEqual(hashes,['6fa0cf306e3aa8662678f0d217845b97df449204493c5850ccf9b34cebd55a50']);"
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -P 16 4 signed/trauma-team-1.0.0.apk
+          "$ANDROID_HOME/build-tools/35.0.0/aapt2" dump badging signed/trauma-team-1.0.0.apk > signed/apk-badging.txt
+          node android/scripts/inspect-apk.mjs signed/trauma-team-1.0.0.apk signed/apk-badging.txt
+      - name: Publish the signed preview without private signing material
+        if: steps.existing.outputs.present == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create android-v1.0.0 signed/trauma-team-1.0.0.apk signed/SHA256SUMS signed/certificate-sha256.txt --repo ChenlizheMe/trauma-team-international --target b317f650dd5aae8fa2d1c3d1ad1b9c49a2acb9dc --title '创伤小组 Android 1.0.0 预览版' --notes-file android/releases/1.0.0/notes.md --prerelease --draft
+          gh release edit android-v1.0.0 --repo ChenlizheMe/trauma-team-international --draft=false --prerelease
+      - name: Publish an already verified complete draft
+        if: steps.existing.outputs.present == 'true' && steps.existing.outputs.draft == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release edit android-v1.0.0 --repo ChenlizheMe/trauma-team-international --draft=false --prerelease
