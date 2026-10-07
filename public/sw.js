@@ -9,7 +9,23 @@ const MODEL_CACHE = PREFIX + 'models-v' + MODEL_VERSION;
 const isRuntimeAsset = url => url.pathname.includes('/assets/') && /\.(?:js|mjs|css)$/.test(url.pathname);
 const isModelAsset = url => (url.pathname.includes('/anatomy/') && url.pathname.endsWith('.glb')) || url.pathname.includes('/draco/');
 const canReuseModel = url => isModelAsset(url) && (!url.pathname.endsWith('.glb') || url.searchParams.get('v') === MODEL_VERSION);
-const validModelResponse = response => response.ok && !/text\/html|application\/xhtml\+xml/i.test(response.headers.get('content-type') || '');
+function modelContentHash(request) {
+  const url = new URL(typeof request === 'string' ? request : request.url, scope);
+  return url.pathname.match(/\/(?:anatomy|draco)\/[^/]+\.([a-f0-9]{64})\.(?:glb|js|wasm)$/)?.[1];
+}
+async function validModelResponse(response, request) {
+  if (!response.ok || /text\/html|application\/xhtml\+xml/i.test(response.headers.get('content-type') || '')) return false;
+  const hash = modelContentHash(request);
+  // Legacy/dev URLs retain their previous checks. Content-addressed files must
+  // contain the promised bytes, including when read from an older app cache.
+  if (!hash) return true;
+  try {
+    if (!crypto?.subtle?.digest) return false;
+    const bytes = await response.clone().arrayBuffer();
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('') === hash;
+  } catch { return false; }
+}
 const validRuntimeResponse = (response, url) => {
   if (!response.ok) return false;
   const mime = (response.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
@@ -52,11 +68,11 @@ async function pageRelease(response) {
 }
 async function cachedResponse(request, primary, primaryName, valid, runtime = false) {
   const local = await primary?.match(request).catch(() => undefined);
-  if (local && valid(local)) return local;
+  if (local && await valid(local)) return local;
   for (const name of await caches.keys().catch(() => [])) {
     if (name === primaryName || !name.startsWith(runtime ? PREFIX + 'shell-' : PREFIX)) continue;
     const response = await caches.open(name).then(cache => cache.match(request)).catch(() => undefined);
-    if (response && valid(response)) return response;
+    if (response && await valid(response)) return response;
   }
 }
 async function cacheReadOrNetwork(read) {
@@ -155,9 +171,9 @@ self.addEventListener('activate', event => {
         for (const request of await previous.keys()) {
           if (!canReuseModel(new URL(request.url))) continue;
           const existing = await models.match(request);
-          if (existing && validModelResponse(existing)) continue;
+          if (existing && await validModelResponse(existing, request)) continue;
           const response = await previous.match(request);
-          if (response && validModelResponse(response)) await models.put(request, response);
+          if (response && await validModelResponse(response, request)) await models.put(request, response);
         }
       } catch { preserveShells.add(key); if (expired) return; }
     }
@@ -195,19 +211,22 @@ self.addEventListener('fetch', event => {
   if (isModelAsset(new URL(request.url))) {
     event.respondWith((async () => {
       const storage = caches.open(MODEL_CACHE);
-      const read = storage.then(cache => cachedResponse(request, cache, MODEL_CACHE, validModelResponse)).catch(() => undefined);
+      const read = storage.then(cache => cachedResponse(request, cache, MODEL_CACHE, response => validModelResponse(response, request))).catch(() => undefined);
       const cached = await cacheReadOrNetwork(read);
       if (cached) return cached;
       try {
         const response = await fetch(request);
-        if (validModelResponse(response)) {
+        if (await validModelResponse(response, request)) {
           // Deliver the downloaded resource now; keep the worker alive for the
           // optional disk write without putting storage on the response path.
           const copy = response.clone();
           event.waitUntil(storage.then(cache => cache.put(request, copy)).catch(() => {}));
           return response;
         }
-        const lateCached = await read;
+        // A failed integrity check must become a retryable resource error even
+        // when optional storage remains stuck. Give a late healthy copy one
+        // more bounded opportunity; keep the existing offline/HTTP-failure path.
+        const lateCached = response.ok && modelContentHash(request) ? await cacheReadOrNetwork(read) : await read;
         if (lateCached) return lateCached;
         return response.ok ? new Response('Invalid anatomy resource', { status: 502 }) : response;
       } catch {

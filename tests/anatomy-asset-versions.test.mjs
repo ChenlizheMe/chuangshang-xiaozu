@@ -80,14 +80,15 @@ test('manifest generation is portable and does not depend on the invoking workin
 });
 for(const scope of ['/','/project/'])test(`model cache and shell migration preserve complete versioned paths in ${scope}`,async()=>{
  const b=browser(worker,{scope}),old=await b.caches.open('trauma-team-international-shell-v7');
- const a='a'.repeat(64),z='b'.repeat(64),legacy='./anatomy/skeleton-mobile.glb',legacyDecoder='./draco/draco_decoder.wasm';
+ const digest=value=>createHash('sha256').update(value).digest('hex');
+ const a=digest('hash A'),z=digest('hash B'),legacy='./anatomy/skeleton-mobile.glb',legacyDecoder='./draco/draco_decoder.wasm';
  const modelA=`./anatomy/skeleton-mobile.${a}.glb`,modelB=`./anatomy/skeleton-mobile.${z}.glb`,decoderA=`./draco/draco_decoder.${a}.wasm`,decoderB=`./draco/draco_decoder.${z}.wasm`;
  const current=modelA+'?v=5&sha256='+a,next=modelB+'?v=5&sha256='+z;
  const binary=value=>new Response(value,{headers:{'content-type':'application/octet-stream'}});
  await old.put(legacy+'?v=5',binary('legacy model'));await old.put(legacy+'?v=5&sha256='+a,binary('legacy query-only model'));
- await old.put(current,binary('hash A'));await old.put(legacyDecoder,binary('legacy decoder'));await old.put(decoderA+'?sha256='+a,binary('decoder A'));
+ await old.put(current,binary('hash A'));await old.put(legacyDecoder,binary('legacy decoder'));await old.put(decoderA+'?sha256='+a,binary('hash A'));
  await b.caches.open('trauma-team-international-shell-v11-development');await b.lifecycle('activate');b.state.online=false;
- assert.equal(await (await b.request(current)).text(),'hash A');assert.equal(await (await b.request(decoderA+'?sha256='+a)).text(),'decoder A');
+ assert.equal(await (await b.request(current)).text(),'hash A');assert.equal(await (await b.request(decoderA+'?sha256='+a)).text(),'hash A');
  for(const url of [next,modelA+'?v=6&sha256='+a,modelA+'?v=5',modelA+'?v=5&sha256=wrong',current+'&sha256='+z,current+'&other=1',decoderB+'?sha256='+z])assert.equal((await b.request(url)).status,503,url);
  if(scope!=='/')assert.equal((await b.request('/anatomy/skeleton-mobile.'+a+'.glb?v=5&sha256='+a)).status,503,'root and project caches do not mix');
  b.state.online=true;b.state.responses.set(b.normalize(next),binary('hash B'));assert.equal(await (await b.request(next)).text(),'hash B');await b.flush();b.state.online=false;

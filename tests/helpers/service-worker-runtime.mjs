@@ -4,7 +4,7 @@ export const html = body => new Response(body, {headers:{'content-type':'text/ht
 export const js = body => new Response(body || 'export const ready = true', {headers:{'content-type':'application/javascript'}});
 export const css = body => new Response(body || 'body{}', {headers:{'content-type':'text/css'}});
 export const deferred = () => { let resolve,reject; const promise=new Promise((yes,no)=>{resolve=yes;reject=no;}); return {promise,resolve,reject}; };
-export function browser(source,{scope='/',stores=new Map(),timerHost={setTimeout,clearTimeout}}={}){
+export function browser(source,{scope='/',stores=new Map(),timerHost={setTimeout,clearTimeout},cryptoHost=globalThis.crypto}={}){
  const base = new URL(scope, origin).href;
  const normalize = request => new URL(typeof request === 'string' ? request : request.url,base).href;
  const listeners={}, background=[], calls=[], writes=[], deletes=[];
@@ -38,7 +38,7 @@ export function browser(source,{scope='/',stores=new Map(),timerHost={setTimeout
  };
  const workerState={claimed:false,skipWaiting:false};
  const self={location:new URL('sw.js',base),registration:{scope:base},clients:{claim:async()=>{if(state.claimHook)await state.claimHook();workerState.claimed=true;},matchAll:async()=>[]},skipWaiting:async()=>{workerState.skipWaiting=true;},addEventListener:(type,handler)=>{listeners[type]=handler;}};
- vm.runInNewContext(source,{self,caches,fetch,URL,Request,Response,Map,Set,Promise,console,crypto:globalThis.crypto,...timerHost});
+ vm.runInNewContext(source,{self,caches,fetch,URL,Request,Response,Map,Set,Promise,console,crypto:cryptoHost,...timerHost});
  const lifecycle=async type=>{const tasks=[];listeners[type]({waitUntil:promise=>tasks.push(promise)});return await Promise.all(tasks);};
  const request=async(path,mode='cors')=>{let pending;listeners.fetch({request:{url:normalize(path),mode,method:'GET',headers:new Headers()},respondWith:promise=>{pending=promise;},waitUntil:promise=>{background.push(Promise.resolve(promise));}});return pending;};
  const flush=async()=>{while(background.length)await Promise.all(background.splice(0));};
