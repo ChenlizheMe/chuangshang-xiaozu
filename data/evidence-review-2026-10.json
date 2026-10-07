@@ -1170,6 +1170,40 @@
       "tests": [
         "tests/urinary-retention-disposition.test.mjs"
       ]
+    },
+    {
+      "id": "explicit-flank-pain-equivalence",
+      "reviewedOn": "2026-10-07",
+      "status": "implemented-with-stated-limits",
+      "type": "Explicit-location and symptom equivalence with retained editability",
+      "rules": [],
+      "sources": [
+        {
+          "title": "NIDDK: Kidney infection symptoms and when to seek care",
+          "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-infection-pyelonephritis/symptoms-causes"
+        },
+        {
+          "title": "EAU: Urological Infections, pyelonephritis diagnostic evaluation",
+          "url": "https://uroweb.org/guidelines/urological-infections/chapter/the-guideline"
+        }
+      ],
+      "decision": "User-confirmed flank location plus a genuine local pain/tenderness observation and fever/chills receives the same existing same-day assessment as an explicit flank-pain tag. The confirmed location remains visible and editable after removing colic or other trigger words. Existing colic-plus-fever emergency guidance remains higher priority.",
+      "positiveExamples": [
+        "Pectineus muscle.r: location flank + 疼痛 + 发热",
+        "Abdominal wall: location flank + 局部压痛 + 发冷"
+      ],
+      "negativeExamples": [
+        "Location alone plus fever does not establish pain.",
+        "Unknown/diffuse location plus generic pain and fever does not establish flank pain.",
+        "Local warmth alone is not systemic fever.",
+        "Selecting a kidney is not confirmation of actual flank location."
+      ],
+      "notEstablished": [
+        "No pyelonephritis/stone diagnosis or negative finding is inferred. The reference-card evidence gates are unchanged."
+      ],
+      "tests": [
+        "tests/confirmed-flank-state.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [
@@ -1240,5 +1274,6 @@
       "reason": "Public-source review and synthetic software tests cannot estimate diagnostic accuracy, sensitivity, specificity or patient safety. No patient dataset or clinician validation is claimed.",
       "tests": []
     }
-  ]
+  ],
+  "updatedOn": "2026-10-07"
 }

@@ -8,7 +8,7 @@ export function reportLocationOptions(report){
  if(region==='abdomen')return ABDOMEN_LOCATIONS;
  if(region==='pelvis')return ABDOMEN_LOCATIONS.filter(([id])=>['unknown','rlq','llq','suprapubic','diffuse'].includes(id));
  const tags=[...(report.feelings||[]),...(report.signs||[])];
- if(['spine','hip'].includes(region)&&tags.some(tag=>['侧腰痛','绞痛','腰腹向腹股沟放射','血尿'].includes(tag)))
+ if(['spine','hip'].includes(region)&&(['flank','diffuse'].includes(report.location)||tags.some(tag=>['侧腰痛','绞痛','腰腹向腹股沟放射','血尿'].includes(tag))))
   return ABDOMEN_LOCATIONS.filter(([id])=>['unknown','flank','diffuse'].includes(id));
  return [];
 }

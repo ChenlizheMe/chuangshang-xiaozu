@@ -43,7 +43,7 @@ export function assessSymptoms(knowledge,input={}){
  else if(abdominal&&has('可能怀孕')&&has(...chestPain,'侧腰痛','腹痛迁移至右下腹','肩尖痛','向背部放射','腰腹向腹股沟放射','局部压痛'))warn('可能怀孕且腹部/盆腔痛：尽快就医确认；单侧剧痛、出血、肩尖痛或晕厥立即急诊。','Possible pregnancy with abdominal/pelvic pain needs prompt assessment; severe one-sided pain, bleeding, shoulder-tip pain or fainting is an emergency.','same-day');
 
  // Selected urinary warning signs must not fall through to mechanical back care.
- if(profiles.some((p,i)=>['abdomen','pelvis','spine','hip'].includes(p.region)&&localHas(i,'侧腰痛','尿痛','尿频','尿急')&&localHas(i,'发热','发冷')))warn('侧腰痛或排尿变化伴发热、寒战：当日尽快就医排查肾脏/尿路感染，不按普通腰背劳损处理。','Flank pain or urinary changes with fever or chills need urgent same-day assessment for kidney/urinary infection; do not treat it as ordinary back strain.','same-day');
+ if(profiles.some((p,i)=>['abdomen','pelvis','spine','hip'].includes(p.region)&&(localHas(i,'侧腰痛','尿痛','尿频','尿急')||normalized[i].location==='flank'&&localHas(i,...LOCAL_PAIN_TAGS))&&localHas(i,'发热','发冷')))warn('侧腰痛或排尿变化伴发热、寒战：当日尽快就医排查肾脏/尿路感染，不按普通腰背劳损处理。','Flank pain or urinary changes with fever or chills need urgent same-day assessment for kidney/urinary infection; do not treat it as ordinary back strain.','same-day');
  if(has('血尿')&&has('发热','发冷'))warn('血尿伴发热或寒战：当天尽快就医排查感染等原因；如剧痛、不能排尿或明显不适，立即急诊。','Blood in urine with fever or chills needs same-day assessment for infection and other causes; severe pain, inability to urinate or feeling very unwell needs emergency care.','same-day');
  else if(has('血尿'))warn('出现血尿：尽快就医检查；伴发热或排尿变化应当日评估；如剧痛或无法排尿，立即急诊。','Blood in urine needs prompt medical assessment; fever or urinary changes need same-day assessment; severe pain or inability to pass urine needs emergency care.','prompt');
 

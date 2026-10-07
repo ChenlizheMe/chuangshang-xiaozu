@@ -1,0 +1,154 @@
+{
+  "purpose": "Independently reviewed synthetic safety cases, not clinical validation. Only explicit actual flank location plus a real pain observation can supply the missing flank-pain fact.",
+  "sources": [
+    "https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-infection-pyelonephritis/symptoms-causes",
+    "https://uroweb.org/guidelines/urological-infections/chapter/the-guideline"
+  ],
+  "cases": [
+    {
+      "name": "positive generic flank fever",
+      "input": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "flank",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "发热"
+        ]
+      },
+      "wantLevel": "same-day"
+    },
+    {
+      "name": "positive aching flank chills",
+      "input": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "flank",
+        "feelings": [
+          "酸痛"
+        ],
+        "signs": [
+          "发冷"
+        ]
+      },
+      "wantLevel": "same-day"
+    },
+    {
+      "name": "positive flank tenderness fever",
+      "input": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "flank",
+        "feelings": [],
+        "signs": [
+          "局部压痛",
+          "发热"
+        ]
+      },
+      "wantLevel": "same-day"
+    },
+    {
+      "name": "positive explicit flank-pain fever",
+      "input": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "flank",
+        "feelings": [
+          "侧腰痛"
+        ],
+        "signs": [
+          "发热"
+        ]
+      },
+      "wantLevel": "same-day"
+    },
+    {
+      "name": "preserve colic fever",
+      "input": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "flank",
+        "feelings": [
+          "绞痛"
+        ],
+        "signs": [
+          "发热"
+        ]
+      },
+      "wantLevel": "emergency"
+    },
+    {
+      "name": "negative location fever only",
+      "input": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "flank",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ]
+      },
+      "wantLevel": null
+    },
+    {
+      "name": "negative generic pain unknown location",
+      "input": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "发热"
+        ]
+      },
+      "wantLevel": null
+    },
+    {
+      "name": "negative generic pain diffuse location",
+      "input": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "diffuse",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "发热"
+        ]
+      },
+      "wantLevel": null
+    },
+    {
+      "name": "negative local warmth not fever",
+      "input": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "flank",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": [
+          "局部发热"
+        ]
+      },
+      "wantLevel": null
+    },
+    {
+      "name": "negative pain without fever",
+      "input": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "flank",
+        "feelings": [
+          "疼痛"
+        ],
+        "signs": []
+      },
+      "wantLevel": null
+    }
+  ]
+}
