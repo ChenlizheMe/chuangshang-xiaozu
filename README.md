@@ -164,3 +164,5 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 三层GLTF复用一个Draco实例；轻量配置的真实解码探针中，按顺序加载骨骼/肌肉/内脏的decoder/worker/Blob各从3个降到1个，解码库读取6次降到2次；三层并发仍完整得到335/636/30个网格。专用加载管理器只在解码库初始化失败时丢弃失败实例，分别验证JS、WASM失败一次后重试能成功。正常换层不销毁正在使用的解码器。实现遵循[Three.js复用DRACOLoader建议](https://github.com/mrdoob/three.js/blob/dev/docs/pages/DRACOLoader.html.md)。
 
 `tests/model-suspense.test.mjs`使用真实React/R3F调度和事件系统、合成网格及模拟GL；`tests/anatomy-picking.test.mjs`覆盖隐藏、移除及转移场景的旧回调；`tests/draco-loader.test.mjs`覆盖共享与初始化失败恢复。解码资源计数另用Node真实worker及仓库WASM/GLB复核，不能据此宣称已测浏览器堆内存或手机功耗。
+
+指针候选现在通过原生事件跟踪移动、取消、移出释放和窗口失焦；R3F仅在按下/抬起时做结构命中，闲置悬停不再遍历网格。双指手势（即使仅移动2像素）、右键菜单及双击附带通知不会额外选中部位；取消后复用同一pointerId的首个新点击可用。触摸取消不启动惯性，捏合结束后剩余单指可从当前位置继续旋转；RESET/切层清理未结束的手势，保留滑块自身拖动。`tests/pointer-selection.test.mjs`及实际R3F事件序列覆盖这些状态；物理手机多指手势仍需实机复验。事件终止语义参考[W3C Touch Events](https://www.w3.org/TR/touch-events/#the-touchcancel-event)。

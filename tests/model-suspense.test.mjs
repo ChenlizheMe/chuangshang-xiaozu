@@ -3,7 +3,9 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url);const repo=new URL('../',import.meta.url).pathname;
 if(!globalThis.navigator)globalThis.navigator={};
-globalThis.window={matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}),devicePixelRatio:1};
+const windowEvents=new Map();
+const native=(type,event={})=>{for(const handler of windowEvents.get(type)||[])handler({...event,type});};
+globalThis.window={matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}),devicePixelRatio:1,addEventListener(type,fn){if(!windowEvents.has(type))windowEvents.set(type,new Set());windowEvents.get(type).add(fn);},removeEventListener(type,fn){windowEvents.get(type)?.delete(fn);}};
 globalThis.requestAnimationFrame=cb=>setTimeout(()=>cb(performance.now()),16);globalThis.cancelAnimationFrame=clearTimeout;
 const React=require('react'),THREE=require('three'),fiber=require('@react-three/fiber');fiber.extend(THREE);
 const {build}=require('esbuild');let source=fs.readFileSync(new URL('../src/AnatomyViewer.jsx',import.meta.url),'utf8');
@@ -25,8 +27,8 @@ test('hidden Suspense models cannot be picked and one visible branch raycasts on
  try{
   render('skeleton');await until(()=>approximate.current);const state=fiber._roots.get(canvas).store.getState();state.scene.updateMatrixWorld(true);state.camera.updateMatrixWorld(true);
   assert.equal(state.internal.interaction.length,1);let rays=0;const raycast=skeleton.mesh.raycast;skeleton.mesh.raycast=function(...args){rays++;return raycast.apply(this,args);};
-  state.events.handlers.onPointerMove(event);assert.equal(rays,1);
-  state.events.handlers.onPointerDown(event);state.events.handlers.onPointerUp(event);assert.deepEqual(choices.splice(0),[{layer:'skeleton',part:'Femur.l'}]);
+  state.events.handlers.onPointerMove(event);assert.equal(rays,0,'idle hover needs no mesh intersection');
+  state.events.handlers.onPointerDown(event);assert.equal(rays,1);state.events.handlers.onPointerUp(event);assert.equal(rays,2);assert.deepEqual(choices.splice(0),[{layer:'skeleton',part:'Femur.l'}]);
   const staleApproximate=approximate.current;state.events.handlers.onPointerDown(event);
   render('muscle');await until(()=>state.scene.children.some(o=>o.name==='loading'));state.scene.updateMatrixWorld(true);
   assert.equal(approximate.current,null);assert.equal(skeleton.mesh.visible,true,'mesh visibility alone is not a sufficient guard');
@@ -34,5 +36,15 @@ test('hidden Suspense models cannot be picked and one visible branch raycasts on
   ready=true;resolve();await until(()=>approximate.current&&approximate.current!==staleApproximate);state.scene.updateMatrixWorld(true);
   staleApproximate(event);assert.deepEqual(choices,[],'a replaced cached root stays inactive');
   state.events.handlers.onPointerDown(event);state.events.handlers.onPointerUp(event);assert.deepEqual(choices.splice(0),[{layer:'muscle',part:'Rectus femoris muscle.r'}]);assert.equal(state.internal.interaction.length,1);
- }finally{root.unmount();await sleep(600);assert.equal(approximate.current,null);}
+  // R3F does not forward pointercancel to a group's handler. Native capture
+  // must clear the candidate so the very next tap can select normally.
+  state.events.handlers.onPointerDown(event);state.events.handlers.onPointerCancel(event);native('pointercancel',event);await sleep(550);
+  state.events.handlers.onPointerDown(event);state.events.handlers.onPointerUp(event);assert.equal(choices.splice(0).length,1);
+  const second={...event,pointerId:2,isPrimary:false,clientX:197,offsetX:197};
+  native('pointerdown',event);state.events.handlers.onPointerDown(event);native('pointerdown',second);state.events.handlers.onPointerDown(second);
+  native('pointermove',{...second,clientX:199,offsetX:199});native('pointerup',second);state.events.handlers.onPointerUp(second);native('pointerup',event);state.events.handlers.onPointerUp(event);await Promise.resolve();
+  approximate.current({...event,type:'click',detail:1});assert.deepEqual(choices,[],'a short pinch cannot select through an exact or near-miss click');
+  approximate.current({...event,type:'contextmenu',button:2});assert.deepEqual(choices,[],'right-click misses do not select anatomy');
+  approximate.current({...event,type:'click',button:0,detail:0});assert.equal(choices.splice(0).length,1,'explicit keyboard click is still accepted');
+ }finally{root.unmount();await sleep(600);assert.equal(approximate.current,null);assert.equal([...windowEvents.values()].reduce((n,set)=>n+set.size,0),0);}
 });

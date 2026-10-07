@@ -11,6 +11,7 @@ import {ANATOMY_MODELS,isVisibleAnatomyMesh} from './anatomyModels.js';
 import {ORGAN_ATLAS} from './organAtlas.js';
 import {renderProfile} from './renderProfile.js';
 import {isVisibleInScene,isPickableAnatomy} from './anatomyPicking.js';
+import {createPointerSelection} from './pointerSelection.js';
 const quality=renderProfile({mobile:window.matchMedia('(max-width:700px), (pointer:coarse)').matches,memory:navigator.deviceMemory,cores:navigator.hardwareConcurrency,saveData:navigator.connection?.saveData});
 const MODEL_URLS=Object.fromEntries(Object.entries(ANATOMY_MODELS).map(([layer,model])=>[layer,`./anatomy/${quality.light?model.mobileFile:model.file}?v=5`]));
 const getDracoLoader=createSharedDraco({workerLimit:quality.workers});
@@ -55,7 +56,16 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
   const pickableMeshes=useMemo(()=>{const meshes=[];root.traverse(object=>{if(object.isMesh&&object.userData.inActiveLayer)meshes.push(object)});return meshes},[root]);
   useEffect(()=>{const previous=sceneRaycaster.firstHitOnly;sceneRaycaster.firstHitOnly=true;return()=>{sceneRaycaster.firstHitOnly=previous}},[sceneRaycaster]);
   const groupRef=useRef();
-  const clickRef=useRef(null);
+  const pointerSelection=useMemo(()=>createPointerSelection(),[]);
+  useLayoutEffect(()=>{
+    const host=gl.domElement.ownerDocument?.defaultView||window;
+    const down=event=>pointerSelection.down(event),move=event=>pointerSelection.move(event);
+    const up=event=>{const token=pointerSelection.token(event.pointerId);queueMicrotask(()=>pointerSelection.finishOutside(event,token));};
+    const cancel=event=>pointerSelection.cancel(event),blur=()=>pointerSelection.clear();
+    const handlers={pointerdown:down,pointermove:move,pointerup:up,pointercancel:cancel,blur};
+    for(const [name,handler] of Object.entries(handlers))host.addEventListener(name,handler,true);
+    return()=>{for(const [name,handler] of Object.entries(handlers))host.removeEventListener(name,handler,true);pointerSelection.clear();};
+  },[gl,root,pointerSelection]);
   // All published atlases use the same centered, human-scale frame. Combined
   // with the shared camera, a layer change preserves each anatomical location.
   useLayoutEffect(()=>{
@@ -71,7 +81,7 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
   useLayoutEffect(()=>{
     if(!registerApproximatePick)return;
     const pickNearest=(event)=>{
-      if(!isVisibleInScene(root,scene))return;
+      if(!pointerSelection.canApproximate(event)||!isVisibleInScene(root,scene))return;
       const rect=gl.domElement.getBoundingClientRect();
       const x=Number(event.clientX);const y=Number(event.clientY);
       if(!Number.isFinite(x)||!Number.isFinite(y)||!rect.width||!rect.height)return;
@@ -99,8 +109,8 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
       if(nearest&&nearest.score<1.15)commitSelection(nearest.object);
     };
     registerApproximatePick.current=pickNearest;
-    return()=>{clickRef.current=null;if(registerApproximatePick.current===pickNearest)registerApproximatePick.current=null;};
-  },[camera,gl,scene,root,pickableMeshes,registerApproximatePick,onPart]);
+    return()=>{pointerSelection.clear();if(registerApproximatePick.current===pickNearest)registerApproximatePick.current=null;};
+  },[camera,gl,scene,root,pickableMeshes,registerApproximatePick,onPart,pointerSelection]);
   // Prepare shared base materials once per asset, rather than flagging every
   // material for shader updates after each selection.
   useLayoutEffect(()=>{
@@ -154,11 +164,9 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
     markDirty();return()=>{restore.forEach(fn=>fn());markDirty();};
   },[root,selectedParts,pickableMeshes]);
   const meshPart=e=>decodeName(e.object?.userData?.part||e.object?.name||'general');
-  const onMeshPointerDown=e=>{if(e.button!==0||clickRef.current?.pointerId===e.pointerId)return;const object=e.intersections?.find(hit=>isPickableAnatomy(hit.object,root,scene))?.object;if(!object)return;clickRef.current={pointerId:e.pointerId,part:meshPart({object}),object,x:e.clientX,y:e.clientY,startedAt:performance.now(),moved:false};};
-  const onMeshPointerMove=e=>{const candidate=clickRef.current;if(!candidate||candidate.pointerId!==e.pointerId)return;const distance=Math.hypot(e.clientX-candidate.x,e.clientY-candidate.y);if(distance>6)candidate.moved=true;};
-  const onMeshPointerUp=e=>{const candidate=clickRef.current;if(!candidate||candidate.pointerId!==e.pointerId){clickRef.current=null;return;}const elapsed=performance.now()-candidate.startedAt;const distance=Math.hypot(e.clientX-candidate.x,e.clientY-candidate.y);if(!candidate.moved&&elapsed<=520&&distance<=14)commitSelection(candidate.object);clickRef.current=null;};
-  const onMeshPointerCancel=()=>{clickRef.current=null;};
-  return <group ref={groupRef} onPointerDown={onMeshPointerDown} onPointerMove={onMeshPointerMove} onPointerUp={onMeshPointerUp} onPointerCancel={onMeshPointerCancel}><primitive object={root}/></group>;
+  const onMeshPointerDown=e=>{const object=e.intersections?.find(hit=>isPickableAnatomy(hit.object,root,scene))?.object;if(object)pointerSelection.begin(e,object);};
+  const onMeshPointerUp=e=>commitSelection(pointerSelection.end(e));
+  return <group ref={groupRef} onPointerDown={onMeshPointerDown} onPointerUp={onMeshPointerUp}><primitive object={root}/></group>;
 }
 export function clearAnatomyCache(layer){useLoader.clear(GLTFLoader,MODEL_URLS[layer]);}
 export default function AnatomyViewer({layer,modelNonce,loading,selectedParts,onPart,approximatePickRef,orbit,lift,elevation,zoom}){
