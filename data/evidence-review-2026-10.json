@@ -1797,6 +1797,65 @@
       "tests": [
         "tests/reported-observation-facts.test.mjs"
       ]
+    },
+    {
+      "id": "regional-night-pain-fact",
+      "type": "Existing regional safety predicates consuming an explicit pain observation",
+      "sources": [
+        {
+          "title": "NHS: Chest pain, immediate action",
+          "url": "https://www.nhs.uk/symptoms/chest-pain/"
+        },
+        {
+          "title": "NHS: Ectopic pregnancy, symptoms and medical advice",
+          "url": "https://www.nhs.uk/conditions/ectopic-pregnancy/symptoms/"
+        }
+      ],
+      "decision": "The existing night pain label reports pain without severity or new quality. Within the reviewed chest, abdominal/pelvic and confirmed-flank safety branches only, it satisfies the original pain premise. Every original location, associated sign, onset and persistence condition is preserved. The prior disposition source entries remain applicable; this is not a new night-pain risk standard.",
+      "existingSourceScopes": [
+        "upper-left-trauma",
+        "right-upper-pain-fever",
+        "confirmed-left-lower-pain-warning",
+        "right-upper-pain-fever-jaundice",
+        "upper-abdominal-pain-vomiting",
+        "Previously reviewed RLQ/confirmed-flank core warnings"
+      ],
+      "positiveExamples": [
+        "Body of sternum and Sternocostal head of pectoralis major muscle.r: night pain with breathlessness or cold sweat",
+        "Rectus abdominis muscle.r / Levator ani.or: night pain plus possible pregnancy, with or without a known quadrant",
+        "Explicit LLQ/RLQ/flank and the original upper-abdominal combinations with night pain"
+      ],
+      "negativeExamples": [
+        "Night pain alone, or sudden onset without the separately required persistence, is not automatically an emergency",
+        "Duration alone does not report pain; unknown/diffuse location cannot supply a specific quadrant",
+        "Epigastric night pain with cold sweat does not imply the dedicated pressure symptom"
+      ],
+      "notEstablished": [
+        "No pregnancy, ectopic pregnancy, cardiac disease, infection, stone, organ injury or other diagnosis is established by these selections.",
+        "No general pain token is inserted, no global PAIN/LOCAL/REPORTED set or evidence family is changed, and no condition gate is loosened.",
+        "The generic Sternum/Pectoralis major aliases were replaced by verified visible mesh names in final cases. Full/mobile identity and per-field availability are tested; this is not clinical validation."
+      ],
+      "rules": [
+        "upper-left-trauma",
+        "right-upper-pain-fever",
+        "confirmed-left-lower-pain-warning",
+        "right-upper-pain-fever-jaundice",
+        "upper-abdominal-pain-vomiting"
+      ],
+      "existingCoreBranches": [
+        "chest pain with danger signs or explicitly sudden and persistent onset",
+        "possible pregnancy with abdominal/pelvic pain",
+        "explicit RLQ worsening pain",
+        "explicit flank pain with systemic fever/chills"
+      ],
+      "continuingLimits": [
+        "Night pain remains outside unreviewed pain predicates; this entry does not certify all clinical warning coverage."
+      ],
+      "tests": [
+        "tests/regional-night-pain.test.mjs",
+        "tests/build/verify-built-assessment.test.mjs"
+      ],
+      "status": "implemented-with-stated-limits"
     }
   ],
   "retainedBoundaries": [

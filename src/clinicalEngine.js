@@ -24,7 +24,10 @@ export function assessSymptoms(knowledge,input={}){
  const symptoms=new Set(normalized.flatMap(r=>[...r.tags]));
  const has=(...tags)=>tags.some(t=>symptoms.has(t));
  const abdominal=profiles.some(p=>['abdomen','pelvis'].includes(p.region));
- const chestPain=[...LOCAL_PAIN_TAGS,'运动诱发胸闷'];
+ // Night pain already reports pain, but supplies no new quality, severity or
+ // onset. These lists are consumed only by the reviewed regional safety gates.
+ const regionalPain=[...LOCAL_PAIN_TAGS,'夜间痛'];
+ const chestPain=[...regionalPain,'运动诱发胸闷'];
  const localHas=(index,...tags)=>tags.some(t=>normalized[index].tags.has(t));
  const urgent=[];
  const warn=(zh,en,level='emergency',id)=>urgent.push({zh,en,level,...(id?{id}:{})});
@@ -35,7 +38,7 @@ export function assessSymptoms(knowledge,input={}){
  else if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,'突发剧痛')))warn('突发严重胸痛：立即联系急救，不要等待更多症状。','Sudden severe chest pain: call emergency services without waiting for more symptoms.');
  else if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,'压迫感','运动诱发胸闷')))warn('胸部压迫感或活动时胸闷应当天尽快就医；持续不缓解或伴气短、冷汗时立即联系急救。','Chest pressure or exertional chest tightness needs same-day assessment; persistent pressure or associated breathlessness or cold sweat needs emergency care.','same-day');
  if(abdominal&&(has('突发剧痛','黑便','血便','腹部僵硬','晕厥')))warn('严重或突发腹部/盆腔痛、出血、腹部僵硬或晕厥：立即急诊。','Severe or sudden abdominal/pelvic pain, bleeding, rigidity or fainting: seek emergency assessment.');
- if(profiles.some((p,i)=>['abdomen','pelvis'].includes(p.region)&&(normalized[i].tags.has('腹痛迁移至右下腹')||normalized[i].location==='rlq'&&normalized[i].tags.has('持续加重')&&localHas(i,...LOCAL_PAIN_TAGS))))warn('右下腹迁移痛或持续加重的右下腹痛：尽快急诊排查阑尾炎等原因，伴发热时更应警惕。','Migrating or worsening right-lower abdominal pain, especially with fever, needs urgent assessment for appendicitis and other causes.','same-day');
+ if(profiles.some((p,i)=>['abdomen','pelvis'].includes(p.region)&&(normalized[i].tags.has('腹痛迁移至右下腹')||normalized[i].location==='rlq'&&normalized[i].tags.has('持续加重')&&localHas(i,...regionalPain))))warn('右下腹迁移痛或持续加重的右下腹痛：尽快急诊排查阑尾炎等原因，伴发热时更应警惕。','Migrating or worsening right-lower abdominal pain, especially with fever, needs urgent assessment for appendicitis and other causes.','same-day');
  if(has('会阴麻木')&&profiles.some(p=>['neck','spine','hip','pelvis','lower-limb'].includes(p.region)))warn('所选颈背/腰腿区域伴会阴麻木：立即急诊评估。','Selected neck/back or leg area with saddle numbness need emergency assessment.');
  if(profiles.some((p,i)=>p.region==='eye'&&localHas(i,'视物模糊','畏光')))warn('报告视物模糊或畏光：今天尽快眼科评估。','Reported blurred vision or light sensitivity needs same-day eye assessment.','same-day');
  if(profiles.some((p,i)=>p.region==='lower-limb'&&localHas(i,'单侧肿胀')))warn('单侧腿部肿胀需要当日排查血栓；同时气短或胸痛应立即急救。','One-sided leg swelling needs same-day assessment for a clot; associated breathlessness or chest pain is an emergency.','same-day');
@@ -43,7 +46,7 @@ export function assessSymptoms(knowledge,input={}){
  else if(abdominal&&has('可能怀孕')&&has(...chestPain,'侧腰痛','腹痛迁移至右下腹','肩尖痛','向背部放射','腰腹向腹股沟放射','局部压痛'))warn('可能怀孕且腹部/盆腔痛：尽快就医确认；单侧剧痛、出血、肩尖痛或晕厥立即急诊。','Possible pregnancy with abdominal/pelvic pain needs prompt assessment; severe one-sided pain, bleeding, shoulder-tip pain or fainting is an emergency.','same-day');
 
  // Selected urinary warning signs must not fall through to mechanical back care.
- if(profiles.some((p,i)=>['abdomen','pelvis','spine','hip'].includes(p.region)&&(localHas(i,'侧腰痛','尿痛','尿频','尿急')||normalized[i].location==='flank'&&localHas(i,...LOCAL_PAIN_TAGS))&&localHas(i,'发热','发冷')))warn('侧腰痛或排尿变化伴发热、寒战：当日尽快就医排查肾脏/尿路感染，不按普通腰背劳损处理。','Flank pain or urinary changes with fever or chills need urgent same-day assessment for kidney/urinary infection; do not treat it as ordinary back strain.','same-day');
+ if(profiles.some((p,i)=>['abdomen','pelvis','spine','hip'].includes(p.region)&&(localHas(i,'侧腰痛','尿痛','尿频','尿急')||normalized[i].location==='flank'&&localHas(i,...regionalPain))&&localHas(i,'发热','发冷')))warn('侧腰痛或排尿变化伴发热、寒战：当日尽快就医排查肾脏/尿路感染，不按普通腰背劳损处理。','Flank pain or urinary changes with fever or chills need urgent same-day assessment for kidney/urinary infection; do not treat it as ordinary back strain.','same-day');
  if(has('血尿')&&has('发热','发冷'))warn('血尿伴发热或寒战：当天尽快就医排查感染等原因；如剧痛、不能排尿或明显不适，立即急诊。','Blood in urine with fever or chills needs same-day assessment for infection and other causes; severe pain, inability to urinate or feeling very unwell needs emergency care.','same-day');
  else if(has('血尿'))warn('已报告血尿：今天联系医疗机构分诊，说明发现方式和既往检查/随访安排，由医护确定就诊时间。伴发热或排尿变化应当日评估；如剧痛或无法排尿，立即急诊。','Reported blood in urine: contact a medical service today for triage. Explain how it was found and any previous assessment or follow-up plan so a clinician can arrange when you need to be seen. Fever or urinary changes need same-day assessment; severe pain or inability to pass urine needs emergency care.','prompt');
 

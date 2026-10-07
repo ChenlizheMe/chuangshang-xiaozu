@@ -1,0 +1,448 @@
+{
+  "scope": "Night pain is consumed only as a reported-pain fact in existing reviewed regional safety gates. Severity, exact location, onset, pressure/colic quality and disease criteria are not inferred. The source test checks actual full/mobile meshes and field visibility; a minimal subset also runs against built modules.",
+  "cases": [
+    {
+      "name": "pregnancy pain abdominal LLQ",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "可能怀孕"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "pregnancy pain pelvic LLQ",
+      "report": {
+        "part": "Levator ani.or",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "可能怀孕"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": false
+    },
+    {
+      "name": "pregnancy pain unspecified quadrant",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "可能怀孕"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "LLQ night pain fever",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "LLQ night pain chills",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "发冷"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": false
+    },
+    {
+      "name": "pelvic RLQ worsening",
+      "report": {
+        "part": "Levator ani.or",
+        "layer": "muscle",
+        "location": "rlq",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛",
+          "持续加重"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "RUQ pain fever",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "ruq",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "upper pain worsening vomiting",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "epigastric",
+        "feelings": [],
+        "signs": [
+          "呕吐"
+        ],
+        "timing": [
+          "夜间痛",
+          "持续加重"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "LUQ trauma pain",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "luq",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": [
+          "外伤后"
+        ]
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "confirmed flank fever abdominal entry",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "flank",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": false
+    },
+    {
+      "name": "confirmed flank fever retained hip location",
+      "report": {
+        "part": "Pectineus muscle.r",
+        "layer": "muscle",
+        "location": "flank",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "same-day",
+      "builtParity": true
+    },
+    {
+      "name": "RUQ fever jaundice",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "ruq",
+        "feelings": [],
+        "signs": [
+          "发热",
+          "黄疸"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "emergency",
+      "builtParity": true
+    },
+    {
+      "name": "chest night pain breathless",
+      "report": {
+        "part": "Body of sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "气短"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "emergency",
+      "builtParity": true
+    },
+    {
+      "name": "chest night pain cold sweat",
+      "report": {
+        "part": "Sternocostal head of pectoralis major muscle.r",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "冷汗"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "emergency",
+      "builtParity": false
+    },
+    {
+      "name": "chest explicitly sudden persistent night pain",
+      "report": {
+        "part": "Body of sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛",
+          "突然起病",
+          "持续数小时"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "emergency",
+      "builtParity": true
+    },
+    {
+      "name": "night pain alone abdomen",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "night pain alone chest",
+      "report": {
+        "part": "Body of sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": false
+    },
+    {
+      "name": "duration does not report pain pregnancy",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "可能怀孕"
+        ],
+        "timing": [
+          "持续数小时"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "pregnancy alone",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "可能怀孕"
+        ],
+        "timing": [],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": false
+    },
+    {
+      "name": "duration does not report chest pain",
+      "report": {
+        "part": "Body of sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "气短"
+        ],
+        "timing": [
+          "持续数小时"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "night pain does not establish pressure",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "epigastric",
+        "feelings": [],
+        "signs": [
+          "冷汗"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "unknown quadrant does not establish LLQ fever",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [
+          "发热"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "explicit timing alone does not establish RLQ pain",
+      "report": {
+        "part": "Levator ani.or",
+        "layer": "muscle",
+        "location": "rlq",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "持续加重"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": false
+    },
+    {
+      "name": "night plus onset without persistence not auto-severe",
+      "report": {
+        "part": "Body of sternum",
+        "layer": "skeleton",
+        "location": "unknown",
+        "feelings": [],
+        "signs": [],
+        "timing": [
+          "夜间痛",
+          "突然起病"
+        ],
+        "triggers": []
+      },
+      "wantLevel": null,
+      "builtParity": true
+    },
+    {
+      "name": "actual fainting remains emergency",
+      "report": {
+        "part": "Rectus abdominis muscle.r",
+        "layer": "muscle",
+        "location": "llq",
+        "feelings": [],
+        "signs": [
+          "可能怀孕",
+          "晕厥"
+        ],
+        "timing": [
+          "夜间痛"
+        ],
+        "triggers": []
+      },
+      "wantLevel": "emergency",
+      "builtParity": false
+    }
+  ]
+}
