@@ -1489,6 +1489,41 @@
       "tests": [
         "tests/anatomy-identity-routing.test.mjs"
       ]
+    },
+    {
+      "id": "oral-escalation-presentation",
+      "reviewedOn": "2026-10-07",
+      "type": "Presentation-only removal of repeated lower dental actions after an explicitly matched oral emergency",
+      "sources": [
+        {
+          "title": "NHS Dental abscess: emergency oral symptoms",
+          "url": "https://www.nhs.uk/conditions/dental-abscess/",
+          "use": "Oral swelling with difficulty swallowing or opening the mouth warrants emergency assessment. This supports prioritizing the matched emergency action; the exact message coverage is an application presentation decision."
+        }
+      ],
+      "implementation": [
+        "Give the existing oral-swelling/swallowing emergency a stable identity. Preserve every original warning, assessment tier, clinical rule and reference-card action.",
+        "Only oral-swelling-dysphagia and oral-swelling-restricted-opening cover the three named lower dental actions, and only when the covering warning has a strictly higher tier. Other warnings remain visible at every level.",
+        "A saved canonical reportedSymptoms snapshot supplies a brief bilingual Also reported line for the covered dental observations. It never reads live edited form state or treats reference-card why as a complete history."
+      ],
+      "positiveExamples": [
+        "Jaw biting pain, gum swelling and swallowing difficulty show the emergency action plus the actual dental observations, without repeating a lower same-day dental appointment instruction.",
+        "Removing the swallowing observation and reassessing restores the complete same-day dental message."
+      ],
+      "negativeExamples": [
+        "Facial droop, oral swallowing difficulty and restricted opening retain all three distinct emergency instructions.",
+        "A sudden worst headache does not hide an independent biting-pain/fever action.",
+        "Unknown warning IDs, unlabelled warnings, unrelated hearing/urinary warnings and equal-tier messages are not covered."
+      ],
+      "limits": [
+        "This is a narrow message-coverage policy for the same oral escalation, not a global highest-tier-only filter or a clinical validation.",
+        "The additional line is a subset of actual dental observations, not a complete medical history or evidence of absent symptoms."
+      ],
+      "tests": [
+        "tests/priority-presentation.test.mjs",
+        "tests/priority-guidance.test.mjs",
+        "tests/diagnosis-reuse.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [

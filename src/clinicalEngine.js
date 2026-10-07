@@ -27,7 +27,7 @@ export function assessSymptoms(knowledge,input={}){
  const chestPain=[...LOCAL_PAIN_TAGS,'运动诱发胸闷'];
  const localHas=(index,...tags)=>tags.some(t=>normalized[index].tags.has(t));
  const urgent=[];
- const warn=(zh,en,level='emergency')=>urgent.push({zh,en,level});
+ const warn=(zh,en,level='emergency',id)=>urgent.push({zh,en,level,...(id?{id}:{})});
  // Triage is independent of ranking and cannot disappear below the top cards.
  if(has('面部歪斜','说话含糊','突然单侧无力'))warn('面部歪斜、说话含糊或突然单侧无力：立即联系急救，记录起病时间。','Facial droop, slurred speech or sudden one-sided weakness: call emergency services and note onset time.');
  if(profiles.some((p,i)=>p.region==='chest'&&localHas(i,...chestPain)&&localHas(i,'气短','静息气短','呼吸困难','冷汗','出汗','晕厥','恶心','呕吐')))warn('胸部疼痛或不适伴气短、出汗、恶心或晕厥：立即急诊，不要用胃药试验排除心脏原因。','Chest pain or discomfort with breathlessness, sweating, nausea or fainting needs emergency assessment; an antacid response cannot exclude a cardiac cause.');
@@ -50,7 +50,7 @@ export function assessSymptoms(knowledge,input={}){
  if(has('突发最严重头痛'))warn('突发最严重头痛：立即急诊，记录开始时间。','Sudden worst-ever headache: seek emergency care and note onset time.');
  if(has('呼吸困难','静息气短'))warn('呼吸困难或静息气短：立即就医；严重呼吸困难联系急救。','Breathing difficulty or breathlessness at rest needs immediate care; severe breathing difficulty is an emergency.');
  if(has('吞咽困难')){
-  if(profiles.some((p,i)=>['tooth','jaw'].includes(p.region)&&localHas(i,'牙龈肿胀','面部肿胀','流脓')))warn('牙齿或颌面肿胀/感染表现伴吞咽困难：立即急诊；伴呼吸困难联系急救。','Dental or facial swelling/infection signs with difficulty swallowing need emergency assessment; call emergency services if breathing is affected.');
+  if(profiles.some((p,i)=>['tooth','jaw'].includes(p.region)&&localHas(i,'牙龈肿胀','面部肿胀','流脓')))warn('牙齿或颌面肿胀/感染表现伴吞咽困难：立即急诊；伴呼吸困难联系急救。','Dental or facial swelling/infection signs with difficulty swallowing need emergency assessment; call emergency services if breathing is affected.','emergency','oral-swelling-dysphagia');
   else warn('吞咽困难：今天联系医疗机构评估；如已无法吞咽液体、明显口腔肿胀或伴呼吸困难，立即急诊。','Difficulty swallowing needs same-day medical assessment. If unable to swallow liquids, the mouth is markedly swollen or breathing is affected, seek emergency care.','same-day');
  }
  if(has('突然听力下降'))warn('突然听力下降：当日尽快耳鼻喉科评估。','Sudden hearing loss needs urgent same-day ENT assessment.','same-day');
@@ -104,5 +104,5 @@ export function assessSymptoms(knowledge,input={}){
  }
  items=applyPriorityGuidance(items,orderedUrgent);
  const suggestions=[...new Set(missing.sort((a,b)=>b.matched-a.matched).slice(0,3).flatMap(m=>m.groups.map(g=>g.find(t=>!symptoms.has(t))).filter(Boolean)))].slice(0,6);
- return {profiles,items,urgent:orderedUrgent,triageLevel:orderedUrgent[0]?.level||null,suggestions,needsLocation:missing.some(m=>m.location),needsSymptoms:!symptoms.size,needsPart:!profiles.length,needsEvidence:profiles.length>0&&!items.length};
+ return {profiles,items,reportedSymptoms:[...symptoms],urgent:orderedUrgent,triageLevel:orderedUrgent[0]?.level||null,suggestions,needsLocation:missing.some(m=>m.location),needsSymptoms:!symptoms.size,needsPart:!profiles.length,needsEvidence:profiles.length>0&&!items.length};
 }
