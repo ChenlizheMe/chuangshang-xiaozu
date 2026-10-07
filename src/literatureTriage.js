@@ -10,6 +10,9 @@ const musculoskeletalRegions=['neck','spine','chest','abdomen','pelvis','lower-l
 // related review entries in data/evidence-review-2026-10.json. These predicates
 // route assessment; they do not create diagnoses or require missing checkboxes.
 const rules=[
+ {id:'biting-pain-fever-review',level:'same-day',matches:(p,r)=>!['tooth','jaw'].includes(p.region)&&has(r,'咬合痛')&&has(r,'发热','发冷'),
+  zh:'咬东西时痛并伴发热或寒战：今天联系牙科或医疗机构评估，核实牙、颌及头颈等来源；模型点位不能确定病因。',
+  en:'Pain on biting with fever or chills needs same-day dental or medical assessment to clarify dental, jaw, head/neck and other sources. The selected model site does not establish the cause.'},
  {id:'unable-to-urinate',level:'emergency',matches:(p,r)=>has(r,'排尿困难'),
   zh:'已报告尿不出来：立即就医评估，不必等待腹痛、发热或选择另一个模型部位。当前选择不能确定是否尿潴留、梗阻或神经问题。',
   en:'Reported inability to pass urine needs immediate medical assessment. Do not wait for abdominal pain, fever or a different model selection. These inputs do not establish urinary retention, obstruction or a neurological cause.'},
@@ -25,7 +28,7 @@ const rules=[
  {id:'oral-swelling-restricted-opening',level:'emergency',matches:(p,r)=>['tooth','jaw'].includes(p.region)&&has(r,'牙龈肿胀','面部肿胀','流脓')&&has(r,'张口受限'),
   zh:'牙龈/颌面肿胀或流脓伴张口受限：立即急诊评估可能的感染扩散；不要等出现发烧或再按普通颞下颌关节不适处理。',
   en:'Gum/facial swelling or pus with restricted mouth opening needs emergency assessment for possible spreading infection. Do not wait for fever or treat it only as a routine jaw-joint problem.'},
- {id:'dental-infection-review',level:'same-day',matches:(p,r)=>['tooth','jaw'].includes(p.region)&&(has(r,'流脓')||has(r,'牙龈肿胀','面部肿胀')&&has(r,'发热','发冷')||(pain(r)||has(r,'持续冷热痛','自发痛','夜间痛'))&&has(r,'发热','发冷')),
+ {id:'dental-infection-review',level:'same-day',matches:(p,r)=>['tooth','jaw'].includes(p.region)&&(has(r,'流脓')||has(r,'牙龈肿胀','面部肿胀')&&has(r,'发热','发冷')||(pain(r)||has(r,'咬合痛','持续冷热痛','自发痛','夜间痛'))&&has(r,'发热','发冷')),
   zh:'牙齿/颌面流脓，或局部不适/肿胀伴发热或寒战：今天尽快联系急诊牙科评估。若张口、吞咽或呼吸受影响，立即急诊。',
   en:'Dental/facial pus, or local discomfort/swelling with fever or chills, needs same-day urgent dental assessment. Difficulty opening the mouth, swallowing or breathing needs emergency care.'},
  {id:'dental-observation-review',level:'prompt',matches:(p,r)=>['tooth','jaw'].includes(p.region)&&has(r,'持续冷热痛','自发痛','夜间痛','牙龋洞','牙齿裂纹'),

@@ -1,7 +1,8 @@
 // Every active branch has an explicit evidence gate. Groups are alternatives
 // within a feature, AND across features. Missing input is unknown, not absent.
 // These are assessment directions; scores are ranks, never probabilities.
-const P=['疼痛','针刺','钝痛','胀痛','酸痛','灼烧','跳痛','撕裂','电击','抽筋','压迫感','隐痛','刺痛','刀割感','牵拉痛','酸胀','紧绷','紧箍感','酸涩','咬合痛','呼吸痛','绞痛'];
+import {PAIN_TAGS} from './symptomLanguage.js';
+const P=[...PAIN_TAGS];
 const limb=['neck','spine','shoulder','upper-limb','hand','chest','abdomen','pelvis','hip','knee','lower-limb','ankle','foot'];
 const joints=['shoulder','upper-limb','hand','hip','knee','ankle','foot'];
 const neural=['neck','spine','shoulder','upper-limb','hand','hip','lower-limb','ankle','foot'];

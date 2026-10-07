@@ -2,7 +2,7 @@ import {clinicalProfile} from './clinicalRegions.js';
 import {ORGAN_CONDITIONS} from './organAtlas.js';
 import {CLINICAL_RULES} from './clinicalRules.js';
 import {evidenceFamily,LOCAL_PAIN_TAGS} from './symptomLanguage.js';
-import {basicAssessment} from './basicAssessments.js';
+import {basicAssessment,BITE_PAIN_CONTEXT} from './basicAssessments.js';
 import {orderPriorityGuidance,applyPriorityGuidance} from './priorityGuidance.js';
 import {literatureWarnings} from './literatureTriage.js';
 import {referenceLocation} from './reportLocation.js';
@@ -98,7 +98,10 @@ export function assessSymptoms(knowledge,input={}){
   chosen.push(candidate);
  }
  let items=chosen.slice(0,6);
- if(!items.length&&normalized.length){const basic=basicAssessment(profiles[0],normalized[0],orderedUrgent);if(basic)items.push(basic);}
+ if(!items.length&&normalized.length){const basic=basicAssessment(profiles[0],normalized[0],orderedUrgent,knowledge);if(basic)items.push(basic);}
+ if(items.length&&normalized[0]?.tags.has('咬合痛')&&!['tooth','jaw'].includes(profiles[0].region)&&items[0].shortDescription!==BITE_PAIN_CONTEXT){
+  const first=items[0];items=[{...first,shortDescription:Object.fromEntries(['zh','en'].map(lang=>[lang,`${first.shortDescription?.[lang]||''} ${BITE_PAIN_CONTEXT[lang]}`]))},...items.slice(1)];
+ }
  items=applyPriorityGuidance(items,orderedUrgent);
  const suggestions=[...new Set(missing.sort((a,b)=>b.matched-a.matched).slice(0,3).flatMap(m=>m.groups.map(g=>g.find(t=>!symptoms.has(t))).filter(Boolean)))].slice(0,6);
  return {profiles,items,urgent:orderedUrgent,triageLevel:orderedUrgent[0]?.level||null,suggestions,needsLocation:missing.some(m=>m.location),needsSymptoms:!symptoms.size,needsPart:!profiles.length,needsEvidence:profiles.length>0&&!items.length};

@@ -1352,6 +1352,63 @@
       "tests": [
         "tests/reference-observations.test.mjs"
       ]
+    },
+    {
+      "id": "biting-pain-is-not-arbitrary-local-pain",
+      "reviewedOn": "2026-10-07",
+      "status": "implemented-with-stated-limits",
+      "type": "Existing observation semantics, region filtering and conservative source clarification",
+      "rules": [
+        "biting-pain-fever-review",
+        "dental-infection-review"
+      ],
+      "sources": [
+        {
+          "title": "AAE: Tooth pain, sharp pain when biting",
+          "url": "https://www.aae.org/patients/dental-symptoms/tooth-pain/",
+          "use": "Biting pain can have several dental causes and warrants dental examination; it does not establish one diagnosis."
+        },
+        {
+          "title": "NIDCR: Temporomandibular disorders",
+          "url": "https://www.nidcr.nih.gov/health-info/tmd",
+          "use": "Chewing/jaw symptoms can involve the face or neck and require examination; retain head/neck referral contexts."
+        },
+        {
+          "title": "NHS: Temporomandibular disorder",
+          "url": "https://www.nhs.uk/conditions/temporomandibular-disorder-tmd/",
+          "use": "Jaw, ear and temple symptoms can be related to chewing."
+        },
+        {
+          "title": "NHS: Toothache",
+          "url": "https://www.nhs.uk/symptoms/toothache/",
+          "use": "Dental review is advised for tooth pain with fever or pain on biting; this page does not establish a mandatory same-day two-checkbox rule."
+        },
+        {
+          "title": "NHS: Dental abscess",
+          "url": "https://www.nhs.uk/conditions/dental-abscess/",
+          "use": "Suspected abscess needs urgent dental care; current inputs do not prove an abscess."
+        }
+      ],
+      "decision": "The existing pain-on-biting observation stays in the pain evidence family but is removed from generic local-pain gates. Existing explicit dental/jaw rules remain. Its visible entries are teeth, jaw, ear, head and neck, including the organ-filter boundary. Old wrong-area inputs remain in the report and receive source-clarification wording rather than being silently erased or converted to limb/abdominal pain. Other independent symptoms and actions remain in force.",
+      "positiveExamples": [
+        "Tooth: 咬合痛 + 牙龋洞 / 外伤后 / 牙龈肿胀 retains the corresponding existing gated reference.",
+        "Jaw: 咬合痛 + 张口弹响 retains the existing jaw reference.",
+        "Humerus: 咬合痛 + 疼痛 + 外伤后 still has actual local pain and injury evidence; biting does not appear as local evidence.",
+        "Ear/head/neck and legacy wrong-area biting with fever/chills receive source-neutral same-day dental/medical assessment."
+      ],
+      "negativeExamples": [
+        "咬合痛 + 疼痛 are not two independent pain observations.",
+        "Biting plus injury or posture does not establish arm, knee, abdominal, splenic or local neck pain.",
+        "Biting alone is not automatically urgent or a diagnosis.",
+        "A separate back-radiation pain label, breathing difficulty or sudden neurological/hearing change keeps its existing action."
+      ],
+      "notEstablished": [
+        "Same-day timing for reported biting pain with fever/chills is a conservative application disposition extending the existing dental tier while the source is unconfirmed, not a guideline-validated score or proof of infection.",
+        "Anatomy selection cannot confirm the source or side of referred pain. No global symptom or condition ID is added."
+      ],
+      "tests": [
+        "tests/biting-pain-context.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [

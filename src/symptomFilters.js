@@ -8,6 +8,7 @@ import {CLINICAL_RULES} from './clinicalRules.js';
 // unmistakably local observations out of unrelated body regions (for example,
 // nasal congestion should not appear when the selected structure is the mouth).
 const REGION_OVERRIDES={
+  '咬合痛':['tooth','jaw','ear','head','neck'],
   '磨牙':['tooth','jaw','head'],
   '咀嚼加重':['tooth','jaw'],'压力大':['tooth','jaw','head','neck'],
   '眼干':['eye'],'异物感':['eye'],'眼红':['eye'],'复视':['eye','head'],
@@ -79,6 +80,7 @@ export function visibleSymptoms(knowledge,{parts=[],layer='skeleton',kind='feeli
     const supported=new Set(knowledge.conditions.filter(c=>conditions.has(c.id)).flatMap(c=>{const r=CLINICAL_RULES[c.id];return [...r.required.flat(),...r.optional,...(r.exclude||[])];}));
     const urgent={chest:['突发剧痛','晕厥','呼吸困难'],abdomen:['突发剧痛','晕厥','黑便','血便','呕血','腹部僵硬']};
     return tags.filter(tag=>{
+      if(tag.id==='咬合痛')return profiles.some(p=>REGION_OVERRIDES['咬合痛'].includes(p.region));
       if(universalTiming(tag))return true;
       if(tag.id==='排尿困难'&&profiles.some(p=>['kidney','ureter','bladder'].includes(p.organ)))return true;
       if(tag.id==='可能怀孕')return profiles.some(p=>p.region==='abdomen');

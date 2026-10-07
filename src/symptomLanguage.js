@@ -20,7 +20,9 @@ const families={
 };
 const groupByTag=Object.fromEntries(Object.entries(families).flatMap(([group,tags])=>tags.map(tag=>[tag,group])));
 export const evidenceFamily=tag=>groupByTag[tag]||tag;
-export const PAIN_TAGS=new Set(pain);
+// Biting remains in the pain evidence family, but cannot establish local
+// pain at an arbitrary selected structure. Dental/jaw rules consume it explicitly.
+export const PAIN_TAGS=new Set(pain.filter(tag=>tag!=='咬合痛'));
 export const LOCAL_PAIN_TAGS=new Set([...PAIN_TAGS,'放射痛','局部压痛','突发剧痛','新运动后1至3天','转身牵拉痛']);
 export const SYSTEMIC_TAGS=new Set(['发热','发冷','疲劳乏力','白天困倦','睡眠不足','失眠','喝水少','口渴口干','尿色深','无故淤青','异常出血','反复感染','体重下降','可能怀孕']);
 
