@@ -206,3 +206,5 @@ UI 可达性夹具必须用当前完整与轻量 GLB 中真实存在且可见的
 主界面品牌、面板名称、优先动作和参考卡名称使用原生标题层级；实际位置、感觉/表现、时间、诱因、图层及操作键组提供双语分组名。原尺寸、切换按钮的 `aria-pressed` 和键盘停点保持不变，完整临床报告不会作为整段打断式提示播报。语义依据 [W3C 控件分组](https://www.w3.org/WAI/tutorials/forms/grouping/) 和 [WAI 按钮模式](https://www.w3.org/WAI/ARIA/apg/patterns/button/)。`tests/interface-semantics.test.mjs` 验证实际组件的标题次序、组名、双语切换、重评等级替换及普通/空报告边界；组件和浏览器可访问性树检查不等同运行真实读屏软件或整站无障碍认证。
 
 面板键盘滚动按实际粘性标题高度保留可视区，长结构名、中文暂用副注和语言换行都会更新测量。焦点进入后再检查按钮是否被标题或面板边缘盖住，只调整当前面板滚动；关闭或进入关于页时清理观察器、监听与待执行帧。实现参考 [MDN scroll-padding-block-start](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scroll-padding-block-start)，`tests/panel-focus-visibility.test.mjs` 覆盖正反向越界、已可见项不动、标题变高、焦点竞争及卸载清理。
+
+构建与测试使用 Node.js 24 LTS，GitHub Pages 的 `setup-node` 目标版本与本地验证的主版本一致。Node.js 20 已进入官方 EOL；见 [Node.js 支持表](https://nodejs.org/en/about/previous-releases)。这里指随后 `npm ci`、测试和构建所用的 Node，不代表升级各个 GitHub Action 自身声明的运行时。
