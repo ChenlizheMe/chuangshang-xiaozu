@@ -165,6 +165,8 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 
 模型仅注册一个R3F事件根。同一固定400射线、7轮交替热测、六种现有GLB/BVH的排序命中保持一致，射线调用次数减半；轻量肌肉模型的一组CPU中位耗时从126.85降至63.54毫秒。这是Node射线探针，不是页面FPS或真机速度翻倍。稳定`onPart`引用也让20次仅重渲染的近似回调重装由20次降为0。
 
+静态结构进一步用保守世界包围球排除明显落空的射线，再进入原有BVH。剪切、退化或变形结构回退原路径，近正交浮点误差保留半径余量；几何、leaf10、近远裁切和排序保持不变。云Node v24.19.0下，以正面/侧面/近景网格射线加每个视锥内结构中心、5轮交替热测，六资产全部排序命中一致：轻量骨骼1,887射线中位198.97→63.18毫秒，轻量肌肉2,544射线544.13→215.75毫秒。后者BVH入口从1,617,984降至72,848；这些是指定射线样本CPU结果，不是整页FPS、触摸延迟或GPU功耗。可用 `node scripts/measure-anatomy-raycasts.mjs` 复跑全部资产，或追加一个GLB文件名测单资产；JSON输出含依赖版本、资产与实际helper哈希及原始各轮读数。
+
 三层GLTF复用一个Draco实例；轻量配置的真实解码探针中，按顺序加载骨骼/肌肉/内脏的decoder/worker/Blob各从3个降到1个，解码库读取6次降到2次；三层并发仍完整得到335/636/30个网格。专用加载管理器只在解码库初始化失败时丢弃失败实例，分别验证JS、WASM失败一次后重试能成功。正常换层不销毁正在使用的解码器。实现遵循[Three.js复用DRACOLoader建议](https://github.com/mrdoob/three.js/blob/dev/docs/pages/DRACOLoader.html.md)。
 
 `tests/model-suspense.test.mjs`使用真实React/R3F调度和事件系统、合成网格及模拟GL；`tests/anatomy-picking.test.mjs`覆盖隐藏、移除及转移场景的旧回调；`tests/draco-loader.test.mjs`覆盖共享与初始化失败恢复。解码资源计数另用Node真实worker及仓库WASM/GLB复核，不能据此宣称已测浏览器堆内存或手机功耗。

@@ -2,7 +2,7 @@ import React,{useEffect,useMemo,useRef,useLayoutEffect,Suspense} from 'react';
 import {Canvas,useLoader,useThree} from '@react-three/fiber';
 import {Html} from '@react-three/drei';
 import * as THREE from 'three';
-import {MeshBVH,acceleratedRaycast} from 'three-mesh-bvh';
+import {MeshBVH} from 'three-mesh-bvh';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {createSharedDraco} from './dracoLoader.js';
 import SignalDisplay from './SignalDisplay.jsx';
@@ -13,6 +13,7 @@ import {renderProfile} from './renderProfile.js';
 import {isVisibleInScene,isPickableAnatomy} from './anatomyPicking.js';
 import {createPointerSelection} from './pointerSelection.js';
 import {ViewerUnavailable} from './Feedback.jsx';
+import {anatomyRaycast} from './anatomyRaycast.js';
 const quality=renderProfile({mobile:window.matchMedia('(max-width:700px), (pointer:coarse)').matches,memory:navigator.deviceMemory,cores:navigator.hardwareConcurrency,saveData:navigator.connection?.saveData});
 const MODEL_URLS=Object.fromEntries(Object.entries(ANATOMY_MODELS).map(([layer,model])=>[layer,`./anatomy/${quality.light?model.mobileFile:model.file}?v=5`]));
 const getDracoLoader=createSharedDraco({workerLimit:quality.workers});
@@ -49,7 +50,7 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
       object.visible=object.userData.inActiveLayer;
       if(object.visible){
         if(!object.geometry.boundsTree)object.geometry.boundsTree=new MeshBVH(object.geometry,{maxLeafTris:10});
-        object.raycast=acceleratedRaycast;
+        object.raycast=anatomyRaycast;
       }else object.raycast=()=>{};
     });
     return gltf.scene;
