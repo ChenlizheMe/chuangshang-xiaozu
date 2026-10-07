@@ -1281,6 +1281,77 @@
       "tests": [
         "tests/confirmed-llq-state.test.mjs"
       ]
+    },
+    {
+      "id": "intertransverse-versus-interspinous-terminology",
+      "reviewedOn": "2026-10-07",
+      "status": "implemented-with-stated-limits",
+      "type": "Anatomical terminology correction with preserved model identity and routing",
+      "rules": [],
+      "sources": [
+        {
+          "title": "Chinese Terms of Human Anatomy, second edition, official nomenclature hosted by Fudan anatomy teaching",
+          "url": "https://xtjp.fudan.edu.cn/Upload/Files/201804100314393640155.pdf",
+          "use": "Terms 02.1542–1547 distinguish interspinales and intertransversarii; 02.1108/02.1110 distinguish the two ligament families. PDF pages 118 and 93."
+        },
+        {
+          "title": "IFAA/FIPAT TA98: muscles of back",
+          "url": "https://ifaa.unifr.ch/Public/EntryPage/TA98%20Tree/TA98%20EN/04.3.01%20TA98%20EN.htm",
+          "use": "A04.3.01.014–016 distinguish lateral lumbar intertransversarii dorsal and ventral parts."
+        }
+      ],
+      "decision": "Correct the ventral lateral lumbar intertransversarii Chinese name, normalize its dorsal counterpart, and correct intertransverse ligaments. A narrow spine alias retains the existing region after removing the erroneous spinous word.",
+      "positiveExamples": [
+        "Ventral/dorsal parts on both sides use 腰横突间外侧肌 + subdivision.",
+        "Intertransverse ligaments use 横突间韧带 on both sides."
+      ],
+      "negativeExamples": [
+        "Interspinales remain 棘间肌; interspinous ligaments remain 棘间韧带.",
+        "Original English labels, mesh names, side suffixes and clinical regions remain unchanged."
+      ],
+      "notEstablished": [
+        "This verifies naming and identity mapping, not geometric laterality or patient pathology."
+      ],
+      "tests": [
+        "tests/anatomy-terminology.test.mjs"
+      ]
+    },
+    {
+      "id": "reference-observations-versus-possible-features",
+      "reviewedOn": "2026-10-07",
+      "status": "implemented-with-stated-limits",
+      "type": "Input-faithful reference copy and single-observation broad assessment",
+      "rules": [
+        "gastroenteritis-pattern",
+        "renal-colic-pattern",
+        "joint-inflammation",
+        "minor-injury-bruise"
+      ],
+      "sources": [
+        {
+          "title": "Existing bilingual observations and reference content at reviewed project baseline",
+          "url": "https://github.com/ChenlizheMe/trauma-team-international/blob/d254fb3b80a177f38cba7938772cd771005ff596/data/knowledge.json",
+          "use": "Software source for the actual reported label meanings; this is not independent clinical evidence."
+        }
+      ],
+      "decision": "Descriptions present associated cramps, groin radiation, heat, bruising and swelling as possible reference features, not additional patient observations. The existing delayed-exercise timing label explicitly reports soreness, so it supports a single broad basic card; it still counts as one exercise evidence family and cannot alone create a specific condition card.",
+      "positiveExamples": [
+        "Diarrhoea + fever does not report cramps.",
+        "Colic + haematuria does not report groin radiation.",
+        "Redness + movement restriction does not report local heat.",
+        "Pain + injury does not report bruising.",
+        "The sole 新运动后1至3天 label already contains soreness in both visible languages."
+      ],
+      "negativeExamples": [
+        "Pure durations or worsening without a reported symptom still do not fabricate pain.",
+        "Reference gates, why observations and triage are not broadened by the copy changes."
+      ],
+      "notEstablished": [
+        "No new clinical association or diagnostic criterion is introduced; this is fidelity to existing inputs and general reference wording."
+      ],
+      "tests": [
+        "tests/reference-observations.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [

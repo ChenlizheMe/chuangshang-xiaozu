@@ -291,7 +291,7 @@ const anatomyGlossaryExtended={
   'vastus intermedius muscle':{zh:'股中间肌'},
   'vastus lateralis muscle':{zh:'股外侧肌'},
   'vastus medialis muscle':{zh:'股内侧肌'},
-  'ventral parts of lateral intertransversarii lumborum muscles':{zh:'腰部外侧棘间肌腹侧部'},
+  'ventral parts of lateral intertransversarii lumborum muscles':{zh:'腰横突间外侧肌腹侧部'},
   'vestibular nerve':{zh:'前庭神经'},
   'vestibular nuclei':{zh:'前庭神经核'},
   'vitreous body':{zh:'玻璃体'},

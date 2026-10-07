@@ -57,7 +57,7 @@ const hasAny=(tags,ids)=>ids.some(id=>tags.has(id));
 export function basicAssessment(profile,report,urgent=[]){
  const tags=report.tags;
  if(!tags.size)return null;
- const timeOnly=new Set(['刚刚开始','持续数小时','持续1至3天','持续超过3天','持续加重','反复数月','短暂发作','突然起病','持续超过10天','新运动后1至3天','经期相关','可能怀孕']);
+ const timeOnly=new Set(['刚刚开始','持续数小时','持续1至3天','持续超过3天','持续加重','反复数月','短暂发作','突然起病','持续超过10天','经期相关','可能怀孕']);
  if([...tags].every(t=>timeOnly.has(t)))return null;
  // Preserve only one real selected observation per family, with symptoms
  // before timing/triggers. A broad card is visibly marked as basic.

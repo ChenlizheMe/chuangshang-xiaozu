@@ -992,8 +992,8 @@
         "en": "Reduce load and use a short cold pack while watching range of motion."
       },
       "shortDescription": {
-        "zh": "关节周围胀痛、红热，活动受限。",
-        "en": "Pain and warmth around a joint with restricted movement."
+        "zh": "关节周围不适可表现为疼痛、红肿、热感或活动受限；实际受累组织及原因需检查。",
+        "en": "Joint-area discomfort may involve pain, redness/swelling, warmth or restricted movement. Examination is needed to establish the affected tissues and cause."
       },
       "triggers": {
         "zh": "重复负重、扭转、外伤或关节周围刺激",
@@ -1078,8 +1078,8 @@
         "en": "Stop activities that worsen symptoms."
       },
       "shortDescription": {
-        "zh": "碰撞后局部淤青、压痛和肿胀。",
-        "en": "Local bruising, tenderness and swelling after an impact."
+        "zh": "受伤后的局部不适可伴淤青、压痛或肿胀；不能仅凭这些选择确定损伤深度或排除骨折。",
+        "en": "Local discomfort after injury may be accompanied by bruising, tenderness or swelling. These selections cannot establish injury depth or exclude a fracture."
       },
       "triggers": {
         "zh": "碰撞、挤压或轻微扭伤",
@@ -2323,8 +2323,8 @@
         "en": "Replace fluids and electrolytes in small, frequent amounts and temporarily choose bland foods."
       },
       "shortDescription": {
-        "zh": "腹部绞痛伴腹泻、恶心或呕吐。",
-        "en": "Abdominal cramping with diarrhoea, nausea or vomiting."
+        "zh": "腹泻、恶心或呕吐等胃肠表现可伴腹部绞痛或发热；具体组合与原因需结合病程核实。",
+        "en": "Gastrointestinal symptoms such as diarrhoea, nausea or vomiting may occur with cramps or fever. The actual combination and cause need assessment in relation to the course."
       },
       "triggers": {
         "zh": "受污染食物、接触感染者或饮食刺激",
@@ -2410,8 +2410,8 @@
         "en": "Record urine colour, urination and changes in pain, maintain appropriate hydration and arrange prompt assessment."
       },
       "shortDescription": {
-        "zh": "腰侧绞痛向腹股沟放射，可伴血尿或恶心。",
-        "en": "Colicky flank pain radiating to the groin, sometimes with blood in urine or nausea."
+        "zh": "侧腰绞痛样表现可伴向腹股沟放射、血尿或恶心；实际疼痛分布及是否结石需检查确认。",
+        "en": "Flank-colic-like symptoms may occur with groin radiation, blood in urine or nausea. The actual pain distribution and whether a stone is present require assessment."
       },
       "triggers": {
         "zh": "尿路结石移动、脱水或泌尿系感染",
