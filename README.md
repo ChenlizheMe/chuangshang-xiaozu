@@ -208,3 +208,5 @@ UI 可达性夹具必须用当前完整与轻量 GLB 中真实存在且可见的
 面板键盘滚动按实际粘性标题高度保留可视区，长结构名、中文暂用副注和语言换行都会更新测量。焦点进入后再检查按钮是否被标题或面板边缘盖住，只调整当前面板滚动；关闭或进入关于页时清理观察器、监听与待执行帧。实现参考 [MDN scroll-padding-block-start](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scroll-padding-block-start)，`tests/panel-focus-visibility.test.mjs` 覆盖正反向越界、已可见项不动、标题变高、焦点竞争及卸载清理。
 
 构建与测试使用 Node.js 24 LTS，GitHub Pages 的 `setup-node` 目标版本与本地验证的主版本一致。Node.js 20 已进入官方 EOL；见 [Node.js 支持表](https://nodejs.org/en/about/previous-releases)。这里指随后 `npm ci`、测试和构建所用的 Node，不代表升级各个 GitHub Action 自身声明的运行时。
+
+选区状态保留同一个 `role="status"` 容器，选择前已存在；选中、取消、RESET和切层只更新其中的当前结构信息，空态文字仅供辅助技术读取。区域使用 polite/atomic，不移动焦点，也不随相机或感觉输入改变内容；关于页仍隐藏整个模型界面。依据 [W3C ARIA22](https://www.w3.org/WAI/WCAG22/Techniques/aria/ARIA22)，`tests/selection-status.test.mjs` 检查容器身份、内容和非相关更新边界；这不等同已验证某一读屏软件的实际朗读。
