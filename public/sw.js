@@ -60,8 +60,8 @@ async function cachedResponse(request, primary, primaryName, valid, runtime = fa
   }
 }
 async function cacheReadOrNetwork(read) {
-  // CacheStorage can queue reads behind writes. A successful online script or
-  // stylesheet must not wait indefinitely for optional disk storage.
+  // CacheStorage can queue reads behind writes. Successful online runtime,
+  // model and decoder resources must not wait indefinitely for optional storage.
   let timer;
   try { return await Promise.race([read, new Promise(resolve => { timer = setTimeout(resolve, 1500); })]); }
   finally { clearTimeout(timer); }
@@ -161,22 +161,26 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
   if (isModelAsset(new URL(request.url))) {
     event.respondWith((async () => {
-      let cache;
-      try {
-        cache = await caches.open(MODEL_CACHE);
-        const cached = await cachedResponse(request, cache, MODEL_CACHE, validModelResponse);
-        if (cached) return cached;
-      } catch { /* Storage restrictions must not block an online model. */ }
+      const storage = caches.open(MODEL_CACHE);
+      const read = storage.then(cache => cachedResponse(request, cache, MODEL_CACHE, validModelResponse)).catch(() => undefined);
+      const cached = await cacheReadOrNetwork(read);
+      if (cached) return cached;
       try {
         const response = await fetch(request);
         if (validModelResponse(response)) {
           // Deliver the downloaded resource now; keep the worker alive for the
           // optional disk write without putting storage on the response path.
-          if (cache) event.waitUntil(cache.put(request, response.clone()).catch(() => {}));
+          const copy = response.clone();
+          event.waitUntil(storage.then(cache => cache.put(request, copy)).catch(() => {}));
           return response;
         }
+        const lateCached = await read;
+        if (lateCached) return lateCached;
         return response.ok ? new Response('Invalid anatomy resource', { status: 502 }) : response;
       } catch {
+        // Slow storage can still hold the only valid offline model/decoder.
+        const lateCached = await read;
+        if (lateCached) return lateCached;
         // Binary and decoder requests must not receive the HTML app shell.
         return new Response('Anatomy resource unavailable offline', { status: 503 });
       }
