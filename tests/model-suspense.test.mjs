@@ -34,6 +34,12 @@ test('hidden Suspense models cannot be picked and one visible branch raycasts on
   native('pointerdown',event);await Promise.resolve();state.events.handlers.onPointerDown(event);
   native('pointerup',event);await Promise.resolve();state.events.handlers.onPointerUp(event);
   assert.deepEqual(choices.splice(0),[{layer:'skeleton',part:'Femur.l'}],'capture cleanup must wait until target listeners can consume the tap');
+  // Clicking the canvas after a toolbar button first blurs that button. A
+  // descendant's focus change is not a window-leave cancellation.
+  native('pointerdown',event);state.events.handlers.onPointerDown(event);native('blur',{target:{tagName:'BUTTON'}});
+  native('pointerup',event);await Promise.resolve();state.events.handlers.onPointerUp(event);
+  assert.equal(choices.splice(0).length,1,'the first anatomy tap after a focused control must survive its blur');
+  native('pointerdown',event);state.events.handlers.onPointerDown(event);native('blur',{target:globalThis.window});state.events.handlers.onPointerUp(event);assert.deepEqual(choices,[],'actual window blur still cancels');
   const staleApproximate=approximate.current;state.events.handlers.onPointerDown(event);
   render('muscle');await until(()=>state.scene.children.some(o=>o.name==='loading'));state.scene.updateMatrixWorld(true);
   assert.equal(approximate.current,null);assert.equal(skeleton.mesh.visible,true,'mesh visibility alone is not a sufficient guard');
