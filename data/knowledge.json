@@ -4124,12 +4124,12 @@
     {
       "id": "上下楼加重",
       "zh": "上下楼更疼",
-      "en": "Worse on stairs"
+      "en": "Pain worse on stairs"
     },
     {
       "id": "蹲起加重",
       "zh": "蹲下站起更疼",
-      "en": "Worse with squatting"
+      "en": "Pain worse with squatting or rising"
     },
     {
       "id": "跪地加重",
@@ -4139,7 +4139,7 @@
     {
       "id": "屈肘加重",
       "zh": "弯着胳膊更麻",
-      "en": "Worse with elbow bent"
+      "en": "Numbness worse with elbow bent"
     },
     {
       "id": "甩手缓解",
