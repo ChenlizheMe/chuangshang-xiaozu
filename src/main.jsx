@@ -68,7 +68,7 @@ function App({lang,setLang,active=true,aboutLinkRef}){
  },[sheet,active]);
  // New panels and regenerated results always start at their priority content.
  useEffect(()=>{if(drawerRef.current)drawerRef.current.scrollTop=0;},[sheet,selection.focusId,result]);
- const priorityPresentation=useMemo(()=>presentPriorityGuidance(result?.urgent,result?.reportedSymptoms),[result]);
+ const priorityPresentation=useMemo(()=>presentPriorityGuidance(result?.urgent,result?.reportedSymptoms,result?.profiles),[result]);
  const displayWhy=useCallback(w=>{const tag=[...knowledge.feelings,...knowledge.signs,...knowledge.timing,...knowledge.triggers].find(item=>item.id===w);return tag?tagLabel(tag,lang):w},[lang]);
  const partLabel=useCallback(ref=>bilingualPartText(ref.part,ref.layer,lang),[lang]);
  const run=event=>{openSheet('diagnosis',event);if(!reports.length){setResult({error:true});return}setResult(assessSymptoms(knowledge,{reports:assessmentReports(selection)}));};
