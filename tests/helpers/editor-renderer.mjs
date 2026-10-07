@@ -31,8 +31,8 @@ async function loadApp(testViewer=false){
       "const AnatomyViewer=props=>React.createElement('anatomy-viewer',props);");
   }
   main=replace(main,"createRoot(document.getElementById('root')).render(<Root/>);",'export {Root,knowledge};');
-  main=replace(main,'function App({lang,setLang}){',
-    `function App({lang,setLang}){globalThis.${probeKey}.appRenders++;`);
+  main=replace(main,'function App({lang,setLang,active=true,aboutLinkRef}){',
+    `function App({lang,setLang,active=true,aboutLinkRef}){globalThis.${probeKey}.appRenders++;`);
   main=replace(main,' return <div className="app"',
     ` globalThis.${probeKey}.state={selection,sheet,lang,layer,zoom,lift,updateReport,modelNonce}; return <div className="app"`);
   const built=await build({stdin:{contents:main,sourcefile:path.join(repo,'src/main.jsx'),resolveDir:path.join(repo,'src'),loader:'jsx'},
@@ -64,7 +64,7 @@ function createRenderer(){
     getRootHostContext:()=>hostContext,getChildHostContext:()=>hostContext,getPublicInstance:instance=>instance,
     prepareForCommit:()=>null,resetAfterCommit:noop,
     createInstance:(type,props)=>({type,props,children:[],tagName:type.toUpperCase(),isConnected:true,
-      ownerDocument:{defaultView:window},focus:noop,closest:()=>null,querySelector:()=>null,
+      ownerDocument:{defaultView:window},focus(){document.activeElement=this;},closest:()=>null,querySelector:()=>null,
       hasPointerCapture:()=>true,setPointerCapture:noop,releasePointerCapture:noop,
       getBoundingClientRect:()=>({height:200}),getClientRects:()=>[{}]}),
     appendInitialChild:append,finalizeInitialChildren:()=>false,prepareUpdate:(instance,type,oldProps,newProps)=>newProps,
@@ -78,14 +78,15 @@ function createRenderer(){
     detachDeletedInstance:noop,getCurrentEventPriority:()=>DefaultEventPriority});
 }
 
-export async function mountEditorApp({loadViewerModule}={}){
+export async function mountEditorApp({loadViewerModule,initialHash=''}={}){
   const keys=['window','document','requestAnimationFrame','cancelAnimationFrame',probeKey];
   const saved=new Map(keys.map(key=>[key,Object.getOwnPropertyDescriptor(globalThis,key)]));
   const probe={appRenders:0,editorRenders:0,filterCalls:0,state:null,loadViewerModule,reloads:0};
   const frames=new Map();let frameId=0;
   const restore=()=>{for(const [key,descriptor] of saved)if(descriptor)Object.defineProperty(globalThis,key,descriptor);else delete globalThis[key]};
   globalThis[probeKey]=probe;
-  globalThis.window={addEventListener:noop,removeEventListener:noop,innerHeight:844,location:{reload(){probe.reloads++;}},
+  const events=new Map();
+  globalThis.window={addEventListener(type,handler){if(!events.has(type))events.set(type,new Set());events.get(type).add(handler);},removeEventListener(type,handler){events.get(type)?.delete(handler);},innerHeight:844,location:{hash:initialHash,reload(){probe.reloads++;}},
     matchMedia:()=>({matches:false,addEventListener:noop,removeEventListener:noop})};
   globalThis.document={addEventListener:noop,removeEventListener:noop,documentElement:{},activeElement:null,hidden:false};
   globalThis.requestAnimationFrame=callback=>{frames.set(++frameId,callback);return frameId};
@@ -106,6 +107,9 @@ export async function mountEditorApp({loadViewerModule}={}){
       get state(){return probe.state},get reloads(){return probe.reloads},get counts(){return {app:probe.appRenders,editor:probe.editorRenders,filters:probe.filterCalls}},
       resetCounts(){probe.appRenders=probe.editorRenders=probe.filterCalls=0},
       all,find,cls,button,click,act,knowledge,
+      navigate(hash){act(()=>{window.location.hash=hash;for(const handler of events.get('hashchange')||[])handler();});},
+      key(key){act(()=>{for(const handler of events.get('keydown')||[])handler({key,preventDefault:noop,stopPropagation:noop});});},
+      get focused(){return document.activeElement;},
       select(part){act(()=>find(node=>node.type==='anatomy-viewer').props.onPart({part}))},
       layer(id){click(all(node=>node.type==='button'&&node.props?.className?.includes('layer-dot'))[['skeleton','muscle','organ'].indexOf(id)])},
       open(kind){click(all(node=>node.type==='button'&&node.props?.className?.includes('sticker-card'))[['feelings','signs','diagnosis'].indexOf(kind)])},

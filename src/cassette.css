@@ -1,4 +1,6 @@
 :root{font-family:Arial,Helvetica,'Microsoft YaHei',sans-serif;font-synthesis:none;color:#ddd9cd;background:#1b1d1a;--ink:#ddd9cd;--muted:#929285;--red:#ed663b;--line:#41443b;--paper:#282b26}
+.app[hidden]{display:none!important}
+a:focus-visible{outline:2px solid var(--red);outline-offset:4px}
 *{box-sizing:border-box}html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer;border:0}button:focus-visible,select:focus-visible,textarea:focus-visible,[role=slider]:focus-visible{outline:2px solid var(--red);outline-offset:3px}button:disabled{opacity:.6;cursor:wait}button:active{filter:brightness(.88)}button,input,textarea,select{-webkit-tap-highlight-color:transparent}
 .app{height:100vh;height:100dvh;width:100%;padding:18px;background:repeating-linear-gradient(90deg,#20231e 0 2px,#242721 2px 5px)}.app main,.console{height:100%;width:100%}
 .viewer{height:100%;position:relative;overflow:hidden;isolation:isolate;border-radius:12px 5px 12px 5px;background:radial-gradient(ellipse at 52% 45%,#343831,#22251f 75%);box-shadow:0 14px 35px #0a0b09,inset 0 0 0 1px #42463a}
@@ -84,3 +86,40 @@ button:active{transform:translateY(1px) scale(.98)}
  .sticker-sheet:not(.empty-sheet){left:17px;right:17px;width:auto}
 }
 @media(prefers-reduced-motion:reduce){.sticker-card.active,.sticker-card.active:hover,.sticker-card.active:focus-visible{transform:none}}
+
+/* Recessed control wells: one housing, inset screen, and shallow physical keys. */
+.model-layers,.sticker-dock{padding:5px;border:1px solid #454b3b;background:#191e17;border-radius:9px 4px;box-shadow:inset 0 2px 3px #0b0f0a,0 1px 0 #71735b33}
+.model-layers .layer-dot:not(.active),.sticker-dock .sticker-card:not(.active){box-shadow:inset 0 1px 0 #cbd1b51c,0 2px 0 #0b0e09}
+.model-layers .layer-dot.active{box-shadow:inset 0 2px 3px #75301355,0 1px 0 #0b0e09}
+.screen-label.about-control{display:block;pointer-events:auto;text-decoration:none;min-height:44px;z-index:7;outline-offset:6px}
+.screen-label.about-control::before{margin-bottom:4px}
+.screen-label.about-control strong{display:block}
+.about-cue{display:block;margin-top:5px;font:10px/1.2 ui-monospace,monospace;letter-spacing:.08em;color:#b6b49d}
+.about-control:hover .about-cue,.about-control:focus-visible .about-cue{color:var(--red);text-decoration:underline;text-underline-offset:3px}
+@media(max-width:700px){.about-cue{font-size:10px;margin-top:4px;letter-spacing:.04em}}
+@media(max-height:590px){.screen-label.about-control::before{font-size:7px;margin-bottom:3px}.about-cue{font-size:10px;margin-top:3px}}
+@media(max-width:1000px) and (max-height:450px){.viewer:has(>.sticker-sheet:not(.empty-sheet)) .screen-label.about-control{visibility:hidden}}
+
+/* A separate project folio, with the same olive housing and charcoal readouts. */
+.about-page{height:100vh;height:100dvh;overflow:auto;overscroll-behavior:contain;padding:clamp(16px,4vw,56px);background:repeating-linear-gradient(90deg,#20231e 0 2px,#242721 2px 5px)}
+.about-shell{max-width:1100px;margin:0 auto;padding:clamp(20px,4vw,48px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);grid-template-areas:'nav nav' 'heading story' 'limits story' 'footer footer';column-gap:clamp(28px,6vw,80px);background:#2b3025;border:1px solid #515742;border-radius:14px 4px 14px 4px;box-shadow:9px 11px 0 #11160e,inset 0 1px 0 #969d7333}
+.about-navigation{grid-area:nav;display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:28px;border-bottom:1px solid #535943}
+.about-navigation a,.about-navigation button{min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border:1px solid #4d5540;border-radius:6px 2px;background:#1b2118;color:#e8e7d3;text-decoration:none;font:700 11px/1.5 ui-monospace,monospace;box-shadow:0 2px 0 #0d120a}
+.about-navigation button{min-width:44px}
+.about-navigation a:hover,.about-navigation button:hover{background:#39432f}
+.about-heading{grid-area:heading;padding-top:40px}
+.about-kicker{display:block;max-width:28em;font:10px/1.7 ui-monospace,monospace;letter-spacing:.09em;color:#c0bf9c;border-left:3px solid var(--red);padding-left:12px}
+.about-heading h1{font-size:clamp(36px,5vw,64px);font-weight:800;line-height:1.14;letter-spacing:-.045em;color:#f0eedc;margin:22px 0 32px;overflow-wrap:anywhere;outline:none}
+.about-story{grid-area:story;padding-top:42px;color:#d4d7be;font-size:16px;line-height:1.95}
+.about-story p{margin:0 0 24px;max-width:38em}
+.about-story .about-intro{font-size:clamp(18px,1.8vw,21px);line-height:1.85;color:#efedda}
+.about-limits{grid-area:limits;align-self:end;background:#1b2118;border-left:2px solid #65704e;padding:18px 20px;margin:0 0 30px}
+.about-limits h2{font:700 11px/1.4 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#b7bd9e;margin:0 0 10px}
+.about-limits p{font-size:13px;line-height:1.8;color:#bbc3a5;margin:0}
+.about-footer{grid-area:footer;display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:26px;border-top:1px solid #535943}
+.about-footer>span{font:12px/1.6 ui-monospace,monospace;letter-spacing:.04em;color:#aaaF93}
+.about-footer a{display:grid;grid-template-columns:1fr auto;gap:4px 30px;min-width:230px;min-height:64px;padding:14px 18px;border:1px solid #6b7054;border-radius:6px 2px;background:#343d2b;box-shadow:0 2px 0 #11180c;color:#efedda;text-decoration:none;font-size:15px;font-weight:700}
+.about-footer a span{color:var(--red);font-size:22px;line-height:1}
+.about-footer a small{grid-column:1/-1;color:#b5bea1;font:11px/1.4 ui-monospace,monospace}
+.about-footer a:hover{background:#424e34;border-color:#d08553}
+@media(max-width:760px){.about-page{padding:12px 12px 22px}.about-shell{padding:22px 20px;grid-template-columns:minmax(0,1fr);grid-template-areas:'nav' 'heading' 'story' 'limits' 'footer';gap:0;box-shadow:5px 7px 0 #11160e}.about-navigation{padding-bottom:22px}.about-heading{padding-top:28px}.about-heading h1{font-size:clamp(34px,8vw,48px);margin:20px 0 24px}.about-story{padding-top:0;font-size:16px;line-height:1.9}.about-story .about-intro{font-size:18px}.about-limits{margin:0 0 24px}.about-footer{align-items:stretch;flex-direction:column;gap:14px;padding-top:22px}.about-footer a{min-width:0}.about-kicker{font-size:9px}}

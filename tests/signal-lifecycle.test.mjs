@@ -21,7 +21,8 @@ test('cached scene follows DPR and context recovery while idle, hidden and reduc
  globalThis.setTimeout=(fn,delay,...args)=>{let token;token=nativeSet(()=>{pending.delete(token);fn(...args);},delay);if(fn===invalidate)pending.add(token);return token;};
  globalThis.clearTimeout=token=>{pending.delete(token);return nativeClear(token);};
  try{
-  root.render(React.createElement(Display,{signal:'skeleton',readySignal:0,idleFps:12}));await until(()=>canvas.count()===2&&preference.count()===1);
+  const render=active=>root.render(React.createElement(Display,{active,signal:'skeleton',readySignal:0,idleFps:12}));
+  render(true);await until(()=>canvas.count()===2&&preference.count()===1);
   const store=fiber._roots.get(canvas).store;invalidate=store.getState().invalidate;
   const frame=()=>{calls=[];fiber.advance(performance.now()/1000,false,store.getState());return calls.slice();};
   assert.deepEqual(frame(),['scene','post']);assert.deepEqual(frame(),['post']);
@@ -31,6 +32,13 @@ test('cached scene follows DPR and context recovery while idle, hidden and reduc
   store.getState().scene.userData.anatomyRevision=1;assert.deepEqual(frame(),['scene','post']);
   store.getState().camera.position.x=.1;assert.deepEqual(frame(),['scene','post']);
   store.getState().setSize(400,800);await until(()=>rt.width===600);assert.deepEqual([rt.width,rt.height],[600,1200]);assert.deepEqual(frame(),['scene','post']);
+  render(false);await until(()=>frame().length===0);assert.equal(pending.size,0);
+  let hiddenDisposes=0;const hiddenDispose=()=>hiddenDisposes++;rt.addEventListener('dispose',hiddenDispose);
+  store.getState().setSize(0,0);await sleep(20);assert.deepEqual(frame(),[]);assert.deepEqual([rt.width,rt.height],[600,1200]);assert.equal(hiddenDisposes,0);assert.equal(pending.size,0);
+  store.getState().scene.userData.anatomyRevision=7;store.getState().camera.position.x=.25;
+  render(true);await sleep(20);assert.deepEqual(frame(),[],'active before a nonzero viewport still does not draw');
+  rt.removeEventListener('dispose',hiddenDispose);store.getState().setSize(844,390);await until(()=>rt.width===1266);
+  assert.deepEqual(frame(),['scene','post']);assert.deepEqual([rt.width,rt.height],[1266,585]);assert.equal(store.getState().scene.userData.anatomyRevision,7);assert.equal(targets.length,1,'About reuses the existing render target');
   validImage=false;canvas.emit('webglcontextlost');assert.equal(pending.size,0);assert.deepEqual(frame(),[]);assert.equal(pending.size,0);
   canvas.emit('webglcontextrestored');assert.deepEqual(frame(),['scene','post']);assert.equal(validImage,true);assert.deepEqual(frame(),['post']);
   doc.hidden=true;doc.emit('visibilitychange');assert.equal(pending.size,0);frame();assert.equal(pending.size,0);

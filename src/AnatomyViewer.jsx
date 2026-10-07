@@ -24,7 +24,7 @@ const CANONICAL_FRAME={center:[0,0.857,0.005],height:1.7};
 const INITIAL_ZOOM=3.8,MIN_ZOOM=1.3;
 function CameraRig({orbit,lift,elevation,zoom}){const {camera,invalidate}=useThree(); useEffect(()=>{const radius=(INITIAL_ZOOM*INITIAL_ZOOM)/Math.max(MIN_ZOOM,zoom); const theta=orbit*Math.PI/180; const phi=elevation*Math.PI/180; const horizontalRadius=Math.cos(phi)*radius; camera.position.set(Math.sin(theta)*horizontalRadius,lift+Math.sin(phi)*radius,Math.cos(theta)*horizontalRadius);
  camera.lookAt(0,lift,0); camera.updateProjectionMatrix();invalidate()},[camera,invalidate,orbit,lift,elevation,zoom]); return null}
-function Model({layer,onPart,selectedParts,registerApproximatePick}){
+function Model({layer,onPart,selectedParts,registerApproximatePick,active=true}){
   const {camera,gl,scene,invalidate,raycaster:sceneRaycaster}=useThree();
   const markDirty=()=>{scene.userData.anatomyRevision=(scene.userData.anatomyRevision||0)+1;invalidate();};
   const gltf=useLoader(GLTFLoader,MODEL_URLS[layer],configureGLTF);
@@ -59,7 +59,10 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
   useEffect(()=>{const previous=sceneRaycaster.firstHitOnly;sceneRaycaster.firstHitOnly=true;return()=>{sceneRaycaster.firstHitOnly=previous}},[sceneRaycaster]);
   const groupRef=useRef();
   const pointerSelection=useMemo(()=>createPointerSelection(),[]);
+  const activeRef=useRef(active);
+  useLayoutEffect(()=>{activeRef.current=active;},[active]);
   useLayoutEffect(()=>{
+    if(!active){pointerSelection.clear();return;}
     const host=gl.domElement.ownerDocument?.defaultView||window;
     const pendingReleases=new Set();
     const down=event=>pointerSelection.down(event),move=event=>pointerSelection.move(event);
@@ -72,7 +75,7 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
     const handlers={pointerdown:down,pointermove:move,pointerup:up,pointercancel:cancel,blur};
     for(const [name,handler] of Object.entries(handlers))host.addEventListener(name,handler,name!=='blur');
     return()=>{for(const [name,handler] of Object.entries(handlers))host.removeEventListener(name,handler,name!=='blur');for(const timer of pendingReleases)clearTimeout(timer);pointerSelection.clear();};
-  },[gl,root,pointerSelection]);
+  },[gl,root,pointerSelection,active]);
   // All published atlases use the same centered, human-scale frame. Combined
   // with the shared camera, a layer change preserves each anatomical location.
   useLayoutEffect(()=>{
@@ -84,11 +87,11 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
     groupRef.current.position.set(0,0,0);
     markDirty();return markDirty;
   },[root]);
-  const commitSelection=object=>{if(!isPickableAnatomy(object,root,scene))return;onPart({part:meshPart({object}),object});};
+  const commitSelection=object=>{if(!activeRef.current||!isPickableAnatomy(object,root,scene))return;onPart({part:meshPart({object}),object});};
   useLayoutEffect(()=>{
-    if(!registerApproximatePick)return;
+    if(!registerApproximatePick||!active)return;
     const pickNearest=(event)=>{
-      if(!pointerSelection.canApproximate(event)||!isVisibleInScene(root,scene))return;
+      if(!activeRef.current||!pointerSelection.canApproximate(event)||!isVisibleInScene(root,scene))return;
       const rect=gl.domElement.getBoundingClientRect();
       const x=Number(event.clientX);const y=Number(event.clientY);
       if(!Number.isFinite(x)||!Number.isFinite(y)||!rect.width||!rect.height)return;
@@ -117,7 +120,7 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
     };
     registerApproximatePick.current=pickNearest;
     return()=>{pointerSelection.clear();if(registerApproximatePick.current===pickNearest)registerApproximatePick.current=null;};
-  },[camera,gl,scene,root,pickableMeshes,registerApproximatePick,onPart,pointerSelection]);
+  },[camera,gl,scene,root,pickableMeshes,registerApproximatePick,onPart,pointerSelection,active]);
   // Prepare shared base materials once per asset, rather than flagging every
   // material for shader updates after each selection.
   useLayoutEffect(()=>{
@@ -171,11 +174,11 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
     markDirty();return()=>{restore.forEach(fn=>fn());markDirty();};
   },[root,selectedParts,pickableMeshes]);
   const meshPart=e=>decodeName(e.object?.userData?.part||e.object?.name||'general');
-  const onMeshPointerDown=e=>{const object=e.intersections?.find(hit=>isPickableAnatomy(hit.object,root,scene))?.object;if(object)pointerSelection.begin(e,object);};
+  const onMeshPointerDown=e=>{if(!activeRef.current)return;const object=e.intersections?.find(hit=>isPickableAnatomy(hit.object,root,scene))?.object;if(object)pointerSelection.begin(e,object);};
   const onMeshPointerUp=e=>commitSelection(pointerSelection.end(e));
-  return <group ref={groupRef} onPointerDown={onMeshPointerDown} onPointerUp={onMeshPointerUp}><primitive object={root}/></group>;
+  return <group ref={groupRef} visible={active} onPointerDown={onMeshPointerDown} onPointerUp={onMeshPointerUp}><primitive object={root}/></group>;
 }
 export function clearAnatomyCache(layer){useLoader.clear(GLTFLoader,MODEL_URLS[layer]);}
-export default function AnatomyViewer({lang,layer,modelNonce,loading,selectedParts,onPart,approximatePickRef,orbit,lift,elevation,zoom}){
- return <Canvas className="anatomy-canvas" frameloop="demand" onPointerMissed={event=>approximatePickRef.current?.(event)} fallback={<ViewerUnavailable lang={lang} onRetry={()=>window.location.reload()}/>} camera={{position:[0,0,3.8],fov:38}} gl={{antialias:!quality.light,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.setPixelRatio(Math.min(window.devicePixelRatio||1,quality.maxDpr));gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.NoToneMapping;gl.shadowMap.enabled=false;}} dpr={[1,quality.maxDpr]}><color attach="background" args={['#292c29']}/><ambientLight intensity={1.5}/><directionalLight position={[2,3,4]} intensity={2}/><Suspense fallback={<Html center zIndexRange={[4,0]} className="model-loading">{loading}</Html>}><Model layer={layer} onPart={onPart} selectedParts={selectedParts} registerApproximatePick={approximatePickRef}/></Suspense><CameraRig orbit={orbit} lift={lift} elevation={elevation} zoom={zoom}/><SignalDisplay signal={layer} readySignal={modelNonce} idleFps={quality.idleFps}/></Canvas>;
+export default function AnatomyViewer({active=true,lang,layer,modelNonce,loading,selectedParts,onPart,approximatePickRef,orbit,lift,elevation,zoom}){
+ return <Canvas className="anatomy-canvas" frameloop="demand" onPointerMissed={event=>{if(active)approximatePickRef.current?.(event)}} fallback={<ViewerUnavailable lang={lang} onRetry={()=>window.location.reload()}/>} camera={{position:[0,0,3.8],fov:38}} gl={{antialias:!quality.light,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.setPixelRatio(Math.min(window.devicePixelRatio||1,quality.maxDpr));gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.NoToneMapping;gl.shadowMap.enabled=false;}} dpr={[1,quality.maxDpr]}><color attach="background" args={['#292c29']}/><ambientLight intensity={1.5}/><directionalLight position={[2,3,4]} intensity={2}/><Suspense fallback={<Html center zIndexRange={[4,0]} className="model-loading">{loading}</Html>}><Model active={active} layer={layer} onPart={onPart} selectedParts={selectedParts} registerApproximatePick={approximatePickRef}/></Suspense><CameraRig orbit={orbit} lift={lift} elevation={elevation} zoom={zoom}/><SignalDisplay active={active} signal={layer} readySignal={modelNonce} idleFps={quality.idleFps}/></Canvas>;
 }

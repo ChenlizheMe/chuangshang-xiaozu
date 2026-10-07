@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef} from 'react';
+import {useEffect, useLayoutEffect, useMemo, useRef} from 'react';
 import {useFrame, useThree} from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -54,7 +54,7 @@ const fragmentShader = /* glsl */`
   }
 `;
 
-export default function SignalDisplay({signal, readySignal, enabled=true, idleFps=24}) {
+export default function SignalDisplay({signal, readySignal, enabled=true, active=true, idleFps=24}) {
   const {gl,size,viewport,scene,camera,invalidate} = useThree();
   const switchedAt = useRef(-10);
   const reducedMotion = useRef(false);
@@ -74,6 +74,10 @@ export default function SignalDisplay({signal, readySignal, enabled=true, idleFp
     output.add(new THREE.Mesh(geometry,material));
     return {target,material,geometry,output,camera:new THREE.Camera()};
   },[]);
+  useLayoutEffect(() => {
+    clearTimeout(timer.current);
+    if(active){cached.current.dirty=true;invalidate();}
+  },[active,invalidate]);
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => {reducedMotion.current=preference.matches;invalidate();};
@@ -96,6 +100,7 @@ export default function SignalDisplay({signal, readySignal, enabled=true, idleFp
     return()=>{canvas.removeEventListener('webglcontextlost',lost);canvas.removeEventListener('webglcontextrestored',restored);clearTimeout(timer.current);};
   },[gl,invalidate]);
   useEffect(() => {
+    if(size.width<=0||size.height<=0)return;
     const ratio=Math.min(viewport.dpr,1.5);
     pipeline.target.setSize(Math.max(1,Math.floor(size.width*ratio)),Math.max(1,Math.floor(size.height*ratio)));
     pipeline.material.uniforms.resolution.value.set(size.width*ratio,size.height*ratio);
@@ -105,7 +110,7 @@ export default function SignalDisplay({signal, readySignal, enabled=true, idleFp
     pipeline.target.dispose(); pipeline.geometry.dispose(); pipeline.material.dispose();
   },[pipeline]);
   useFrame(() => {
-    if(contextLost.current){clearTimeout(timer.current);return;}
+    if(!active||size.width<=0||size.height<=0||contextLost.current){clearTimeout(timer.current);return;}
     const now=performance.now()/1000;
     const uniforms=pipeline.material.uniforms;
     uniforms.time.value=now;

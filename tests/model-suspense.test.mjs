@@ -22,7 +22,7 @@ test('hidden Suspense models cannot be picked and one visible branch raycasts on
  const gl={render:noop,setPixelRatio:noop,setSize:noop,domElement:canvas,xr:{addEventListener:noop,removeEventListener:noop},shadowMap:{},capabilities:{isWebGL2:true}};
  const root=fiber.createRoot(canvas);root.configure({gl,events:fiber.events,onPointerMissed:event=>approximate.current?.(event),size:{width:390,height:844,top:0,left:0},frameloop:'never',camera:{position:[0,0,3.8],fov:38}});
  const approximate={current:null},selected=[],choices=[];
- const render=layer=>root.render(React.createElement(React.Suspense,{fallback:React.createElement('group',{name:'loading'})},React.createElement(Model,{layer,selectedParts:selected,onPart:p=>choices.push({layer,part:p.part}),registerApproximatePick:approximate})));
+ const render=(layer,active=true)=>root.render(React.createElement(React.Suspense,{fallback:React.createElement('group',{name:'loading'})},React.createElement(Model,{active,layer,selectedParts:selected,onPart:p=>choices.push({layer,part:p.part}),registerApproximatePick:approximate})));
  const event={offsetX:195,offsetY:422,clientX:195,clientY:422,pointerId:1,button:0,target:canvas};
  try{
   render('skeleton');await until(()=>approximate.current);const state=fiber._roots.get(canvas).store.getState();state.scene.updateMatrixWorld(true);state.camera.updateMatrixWorld(true);
@@ -49,6 +49,12 @@ test('hidden Suspense models cannot be picked and one visible branch raycasts on
   native('pointerup',near);await Promise.resolve();state.events.handlers.onPointerUp(near);
   state.events.handlers.onClick({...near,type:'click'});
   assert.equal(choices.splice(0).length,1,'the next short near-miss still selects once');
+  const visibleRoot=state.scene.children[0],oldPick=approximate.current;
+  native('pointerdown',event);state.events.handlers.onPointerDown(event);render('skeleton',false);
+  await until(()=>approximate.current===null);assert.equal([...windowEvents.values()].reduce((n,set)=>n+set.size,0),0);
+  state.events.handlers.onPointerUp(event);oldPick({...event,type:'click'});assert.deepEqual(choices,[],'About rejects stale exact and approximate input');assert.equal(state.scene.children[0],visibleRoot);
+  render('skeleton',true);await until(()=>approximate.current);state.scene.updateMatrixWorld(true);
+  native('pointerdown',event);state.events.handlers.onPointerDown(event);native('pointerup',event);state.events.handlers.onPointerUp(event);assert.equal(choices.splice(0).length,1,'returning from About restores the first tap');
   const staleApproximate=approximate.current;state.events.handlers.onPointerDown(event);
   render('muscle');await until(()=>state.scene.children.some(o=>o.name==='loading'));state.scene.updateMatrixWorld(true);
   assert.equal(approximate.current,null);assert.equal(skeleton.mesh.visible,true,'mesh visibility alone is not a sufficient guard');

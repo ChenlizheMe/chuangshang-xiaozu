@@ -188,3 +188,7 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 JS/CSS查缓存只扫描页面缓存，避免排在无关的模型写入后；缓存读取约1.5秒仍未完成时开始联网，不让可选存储无限拖住成功响应。网络失败时仍接受稍晚读出的有效离线副本。`tests/cache-read-progress.test.mjs`用可控未决open/match/keys及计时器验证这条进展保证，并保留原完整离线/模型迁移回归。[Chromium缓存实现](https://chromium.googlesource.com/chromium/src/+/HEAD/content/browser/cache_storage/cache_storage_cache.cc)中读写共用调度队列是测试该边界的依据，不证明前述空屏就是这个原因。此预算不是设备性能测量，也不保证阻塞的事件循环能准时执行计时器。
 
 3D代码模块失败与模型资源失败采用不同恢复动作：[React.lazy](https://react.dev/reference/react/lazy)会保留首次加载Promise，单纯重挂错误边界不能清除拒绝状态。模块未成功加载时，既有按钮明确显示“重新加载页面”，只在用户点击时普通重载一次；模块已经可用而GLB失败时，仍清理当前图层模型缓存并原地重试。实际App持久React树的故障注入覆盖两条路径、双语错误保留、无自动循环和镜头更新不重建lazy；未在浏览器中人为屏蔽模块网络来制造故障。
+
+关于页使用可直接访问和刷新的 `#/about`，沿用静态托管；品牌区域提供明确入口，返回保留当前部位、症状、报告面板与相机。页面文字仅说明作者最初测试dot及长期工作学习中的不适整理动机，并链接作者指定的 `https://www.chenlizhe.cn`。隐藏的排查界面暂停绘制、指针监听和惯性，返回首个有效尺寸帧刷新画面；不销毁模型/相机。直达关于页暂不挂载排查界面，但已有Service Worker仍可能准备完整离线JS资源；已启动的模型下载或准备也不强制中断。
+
+本轮网页视觉参考包括 [teenage engineering EP sample tool](https://teenage.engineering/apps/ep-sample-tool) 的公共键槽、嵌入屏和控制层次，以及 [Departure Mono](https://departuremono.com/) 的封面、正文与落款叙事。现有图层键/操作键收入静态内凹控制区，关于页采用大标题、正常字号正文和独立使用边界；保留原配色、44px目标和医学选项，没有复制参考网站的代码或添加常驻动画。

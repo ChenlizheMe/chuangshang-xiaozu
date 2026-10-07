@@ -22,8 +22,8 @@ test('viewer module failures explicitly label the existing button as a page relo
  assert.equal(retries,2);
 });
 test('short full-width panels hide only the covered controls, leaving the dock and empty state usable',()=>{
- const root=postcss.parse(fs.readFileSync(new URL('../src/cassette.css',import.meta.url),'utf8'));let rule;
- root.walkAtRules('media',m=>{if(m.params==='(max-width:1000px) and (max-height:450px)')m.walkRules(r=>{if(r.nodes.some(d=>d.prop==='visibility'&&d.value==='hidden'))rule=r;});});
- assert.ok(rule);for(const target of ['.scene-controls','.model-layers','.vertical-control','.model-error'])assert.ok(rule.selector.includes(target));assert.doesNotMatch(rule.selector,/sticker-dock|sticker-card/);assert.match(rule.selector,/:not\(\.empty-sheet\)/);
+ const root=postcss.parse(fs.readFileSync(new URL('../src/cassette.css',import.meta.url),'utf8')),rules=[];
+ root.walkAtRules('media',m=>{if(m.params==='(max-width:1000px) and (max-height:450px)')m.walkRules(r=>{if(r.nodes.some(d=>d.prop==='visibility'&&d.value==='hidden'))rules.push(r);});});
+ const selectors=rules.map(rule=>rule.selector).join(',');assert.ok(rules.length);for(const target of ['.scene-controls','.model-layers','.vertical-control','.model-error','.screen-label.about-control'])assert.ok(selectors.includes(target));assert.doesNotMatch(selectors,/sticker-dock|sticker-card/);for(const rule of rules)assert.match(rule.selector,/:not\(\.empty-sheet\)/);
  const loading=[];root.walkRules('.model-loading',r=>loading.push(...r.nodes));assert.ok(loading.some(d=>d.prop==='width'&&d.value==='max-content'));assert.ok(loading.some(d=>d.prop==='max-width'&&d.value.includes('100vw')));
 });
