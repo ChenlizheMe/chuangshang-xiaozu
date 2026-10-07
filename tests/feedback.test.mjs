@@ -11,6 +11,16 @@ test('changing language does not clear the recorded error or disable its existin
  let retries=0;const error=new Error('decoder failure'),boundary=new ModelErrorBoundary({lang:'zh',onRetry:()=>{retries++;},layer:'skeleton',resetKey:0});boundary.state={error};const previous=boundary.props;boundary.props={...previous,lang:'en'};boundary.componentDidUpdate(previous);assert.equal(boundary.state.error,error);
  const tree=boundary.render();const button=React.Children.toArray(tree.props.children).find(x=>x.type==='button');button.props.onClick();assert.equal(retries,1);
 });
+test('viewer module failures explicitly label the existing button as a page reload in both languages',()=>{
+ const error=Object.assign(new Error('<chunk failed>'),{code:'ANATOMY_MODULE_LOAD_FAILED'});let retries=0;
+ const boundary=new ModelErrorBoundary({lang:'zh',onRetry:()=>retries++,layer:'skeleton',resetKey:0});boundary.state={error};
+ for(const [lang,label] of [['zh','重新加载页面'],['en','RELOAD PAGE']]){
+  const previous=boundary.props;boundary.props={...previous,lang};boundary.componentDidUpdate(previous);assert.equal(boundary.state.error,error);
+  const tree=boundary.render(),html=renderToStaticMarkup(tree);assert.ok(html.includes(label));assert.match(html,/&lt;chunk failed&gt;/);
+  React.Children.toArray(tree.props.children).find(x=>x.type==='button').props.onClick();
+ }
+ assert.equal(retries,2);
+});
 test('short full-width panels hide only the covered controls, leaving the dock and empty state usable',()=>{
  const root=postcss.parse(fs.readFileSync(new URL('../src/cassette.css',import.meta.url),'utf8'));let rule;
  root.walkAtRules('media',m=>{if(m.params==='(max-width:1000px) and (max-height:450px)')m.walkRules(r=>{if(r.nodes.some(d=>d.prop==='visibility'&&d.value==='hidden'))rule=r;});});

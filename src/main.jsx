@@ -13,8 +13,10 @@ import { safePartLabel } from './anatomyLabels.js';
 import { assessSymptoms } from './clinicalEngine.js';
 import {PRIORITY_LEVELS} from './priorityGuidance.js';
 import { ANATOMY_MODELS } from './anatomyModels.js';
+import {createViewerModule} from './viewerModule.js';
 
-const AnatomyViewer=lazy(()=>import('./AnatomyViewer.jsx'));
+const viewerModule=createViewerModule(()=>import('./AnatomyViewer.jsx'));
+const AnatomyViewer=lazy(viewerModule.load);
 const MemoReportEditor=React.memo(ReportEditor);
 
 // Register the lightweight offline shell only in production builds.
@@ -39,7 +41,7 @@ function Root(){const [lang,setLang]=useState('zh');return <AppErrorBoundary lan
 function App({lang,setLang}){
  const [layer,setLayer]=useState('skeleton'),[orbit,setOrbit]=useState(0),[elevation,setElevation]=useState(0),[lift,setLift]=useState(0),[zoom,setZoom]=useState(INITIAL_ZOOM),[selection,dispatchSelection]=useReducer(selectionReducer,emptySelection),[sheet,setSheet]=useState(null),[result,setResult]=useState(null),[modelNonce,setModelNonce]=useState(0); const pinchRef=useRef(null); const liftDragRef=useRef(null); const drawerRef=useRef(null); const sheetOpenerRef=useRef(null); const inertiaFrameRef=useRef(null); const orbitVelocityRef=useRef({azimuth:0,elevation:0}); const zoomVelocityRef=useRef(0); const c=copy[lang]; const reports=selection.reports; const focused=reports.find(r=>r.id===selection.focusId); const feels=focused?.feelings||[], signs=focused?.signs||[]; const visibleReports=reports.filter(r=>r.layer===layer); const meshKey=reports.map(r=>r.id).join('|'); const selectedParts=useMemo(()=>reports.filter(r=>r.layer===layer).map(r=>r.part),[meshKey,layer]); const updateReport=useCallback(patch=>{dispatchSelection({type:'update',id:focused?.id,patch});setResult(null)},[focused?.id]);
  const chooseLayer=id=>{if(id===layer)return;cancelViewerGestures();dispatchSelection({type:'reset'});setResult(null);setSheet(null);setLayer(id)};
- const retryModel=async()=>{const {clearAnatomyCache}=await import('./AnatomyViewer.jsx');clearAnatomyCache(layer);setModelNonce(value=>value+1)};
+ const retryModel=()=>viewerModule.retry(layer,()=>setModelNonce(value=>value+1),()=>window.location.reload());
  const openSheet=(name,event)=>openPanel(()=>setSheet(name),sheetOpenerRef,event?.currentTarget);
  const closeSheet=()=>dismissPanel(()=>setSheet(null),sheetOpenerRef.current);
  useEffect(()=>{
