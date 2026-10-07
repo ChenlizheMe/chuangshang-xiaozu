@@ -55,6 +55,10 @@ No keystore, password, debug signing key, or signing secret is checked in, gener
 
 Signing-key creation, private backup/handoff, repository secrets, and any write-enabled automated release job require explicit owner authorization. Future website updates need no APK/signature change; changing the native wrapper or bundled assets needs a new signed version.
 
+## Publishing the reviewed preview without sending a private key to CI
+
+The fixed first-preview job reconstructs the already signed APK from the verified unsigned Actions artifact and public APK signing-block data in `releases/1.0.0`. This data is already part of the distributable APK and cannot sign changed application bytes. The job verifies the unsigned and signed SHA-256 values, the certificate fingerprint, official `apksigner` verification, alignment, metadata and bundled bytes before publishing a prerelease. Only the publication job has `contents: write` and `actions: read`; it has no signing key or repository secrets. It accepts no arbitrary URL, script, or pull-request input. A matching existing release is verified without replacement; conflicting or incomplete assets are rejected. Keep the private release identity under the owner's control for future native updates.
+
 ## Validation checklist and honest limits
 
 Automated CI verifies compilation, lint, URL/hash boundaries, exact packaged assets, permissions, non-debuggable status, and unsigned archive alignment. These do not prove behavior on a real Android device. Before describing a release as device-tested, actually check:
