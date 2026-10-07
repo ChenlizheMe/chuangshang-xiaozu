@@ -1,0 +1,72 @@
+name: Build Android web wrapper
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'android/**'
+      - 'public/anatomy/**'
+      - 'public/draco/**'
+      - '.github/workflows/android-apk.yml'
+  pull_request:
+    paths:
+      - 'android/**'
+      - 'public/anatomy/**'
+      - 'public/draco/**'
+      - '.github/workflows/android-apk.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Verify preinstalled Android SDK (no license acceptance)
+        run: |
+          test -f "$ANDROID_HOME/platforms/android-35/android.jar"
+          test -x "$ANDROID_HOME/build-tools/35.0.0/aapt2"
+          test -x "$ANDROID_HOME/build-tools/35.0.0/apksigner"
+      - name: Verify bundled asset boundaries
+        run: node --test android/scripts/*.test.mjs
+      - name: Compile, lint and test unsigned release
+        working-directory: android
+        run: gradle --no-daemon --stacktrace lintRelease testReleaseUnitTest assembleRelease
+      - name: Inspect unsigned APK
+        run: |
+          mkdir -p android/release
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk android/release/trauma-team-1.0.0-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/aapt2" dump badging android/release/trauma-team-1.0.0-unsigned.apk > android/release/apk-badging.txt
+          "$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -P 16 4 android/release/trauma-team-1.0.0-unsigned.apk
+          node android/scripts/inspect-apk.mjs android/release/trauma-team-1.0.0-unsigned.apk android/release/apk-badging.txt
+          cp android/app/build/generated/bundled-assets/packaged-assets.json android/release/
+          printf '%s\n' '${{ github.sha }}' > android/release/source-commit.txt
+          cd android/release && sha256sum trauma-team-1.0.0-unsigned.apk > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: trauma-team-android-unsigned-${{ github.sha }}
+          path: android/release/
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-check-reports-${{ github.sha }}
+          path: |
+            android/app/build/reports/lint-results-release.*
+            android/app/build/reports/tests/testReleaseUnitTest/
+          if-no-files-found: ignore
+          retention-days: 14
