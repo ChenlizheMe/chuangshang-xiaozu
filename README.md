@@ -165,4 +165,6 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 
 `tests/model-suspense.test.mjs`使用真实React/R3F调度和事件系统、合成网格及模拟GL；`tests/anatomy-picking.test.mjs`覆盖隐藏、移除及转移场景的旧回调；`tests/draco-loader.test.mjs`覆盖共享与初始化失败恢复。解码资源计数另用Node真实worker及仓库WASM/GLB复核，不能据此宣称已测浏览器堆内存或手机功耗。
 
-指针候选现在通过原生事件跟踪移动、取消、移出释放和窗口失焦；R3F仅在按下/抬起时做结构命中，闲置悬停不再遍历网格。双指手势（即使仅移动2像素）、右键菜单及双击附带通知不会额外选中部位；取消后复用同一pointerId的首个新点击可用。触摸取消不启动惯性，捏合结束后剩余单指可从当前位置继续旋转；RESET/切层清理未结束的手势，保留滑块自身拖动。`tests/pointer-selection.test.mjs`及实际R3F事件序列覆盖这些状态；物理手机多指手势仍需实机复验。事件终止语义参考[W3C Touch Events](https://www.w3.org/TR/touch-events/#the-touchcancel-event)。
+指针候选现在通过原生事件跟踪移动、取消、移出释放和窗口失焦；模型不再注册R3F pointermove，闲置悬停不再遍历网格；按下/抬起及点击等其他事件仍按需要做命中。双指手势（即使仅移动2像素）、右键菜单及双击附带通知不会额外选中部位；取消后复用同一pointerId的首个新点击可用。触摸取消不启动惯性，捏合结束后剩余单指可从当前位置继续旋转；RESET/切层清理未结束的手势，保留滑块自身拖动。`tests/pointer-selection.test.mjs`及实际R3F事件序列覆盖这些状态；物理手机多指手势仍需实机复验。事件终止语义参考[W3C Touch Events](https://www.w3.org/TR/touch-events/#the-touchcancel-event)。
+
+视觉调整沿用橄榄、炭黑和暖橙：面板头部展示真实“已选结构”，完整长名自然换行；当前面板键在hover/focus下保持压下状态，选项键使用较浅静态键面，报告仍保持平面。短横屏让现有面板使用可用高度，不增加控件或持续特效；报告的匹配线索、一般参考表现和相关因素分开标注，优先就医标题保持清楚。层级参考[Braun色彩与功能设计](https://www.braun-audio.com/en-IT/stories/design/braun-colour-choices/)及[Nagra IV-S实体控制面](https://www.nagraaudio.com/product/nagra-iv-s/)，具体CSS属于本项目的设计选择。底部状态位反映是否选中结构，不再显示没有实际录制行为的REC。
