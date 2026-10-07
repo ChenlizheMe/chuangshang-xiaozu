@@ -1,18 +1,23 @@
-// Panels remain non-modal so the model and the existing action keys are usable.
+import {focusConsoleControl} from './consoleViewport.js';
+// Panels remain non-modal. Very short viewports show one panel at a time.
 export function openPanel(onOpen,openerRef,trigger){
  if(trigger?.tagName==='BUTTON'&&!trigger.closest?.('.sticker-sheet'))openerRef.current=trigger;
  onOpen();
 }
 export function dismissPanel(onClose,opener,host=opener?.ownerDocument?.defaultView||globalThis.window){
+ const document=opener?.ownerDocument||host?.document;
+ const focusedBefore=document?.activeElement;
  onClose();
  // React must first remove the covering panel so its trigger becomes visible.
  // A new panel opened before this frame keeps control of focus.
  const restore=()=>{
   if(!opener?.isConnected||opener.closest?.('.viewer')?.querySelector('.sticker-sheet'))return;
+  const focusedNow=document?.activeElement;
+  if(focusedNow&&focusedNow!==focusedBefore&&focusedNow!==opener&&focusedNow.isConnected&&!['BODY','HTML'].includes(focusedNow.tagName))return;
   if(opener.getClientRects&&!opener.getClientRects().length)return;
   const style=host?.getComputedStyle?.(opener);
   if(style?.visibility==='hidden'||style?.display==='none')return;
-  opener.focus?.({preventScroll:true});
+  focusConsoleControl(opener,host);
  };
  if(host?.requestAnimationFrame)host.requestAnimationFrame(restore);else setTimeout(restore,0);
 }

@@ -31,3 +31,11 @@ test('opening records the trigger before a covering layout can hide and blur it'
  openPanel(()=>assert.equal(ref.current,trigger),ref,trigger);
  const internal={tagName:'BUTTON',closest:()=>({})};openPanel(()=>{},ref,internal);assert.equal(ref.current,trigger,'switching within a panel retains the original external trigger');
 });
+test('deferred close does not take focus back after an explicit new focus, but restores after body fallback',()=>{
+ const e=environment(),close={tagName:'BUTTON',isConnected:true},body={tagName:'BODY',isConnected:true},other={tagName:'BUTTON',isConnected:true};
+ const document={activeElement:close,defaultView:e.host};e.opener.ownerDocument=document;
+ dismissPanel(()=>{document.activeElement=body},e.opener,e.host);document.activeElement=other;e.frames.shift()();
+ assert.deepEqual(e.calls,[],'a newly focused external control wins');
+ document.activeElement=close;dismissPanel(()=>{document.activeElement=body},e.opener,e.host);e.frames.shift()();
+ assert.deepEqual(e.calls,['opener-focus'],'removing the close button still restores its trigger');
+});
