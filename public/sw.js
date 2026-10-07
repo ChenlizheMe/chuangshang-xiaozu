@@ -65,7 +65,9 @@ self.addEventListener('fetch', event => {
       try {
         const response = await fetch(request);
         if (validModelResponse(response)) {
-          if (cache) await cache.put(request, response.clone()).catch(() => {});
+          // Deliver the downloaded resource now; keep the worker alive for the
+          // optional disk write without putting storage on the response path.
+          if (cache) event.waitUntil(cache.put(request, response.clone()).catch(() => {}));
           return response;
         }
         return response.ok ? new Response('Invalid anatomy resource', { status: 502 }) : response;
@@ -83,7 +85,7 @@ self.addEventListener('fetch', event => {
         // A transient 404/5xx must never replace the last usable offline page.
         if (response.ok && /text\/html/i.test(response.headers.get('content-type') || '')) {
           const copy = response.clone();
-          await caches.open(CACHE).then(cache => cache.put('./index.html', copy)).catch(() => {});
+          event.waitUntil(caches.open(CACHE).then(cache => cache.put('./index.html', copy)).catch(() => {}));
         }
         return response;
       } catch {
@@ -105,7 +107,7 @@ self.addEventListener('fetch', event => {
       if (runtime && response.ok && !validModelResponse(response)) return new Response('Invalid script or stylesheet resource', { status: 502 });
       if (response.ok) {
         const copy = response.clone();
-        await caches.open(CACHE).then(cache => cache.put(request, copy)).catch(() => {});
+        event.waitUntil(caches.open(CACHE).then(cache => cache.put(request, copy)).catch(() => {}));
       }
       return response;
     } catch {

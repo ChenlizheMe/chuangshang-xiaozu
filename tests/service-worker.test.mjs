@@ -12,9 +12,9 @@ const glb=()=>new Response(binary,{headers:{'content-type':'application/octet-st
 // Emulate the Cache API's response cloning and URL keys, with an independently
 // controlled network. Scenarios exercise an actual worker upgrade and outage.
 function browserCache(){
- const stores=new Map(),listeners={},calls=[];
+ const stores=new Map(),listeners={},calls=[],background=[];
  const key=request=>new URL(typeof request==='string'?request:request.url,origin+'/').href;
- const state={online:true,invalid:false,unavailable:false,quotaExceeded:false,status:200,responses:new Map()};
+ const state={online:true,invalid:false,unavailable:false,quotaExceeded:false,status:200,responses:new Map(),writeGate:null};
  const fetch=async request=>{
   const url=key(request);calls.push(url);
   if(!state.online)throw new TypeError('Network unavailable');
@@ -26,7 +26,7 @@ function browserCache(){
   async open(name){
    if(state.unavailable)throw new Error('Storage unavailable');
    if(!stores.has(name))stores.set(name,new Map());const store=stores.get(name);
-   return {match:async request=>store.get(key(request))?.clone(),put:async(request,response)=>{if(state.quotaExceeded)throw new Error('Storage full');store.set(key(request),response.clone());},keys:async()=>[...store.keys()].map(url=>new Request(url)),addAll:async paths=>{for(const path of paths)store.set(key(path),await fetch(path));}};
+   return {match:async request=>store.get(key(request))?.clone(),put:async(request,response)=>{if(state.writeGate)await state.writeGate;if(state.quotaExceeded)throw new Error('Storage full');store.set(key(request),response.clone());},keys:async()=>[...store.keys()].map(url=>new Request(url)),addAll:async paths=>{for(const path of paths)store.set(key(path),await fetch(path));}};
   },
   keys:async()=>[...stores.keys()],delete:async name=>stores.delete(name),
   async match(request){if(state.unavailable)throw new Error('Storage unavailable');for(const store of stores.values()){const response=store.get(key(request));if(response)return response.clone();}}
@@ -34,8 +34,9 @@ function browserCache(){
  const self={location:{origin},clients:{claim:async()=>{}},skipWaiting:async()=>{},addEventListener:(type,handler)=>{listeners[type]=handler;}};
  vm.runInNewContext(source,{self,caches,fetch,URL,Response});
  const lifecycle=async type=>{let pending;listeners[type]({waitUntil:promise=>{pending=promise;}});await pending;};
- const request=async(path,mode='cors')=>{let pending;listeners.fetch({request:{url:key(path),mode,method:'GET'},respondWith:promise=>{pending=promise;}});return pending;};
- return {caches,state,calls,lifecycle,request};
+ const request=async(path,mode='cors')=>{let pending;listeners.fetch({request:{url:key(path),mode,method:'GET'},respondWith:promise=>{pending=promise;},waitUntil:promise=>background.push(promise)});return pending;};
+ const flushWrites=async()=>{while(background.length)await Promise.all(background.splice(0));};
+ return {caches,state,calls,lifecycle,request,flushWrites};
 }
 
 test('a UI release preserves earlier model and decoder downloads',async()=>{
@@ -57,7 +58,7 @@ test('an existing independent model cache survives subsequent UI upgrades',async
 });
 
 test('a downloaded model is reused on reload and offline',async()=>{
- const browser=browserCache();await browser.request(model);await browser.request(model);browser.state.online=false;
+ const browser=browserCache();await browser.request(model);await browser.flushWrites();await browser.request(model);browser.state.online=false;
  const response=await browser.request(model);assert.equal(response.status,200);assert.equal(browser.calls.length,1);
 });
 
@@ -93,7 +94,7 @@ test('a full storage quota does not discard a successful model download',async()
 test('failed navigation responses do not replace the last usable offline page',async()=>{
  const browser=browserCache();await browser.lifecycle('install');
  browser.state.status=503;assert.equal((await browser.request('/', 'navigate')).status,503);
- await new Promise(resolve=>setImmediate(resolve));browser.state.online=false;
+ await browser.flushWrites();browser.state.online=false;
  const offline=await browser.request('/', 'navigate');assert.equal(offline.status,200);
 });
 
@@ -143,5 +144,33 @@ test('an HTML fallback never poisons a JavaScript or stylesheet cache',async()=>
   browser.state.responses.set(path,new Response(path.endsWith('.css')?'body{}':'export {}',{headers:{'content-type':path.endsWith('.css')?'text/css':'application/javascript'}}));
   assert.equal((await browser.request(path)).status,200);
  }
- browser.state.online=false;assert.equal((await browser.request('/assets/app.js')).status,200);
+ await browser.flushWrites();browser.state.online=false;assert.equal((await browser.request('/assets/app.js')).status,200);
+});
+
+for(const [path,mode,body,type] of [
+ [model,'cors','model body','application/octet-stream'],
+ ['/draco/draco_wasm_wrapper.js','cors','decoder body','application/javascript'],
+ ['/assets/current.js','cors','export {}','application/javascript'],
+ ['/assets/current.css','cors','body{}','text/css'],
+ ['/','navigate','<html>Current navigation</html>','text/html']
+])test(`successful response is readable while its cache write is still pending: ${path}`,async()=>{
+ const browser=browserCache();let release;
+ browser.state.responses.set(new URL(path,origin).pathname,new Response(body,{headers:{'content-type':type}}));
+ browser.state.writeGate=new Promise(resolve=>{release=resolve;});
+ let response;const delivery=browser.request(path,mode).then(value=>{response=value;return value;});
+ try{
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.ok(response,'network delivery must not depend on the blocked disk write');
+  assert.equal(await response.text(),body,'consume before the cache write to exercise response cloning');
+ }finally{release();}
+ await delivery;await browser.flushWrites();browser.state.writeGate=null;browser.state.online=false;
+ const offline=await browser.request(path,mode);assert.equal(offline.status,200);assert.equal(await offline.text(),body);
+});
+
+test('a background write failure cannot reject an already delivered response',async()=>{
+ const browser=browserCache();browser.state.quotaExceeded=true;
+ for(const [path,mode] of [[model,'cors'],['/assets/new.js','cors'],['/','navigate']]){
+  const response=await browser.request(path,mode);assert.equal(response.status,200);await response.text();await browser.flushWrites();
+ }
+ browser.state.online=false;assert.equal((await browser.request('/assets/new.js')).status,503);
 });

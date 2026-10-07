@@ -104,6 +104,8 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 
 离线缓存只保留成功的 HTML 导航响应。上游 404/5xx 不会覆盖可用首页；缺失的脚本、样式与二进制资源返回真实资源错误，不会用 HTML 冒充。浏览器限制缓存或存储已满时，成功的在线响应仍正常提供。
 
+已下载成功的响应先交给页面，缓存写入由 `FetchEvent.waitUntil` 延长工作线程生命期完成；不再让磁盘写入阻塞 GLB、Draco、JS/CSS 或导航响应。响应在交付前克隆，页面消费正文后仍可完成独立缓存。五类资源的手动阻塞写入测试均验证先交付、写完后离线可用，另覆盖写入失败；这证明等待依赖被移除，不代表已测得真机加载时间。依据：[Service Worker 规范](https://w3c.github.io/ServiceWorker/#fetch-event-respondwith)。
+
 
 危险信号回归同时验证“现有按钮可见”和“所选组合能触发优先处理”，覆盖腹壁突发剧痛、牙痛相关呼吸/吞咽困难、不同胸痛描述与伴随信号、盆腔与妊娠/晕厥，以及侧腰痛伴发热和血尿。未增加症状或病种选项。依据：[NHS 胸痛](https://www.nhs.uk/symptoms/chest-pain/)、[NHS 腹痛](https://www.nhs.uk/symptoms/stomach-ache/)、[NHS 牙脓肿](https://www.nhs.uk/conditions/dental-abscess/)、[NHS 盆腔痛](https://www.nhs.uk/symptoms/pelvic-pain/)、[NHS 肾感染](https://www.nhs.uk/conditions/kidney-infection/)。这些是保守就医提示，不确定病因，也不等于临床验证。
 
