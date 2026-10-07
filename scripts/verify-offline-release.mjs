@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const root=new URL('../dist/',import.meta.url);
+const html=fs.readFileSync(new URL('index.html',root),'utf8');
+const worker=fs.readFileSync(new URL('sw.js',root),'utf8');
+const page=JSON.parse(html.match(/<script\b[^>]*\sid="offline-release"[^>]*>([\s\S]*?)<\/script>/)?.[1]||'null');
+const release=JSON.parse(worker.match(/const RELEASE = ([^;]+);/)?.[1]||'null');
+assert.ok(page&&release,'the built page and worker must carry release manifests');
+assert.deepEqual(page,release,'the built page and worker must describe the same release');
+const runtime=fs.readdirSync(new URL('assets/',root)).filter(file=>/\.(?:js|mjs|css)$/.test(file)).sort().map(file=>'./assets/'+file);
+assert.deepEqual(page.assets,runtime,'all built runtime chunks, including lazy ones, must be covered');
+assert.match(page.id,/^[a-f0-9]{16}$/);
+console.log(`Offline release ${page.id}: all ${runtime.length} JS/CSS resources accounted for.`);

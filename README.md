@@ -97,7 +97,7 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 
 基础牙齿负荷分支参考：[NIDCR 磨牙与咬紧牙](https://www.nidcr.nih.gov/health-info/bruxism/)、[NHS 牙痛](https://www.nhs.uk/symptoms/toothache/)。紧绷只是一个可用观察线索，磨牙与牙体病变仍需要口腔检查区分。
 
-模型与 Draco 解码器使用独立的 `models-v5` 缓存，页面使用 `shell-v10` 缓存。更新界面时保留已下载的模型，并迁移旧页面缓存中的当前模型，减少重复下载；没有缓存的模型断网时返回资源错误，不用 HTML 页面冒充 GLB。`npm run test:cache` 覆盖升级、缓存命中、断网和错误响应；生产浏览器验证已缓存的手机版骨骼可断网重载。模型更新时需同步修改运行时 URL 的版本和 `public/sw.js` 中的 `MODEL_VERSION`；解码器更新时也应调整缓存版本。这改善回访和页面更新时的加载，首次下载仍由实际网络线路决定。
+模型与 Draco 解码器使用独立的 `models-v5` 缓存，页面使用按构建内容标记的 `shell-v11-*` 缓存。更新界面时保留已下载的模型，并迁移旧页面缓存中的当前模型，减少重复下载；没有缓存的模型断网时返回资源错误，不用 HTML 页面冒充 GLB。`npm run test:cache` 覆盖升级、缓存命中、断网和错误响应；生产浏览器验证已缓存的手机版骨骼可断网重载。模型更新时需同步修改运行时 URL 的版本和 `public/sw.js` 中的 `MODEL_VERSION`；解码器更新时也应调整缓存版本。这改善回访和页面更新时的加载，首次下载仍由实际网络线路决定。
 
 
 ## 回归验证
@@ -107,6 +107,8 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 离线缓存只保留成功的 HTML 导航响应。上游 404/5xx 不会覆盖可用首页；缺失的脚本、样式与二进制资源返回真实资源错误，不会用 HTML 冒充。浏览器限制缓存或存储已满时，成功的在线响应仍正常提供。
 
 已下载成功的响应先交给页面，缓存写入由 `FetchEvent.waitUntil` 延长工作线程生命期完成；不再让磁盘写入阻塞 GLB、Draco、JS/CSS 或导航响应。响应在交付前克隆，页面消费正文后仍可完成独立缓存。五类资源的手动阻塞写入测试均验证先交付、写完后离线可用，另覆盖写入失败；这证明等待依赖被移除，不代表已测得真机加载时间。依据：[Service Worker 规范](https://w3c.github.io/ServiceWorker/#fetch-event-respondwith)。
+
+构建把同一版本清单同时写入HTML与Worker，包含全部JS/CSS及延迟加载的3D代码；构建验证器会阻止遗漏资源的发布。安装先准备完整代码资源，再激活；在线导航立即交付，但只有清单资源全部有效并写入后才替换离线首页。缺块、配额不足、错误MIME、版本错配或稍后完成的旧请求不会把完整离线入口换坏；模型迁移失败时保留旧下载并继续查找。首次离线准备会缓存完整应用代码，模型和Draco仍按需下载，未下载的模型不能因此离线使用。Node升级/中断回归覆盖根域名与项目子路径，并使用实际构建资源验证完整性；本轮尚未执行真实浏览器离线整页重载。浏览器强制终止、断电及旧版本尚未成功升级时的行为仍不能由模拟保证。
 
 
 危险信号回归同时验证“现有按钮可见”和“所选组合能触发优先处理”，覆盖腹壁突发剧痛、牙痛相关呼吸/吞咽困难、不同胸痛描述与伴随信号、盆腔与妊娠/晕厥，以及侧腰痛伴发热和血尿。未增加症状或病种选项。依据：[NHS 胸痛](https://www.nhs.uk/symptoms/chest-pain/)、[NHS 腹痛](https://www.nhs.uk/symptoms/stomach-ache/)、[NHS 牙脓肿](https://www.nhs.uk/conditions/dental-abscess/)、[NHS 盆腔痛](https://www.nhs.uk/symptoms/pelvic-pain/)、[NHS 肾感染](https://www.nhs.uk/conditions/kidney-infection/)。这些是保守就医提示，不确定病因，也不等于临床验证。
@@ -129,7 +131,7 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 仪器化表现参考 [Sony TPS-L2](https://www.sony.com/en/SonyInfo/design/bside/01_throwback_walkman/) 与 [V&A 的 Braun / Dieter Rams 设计资料](https://www.vam.ac.uk/articles/dieter-rams-a-brave-new-world-of-product-design)：保留现有主视窗、有限成组按键和橄榄/炭黑/暖橙，资料卡减少重复投影，没有添加持续耗电特效。
 
 
-缓存升级回归额外覆盖“新页面资源仍被旧Worker下载”的交接期。升级后保留最近一代含运行时资源的页面缓存供旧标签页/断网资源使用，但离线导航只取当前首页；更旧页面缓存继续回收，模型仍独立保留。脚本或样式收到上游200 HTML也会被拒绝，避免把错误首页缓存为JS/CSS。
+缓存升级回归额外覆盖“新页面资源仍被旧Worker下载”的交接期。升级后保留最近一代完整的页面缓存供旧标签页/断网资源使用（旧格式缓存仅作兼容保留），但离线导航只取当前首页；更旧页面缓存继续回收，模型仍独立保留。脚本或样式收到上游200 HTML也会被拒绝，避免把错误首页缓存为JS/CSS。
 
 
 首轮工程校验共280个自动测试，其中一项遍历51种实际图层/区域/组织/器官组合的3,352个单一观察输入，验证单个观察不会产生具体病种卡；另覆盖症状重复、顺序改变、未知输入隔离和既有74条可达路径。全部仍是合成软件回归。骨骼335、肌肉636、内脏30，共1,001个可选结构；16个解剖/解码文件与本轮基线552bd9d逐字节一致。

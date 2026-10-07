@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite'
+import { offlineReleasePlugin } from './scripts/offline-release.mjs'
 
 // Relative assets keep the build usable on GitHub Pages project URLs and local previews.
 export default defineConfig({
   base: './',
+  plugins: [offlineReleasePlugin()],
   build: {
     rollupOptions: {
       output: {
