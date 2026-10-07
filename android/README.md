@@ -24,7 +24,7 @@ Both `WebViewClient` and `ServiceWorkerClient` use the same read-only intercepto
 3. Exactly one `sha256` equal to the bundled resource's actual SHA-256. An optional single simple `v` is allowed; unknown or duplicate parameters and fragments are not.
 4. No Range header; those requests retain normal network behavior.
 
-A lazy runtime digest also checks the packaged bytes before first use. A new website hash/path, missing hash, unmatched bytes, or malformed request falls through to ordinary HTTPS. The APK therefore cannot substitute an old model for a new content-addressed request. The website service worker keys resources by the complete URL; a cached response can bypass native interception, but a new hash has a different cache key. Missing/native-manifest failures degrade to normal network loading. No online manifest is trusted to rewrite filesystem paths or supply executable native code.
+A lazy runtime digest also checks the packaged bytes before first use. A new website hash/path, missing hash, unmatched bytes, or malformed request falls through to ordinary HTTPS. The APK therefore cannot substitute an old model for a new content-addressed request. The website service worker keys resources by the complete URL; a cached response can bypass native interception, but a new hash has a different cache key. Missing inventory files and resource I/O/hash failures fall back to normal network loading; inconsistent build metadata is rejected by the packaging gate. No online manifest is trusted to rewrite filesystem paths or supply executable native code.
 
 Website HTML, application code, asset selection, and rules remain online. Local model resources do not make first launch fully offline. The app supports manual retry for network/TLS/renderer failures; TLS errors are cancelled without bypass. Hardware acceleration, safe-area/keyboard insets, app pause/resume, and the site's `#/about` Back history are handled by the shell. External user-tapped HTTPS links (including `target=_blank`) open through the system; unknown/custom schemes and non-user external redirects do not get intent privileges. There are no incoming deep-link intents.
 
@@ -41,6 +41,8 @@ gradle --no-daemon lintRelease testReleaseUnitTest assembleRelease
 `ANDROID_HOME` must name an already installed, licensed SDK. `android.builder.sdkDownload=false` prevents the build from silently installing missing SDK packages. This repository does not run `sdkmanager --licenses` or create a signing credential.
 
 `.github/workflows/android-apk.yml` uses the preinstalled SDK on the official `ubuntu-24.04` image, runs source/packaging tests, Android lint and JVM policy tests, verifies application metadata/permissions, checks ZIP alignment, and uploads an **unsigned** release APK with SHA-256 and the source commit as an Actions build artifact. Its GitHub token has `contents: read` only. An unsigned APK is a build output, **not an installable public release**.
+
+The APK inspection checks both inventories against the six actual packaged files. The Java `packaged-assets.properties` must exactly match the generator's sorted ASCII format derived from the verified JSON inventory, including hashes, sizes, MIME types and logical paths. Escapes, continuations, duplicate or missing entries are rejected before publication. An intentional format/version change must update the generator, runtime contract and inspection together; the gate does not implement a separate permissive Java Properties parser.
 
 ## Signing and release gate
 
