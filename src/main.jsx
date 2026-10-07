@@ -72,7 +72,11 @@ function App({lang,setLang,active=true,aboutLinkRef}){
  const displayWhy=useCallback(w=>{const tag=[...knowledge.feelings,...knowledge.signs,...knowledge.timing,...knowledge.triggers].find(item=>item.id===w);return tag?tagLabel(tag,lang):w},[lang]);
  const partLabel=useCallback(ref=>bilingualPartText(ref.part,ref.layer,lang),[lang]);
  const run=event=>{openSheet('diagnosis',event);if(!reports.length){setResult({error:true});return}setResult(assessSymptoms(knowledge,{reports:assessmentReports(selection)}));};
- const selectPart=useCallback(({part,object})=>{if(!activeRef.current)return;dispatchSelection({type:'toggle',part,layer,object});setResult(null)},[layer,active]);
+ // R3F can retain a previous visible model until its next Suspense commit.
+ // Only the current App callback may change selection, including A→B→A switches.
+ const committedPickRef=useRef(null);
+ const selectPart=useCallback(function pickPart({part,object}){if(!activeRef.current||committedPickRef.current!==pickPart)return;dispatchSelection({type:'toggle',part,layer,object});setResult(null)},[layer,active]);
+ useLayoutEffect(()=>{committedPickRef.current=selectPart;return()=>{if(committedPickRef.current===selectPart)committedPickRef.current=null}},[selectPart]);
  const approximatePickRef=useRef(null); const dragRef=useRef(null); const [viewerInteraction,setViewerInteraction]=useState('idle');
  const cancelInertia=()=>{if(inertiaFrameRef.current!==null){cancelAnimationFrame(inertiaFrameRef.current);inertiaFrameRef.current=null}orbitVelocityRef.current={azimuth:0,elevation:0};zoomVelocityRef.current=0};
  const cancelViewerGestures=()=>{cancelInertia();const captures=[dragRef.current,liftDragRef.current];dragRef.current=null;pinchRef.current=null;liftDragRef.current=null;setViewerInteraction('idle');for(const gesture of captures){const target=gesture?.captureTarget;if(target?.hasPointerCapture?.(gesture.id))target.releasePointerCapture(gesture.id)}};
