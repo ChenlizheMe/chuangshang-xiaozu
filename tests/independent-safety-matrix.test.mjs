@@ -1,3 +1,4 @@
+import {assertSelectableStructure} from './helpers/selectable-anatomy.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -7,11 +8,11 @@ import {selectionReducer,emptySelection} from '../src/selectionState.js';
 const k=JSON.parse(fs.readFileSync(new URL('../data/knowledge.json',import.meta.url))),kinds=['feelings','signs','timing','triggers'];
 const field=Object.fromEntries(kinds.flatMap(f=>k[f].map(t=>[t.id,f])));
 const report=(part,layer,tags,location='unknown')=>({part,layer,location,...Object.fromEntries(kinds.map(f=>[f,tags.filter(t=>field[t]===f)]))});
-const assess=r=>assessSymptoms(k,{reports:[r]});
+const assess=r=>{assertSelectableStructure(r.part,r.layer);return assessSymptoms(k,{reports:[r]});};
 const visible=(part,layer)=>new Set(kinds.flatMap(kind=>visibleSymptoms(k,{parts:[part],layer,kind}).map(t=>t.id)));
 const cases=[];
 const add=(id,priority,r,files,expected,check,source)=>cases.push({id,priority,input:r,files,expected,check,source});
-const a='Rectus abdominis muscle.r',t='Upper first molar tooth.r',s='Sternum',p='Levator ani.or',b='Lumbar vertebra L3';
+const a='Rectus abdominis muscle.r',t='Upper first molar tooth.r',s='Body of sternum',p='Levator ani.or',b='Vertebra L3';
 add('abdominal-severe-pain-reachable','P1',report(a,'muscle',['突发剧痛']),['src/symptomFilters.js:55-91','src/clinicalEngine.js:31'],'Existing sudden severe pain option visible; independently urgent',r=>visible(a,'muscle').has('突发剧痛')&&r.urgent.length>0,'https://www.nhs.uk/symptoms/stomach-ache/');
 for(const tag of ['呼吸困难','吞咽困难'])add('dental-'+tag+'-reachable','P1',report(t,'skeleton',['牙龈肿胀',tag]),['src/symptomFilters.js:24,55-68'],'Existing airway/swallowing option visible; urgent',r=>visible(t,'skeleton').has(tag)&&r.urgent.length>0,'https://www.nhs.uk/conditions/dental-abscess/');
 for(const tag of ['紧绷','撕裂','刀割感','针刺','疼痛','灼烧'])add('chest-'+tag+'-breathlessness','P1',report(s,'skeleton',[tag,'气短']),['src/clinicalEngine.js:29'],'Pain/tightness synonym must not remove independent emergency warning',r=>r.urgent.length>0,'https://www.nhs.uk/symptoms/chest-pain/');

@@ -1,3 +1,4 @@
+import {assertSelectableStructure} from './helpers/selectable-anatomy.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -129,9 +130,10 @@ test('chronic IBS gate cannot be bypassed and alarm features block it',()=>{
  const r=run(abs,['绞痛','排便后缓解','腹泻','反复数月','血便'],{layer:'muscle'});assert.ok(!ids(r).includes('ibs-pattern'));assert.ok(r.urgent.length);
 });
 test('local warmth is not systemic fever and rare vague tags remain unshown',()=>{
+ for(const [part,layer] of [['Superficial part of masseter.r','muscle'],['Palpebral part of orbicularis oculi.l','muscle'],['Kidney.l','organ'],['Left lung','organ']])assertSelectableStructure(part,layer);
  assert.ok(!ids(run('Kidney.l',['侧腰痛','局部发热'],{layer:'organ'})).includes('pyelonephritis-pattern'));
- const mouth=visibleSymptoms(knowledge,{parts:['Masseter muscle.r'],layer:'muscle',kind:'signs'}).map(t=>t.id);assert.ok(!mouth.includes('鼻塞')&&!mouth.includes('脓性鼻涕'));
- const eye=visibleSymptoms(knowledge,{parts:['Palpebral part of orbicularis oculil'],layer:'muscle'}).map(t=>t.id);assert.ok(eye.includes('眼干'));
+ const mouth=visibleSymptoms(knowledge,{parts:['Superficial part of masseter.r'],layer:'muscle',kind:'signs'}).map(t=>t.id);assert.ok(!mouth.includes('鼻塞')&&!mouth.includes('脓性鼻涕'));
+ const eye=visibleSymptoms(knowledge,{parts:['Palpebral part of orbicularis oculi.l'],layer:'muscle'}).map(t=>t.id);assert.ok(eye.includes('眼干'));
  const kidney=visibleSymptoms(knowledge,{parts:['Kidney.l'],layer:'organ',kind:'signs'}).map(t=>t.id);assert.ok(kidney.includes('血尿'));assert.ok(!kidney.includes('牙龋洞'));
  const lung=visibleSymptoms(knowledge,{parts:['Left lung'],layer:'organ',kind:'signs'}).map(t=>t.id);assert.ok(!lung.includes('黑便')&&!lung.includes('腹部僵硬')&&!lung.includes('可能怀孕'));
 });

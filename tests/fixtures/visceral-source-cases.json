@@ -5,7 +5,7 @@
     {
       "name": "rib-wall-injury positive",
       "report": {
-        "part": "Sternum",
+        "part": "Body of sternum",
         "layer": "skeleton",
         "location": "unknown",
         "feelings": [
@@ -23,7 +23,7 @@
     {
       "name": "rib-wall-injury insufficient evidence",
       "report": {
-        "part": "Sternum",
+        "part": "Body of sternum",
         "layer": "skeleton",
         "location": "unknown",
         "feelings": [
@@ -176,7 +176,7 @@
     {
       "name": "pleuritic-chest-pain positive",
       "report": {
-        "part": "Sternum",
+        "part": "Body of sternum",
         "layer": "skeleton",
         "location": "unknown",
         "feelings": [
@@ -194,7 +194,7 @@
     {
       "name": "pleuritic-chest-pain insufficient evidence",
       "report": {
-        "part": "Sternum",
+        "part": "Body of sternum",
         "layer": "skeleton",
         "location": "unknown",
         "feelings": [
@@ -697,7 +697,7 @@
     {
       "name": "costochondritis-pattern positive",
       "report": {
-        "part": "Sternum",
+        "part": "Body of sternum",
         "layer": "skeleton",
         "location": "unknown",
         "feelings": [
@@ -715,7 +715,7 @@
     {
       "name": "costochondritis-pattern insufficient evidence",
       "report": {
-        "part": "Sternum",
+        "part": "Body of sternum",
         "layer": "skeleton",
         "location": "unknown",
         "feelings": [],

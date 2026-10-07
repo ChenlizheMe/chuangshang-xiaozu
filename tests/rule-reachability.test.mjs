@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {assertSelectableStructure} from './helpers/selectable-anatomy.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {assessSymptoms} from '../src/clinicalEngine.js';
@@ -10,6 +11,7 @@ const fixture=JSON.parse(fs.readFileSync(new URL('./fixtures/ui-rule-reachabilit
 // These generated fixtures prove software reachability, not clinical truth.
 // Independently chosen positive/negative and safety cases live in other suites.
 for(const {id,report} of fixture.cases)test(`current selector-to-rule path: ${id}`,()=>{
+ assertSelectableStructure(report.part,report.layer);
  for(const kind of ['feelings','signs','timing','triggers']){
   const visible=new Set(visibleSymptoms(k,{parts:[report.part],layer:report.layer,kind}).map(t=>t.id));
   for(const tag of report[kind])assert.ok(visible.has(tag),`${kind}: ${tag}`);

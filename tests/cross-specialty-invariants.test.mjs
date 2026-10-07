@@ -1,10 +1,10 @@
-import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+import test from 'node:test';
+import {assertSelectableStructure} from './helpers/selectable-anatomy.mjs';import assert from 'node:assert/strict';import fs from 'node:fs';
 import {assessSymptoms} from '../src/clinicalEngine.js';import {visibleSymptoms} from '../src/symptomFilters.js';import {reportLocationOptions} from '../src/reportLocation.js';import {evidenceFamily} from '../src/symptomLanguage.js';import {PRIORITY_LEVELS} from '../src/priorityGuidance.js';
 const k=JSON.parse(fs.readFileSync(new URL('../data/knowledge.json',import.meta.url)));const f=JSON.parse(fs.readFileSync(new URL('./fixtures/cross-specialty-inputs.json',import.meta.url)));const fields=['feelings','signs','timing','triggers'];
 const fieldByTag=new Map(fields.flatMap(field=>k[field].map(t=>[t.id,field])));const tags=r=>fields.flatMap(field=>r[field]||[]);const assess=r=>assessSymptoms(k,{reports:[r]});const rank=a=>PRIORITY_LEVELS[a.triageLevel]?.rank||0;
-const mesh=new Map();for(const [layer,file]of[['skeleton','skeleton-mobile.glb'],['muscle','muscle-mobile.glb'],['organ','organs-mobile.glb']]){const b=fs.readFileSync(new URL(`../public/anatomy/${file}`,import.meta.url));mesh.set(layer,new Set(JSON.parse(b.subarray(20,20+b.readUInt32LE(12))).nodes.filter(n=>n.mesh!==undefined).map(n=>n.name)));}
 const visible=r=>new Set(fields.flatMap(kind=>visibleSymptoms(k,{parts:[r.part],layer:r.layer,kind}).map(t=>t.id)));
-const assertReachable=r=>{assert.ok(mesh.get(r.layer).has(r.part),r.part);const v=visible(r);for(const t of tags(r))assert.ok(v.has(t),`${r.part}: ${t}`);if(r.location&&r.location!=='unknown')assert.ok(reportLocationOptions(r).some(([id])=>id===r.location),`${r.part}: ${r.location}`);return v;};
+const assertReachable=r=>{assertSelectableStructure(r.part,r.layer);const v=visible(r);for(const t of tags(r))assert.ok(v.has(t),`${r.part}: ${t}`);if(r.location&&r.location!=='unknown')assert.ok(reportLocationOptions(r).some(([id])=>id===r.location),`${r.part}: ${r.location}`);return v;};
 const danger=['面部歪斜','说话含糊','突然单侧无力','肌力下降','会阴麻木','排尿困难','呼吸困难','静息气短','吞咽困难','突然听力下降','视物模糊','复视','畏光','突发剧痛','突发最严重头痛','晕厥','冷汗','呕血','黑便','血便','腹部僵硬','发热','发冷','流脓','单侧肿胀','局部发热','无法承重','关节卡住','持续加重','血尿','黄疸','外伤后','扭伤后','体重下降'];
 test('655 independently preserved audit seeds use actual structures and selectable existing inputs',()=>{assert.equal(f.seeds.length,655);for(const {report}of f.seeds)assertReachable(report);});
 test('adding a selectable danger observation never lowers existing assessment urgency',t=>{

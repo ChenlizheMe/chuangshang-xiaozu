@@ -1,3 +1,4 @@
+import {assertSelectableStructure} from './helpers/selectable-anatomy.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -6,6 +7,7 @@ import {visibleSymptoms} from '../src/symptomFilters.js';
 const k=JSON.parse(fs.readFileSync(new URL('../data/knowledge.json',import.meta.url)));
 const fields=['feelings','signs','timing','triggers'];
 const assess=(part,layer,tags)=>{
+ assertSelectableStructure(part,layer);
  const report={part,layer,...Object.fromEntries(fields.map(f=>[f,tags.filter(t=>k[f].some(o=>o.id===t))]))};
  const visible=new Set(fields.flatMap(kind=>visibleSymptoms(k,{parts:[part],layer,kind}).map(o=>o.id)));
  for(const tag of tags)assert.ok(visible.has(tag),`${part}: ${tag}`);
@@ -17,7 +19,7 @@ test('reported motor loss warrants examination without assuming acute onset or m
  assert.equal(assess('Scaphoid bone.r','skeleton',['拇食中指麻木','肌力下降','突然起病']).triageLevel,'emergency');
  assert.equal(assess('Scaphoid bone.r','skeleton',['疲劳乏力','突然起病']).triageLevel,null);
 });
-for(const [part,layer] of [['Lumbar vertebra L3','skeleton'],['Longissimus colli muscle.l','muscle']])test(`reported unintentional weight loss with regional pain warrants review: ${part}`,()=>{
+for(const [part,layer] of [['Vertebra L3','skeleton'],['Longissimus colli muscle.l','muscle']])test(`reported unintentional weight loss with regional pain warrants review: ${part}`,()=>{
  const r=assess(part,layer,['酸痛','久坐后','体重下降']);assert.equal(r.triageLevel,'prompt');
  assert.match(r.urgent[0].zh,/无意中体重下降/);assert.match(r.urgent[0].en,/unintentional weight loss have been reported/);
  assert.equal(assess(part,layer,['体重下降']).triageLevel,null);
@@ -25,7 +27,7 @@ for(const [part,layer] of [['Lumbar vertebra L3','skeleton'],['Longissimus colli
  assert.equal(assess(part,layer,['酸痛','体重下降','发热']).triageLevel,'same-day');
 });
 for(const [part,layer,id] of [
- ['Lumbar vertebra L3','skeleton','vertebral-mechanical-pain'],
+ ['Vertebra L3','skeleton','vertebral-mechanical-pain'],
  ['Longissimus colli muscle.l','muscle','neck-muscle-tension'],
  ['Dorsal parts of lateral intertransversarii lumborum muscles.l','muscle','thoracolumbar-myofascial']
 ])test(`trauma is not explained by posture alone: ${part}`,()=>{

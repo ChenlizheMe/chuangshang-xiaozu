@@ -1,3 +1,4 @@
+import {assertSelectableStructure} from './helpers/selectable-anatomy.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -6,6 +7,7 @@ import {visibleSymptoms} from '../src/symptomFilters.js';
 const k=JSON.parse(fs.readFileSync(new URL('../data/knowledge.json',import.meta.url)));
 const fields=['feelings','signs','timing','triggers'];
 const assess=(part,tags,layer='skeleton')=>{
+ assertSelectableStructure(part,layer);
  const report={part,layer,...Object.fromEntries(fields.map(field=>[field,tags.filter(tag=>k[field].some(t=>t.id===tag))]))};
  const available=new Set(fields.flatMap(kind=>visibleSymptoms(k,{parts:[part],layer,kind}).map(t=>t.id)));
  for(const tag of tags)assert.ok(available.has(tag),`${part}: ${tag}`);
