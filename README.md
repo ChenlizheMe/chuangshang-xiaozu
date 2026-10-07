@@ -79,6 +79,8 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 
 运行时为可选结构建立 BVH，点击只替换选中结构的材质。切换图层复用 WebGL 画布；相机、选中状态、模型或视口改变时重绘几何，静止时只刷新缓存画面的电视后处理（手机目标 12 帧/秒，桌面 24 帧/秒），切换动画期间目标 60 帧/秒。后台页面停止定时刷新；减少动态效果的系统设置关闭持续刷新。部位白色文字不接收点击，始终位于弹出面板下方。
 
+显示缓存还跟随独立的设备像素比变化（保留1.5上限），不会等CSS尺寸改变才重建。WebGL上下文丢失期间停止后处理计时，恢复后重画结构场景，避免继续采样失效的旧纹理。`tests/signal-lifecycle.test.mjs`以实际React/R3F与模拟GL验证DPR、丢失/恢复、后台、减少动态及卸载回收；不是实际GPU丢失或功耗测量。资源恢复依据：[MDN WebGL context restored](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/webglcontextrestored_event)。
+
 `organ-supplement-source.glb` 是从上游心血管/淋巴资源中提取的原始心腔和脾网格。需要重新提取时，检出上游提交 `6f464dfec563352ea4eebd1219f4866a14e7dbf8`，运行 `node scripts/optimize-anatomy.mjs /path/to/Anatria-3D/public/anatomy`。
 
 `npm run test:models` 校验名称完整性、心肺合并后的解剖位置与整体选择、手机减面、面数与体积，以及普通射线与 BVH 的命中一致性。工具依据：[glTF Transform](https://gltf-transform.dev/)、[three-mesh-bvh](https://github.com/gkjohnson/three-mesh-bvh)、[React Three Fiber 按需渲染](https://r3f.docs.pmnd.rs/advanced/scaling-performance)。旧手机性能仍需实机测试；桌面浏览器的移动模拟不等同于实际手机 GPU。

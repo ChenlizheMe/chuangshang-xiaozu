@@ -55,10 +55,11 @@ const fragmentShader = /* glsl */`
 `;
 
 export default function SignalDisplay({signal, readySignal, enabled=true, idleFps=24}) {
-  const {gl,size,scene,camera,invalidate} = useThree();
+  const {gl,size,viewport,scene,camera,invalidate} = useThree();
   const switchedAt = useRef(-10);
   const reducedMotion = useRef(false);
   const timer = useRef();
+  const contextLost = useRef(false);
   const cached = useRef({dirty:true,revision:-1,view:new THREE.Matrix4(),projection:new THREE.Matrix4()});
   const pipeline = useMemo(() => {
     const target = new THREE.WebGLRenderTarget(1,1,{depthBuffer:true});
@@ -86,15 +87,25 @@ export default function SignalDisplay({signal, readySignal, enabled=true, idleFp
   },[invalidate]);
   useEffect(() => {switchedAt.current=performance.now()/1000;cached.current.dirty=true;invalidate();},[signal,readySignal,invalidate]);
   useEffect(() => {
-    const ratio=Math.min(gl.getPixelRatio(),1.5);
+    const canvas=gl.domElement;
+    contextLost.current=Boolean(gl.getContext?.().isContextLost?.());
+    const lost=()=>{contextLost.current=true;cached.current.dirty=true;clearTimeout(timer.current);};
+    const restored=()=>{contextLost.current=false;cached.current.dirty=true;invalidate();};
+    canvas.addEventListener('webglcontextlost',lost);
+    canvas.addEventListener('webglcontextrestored',restored);
+    return()=>{canvas.removeEventListener('webglcontextlost',lost);canvas.removeEventListener('webglcontextrestored',restored);clearTimeout(timer.current);};
+  },[gl,invalidate]);
+  useEffect(() => {
+    const ratio=Math.min(viewport.dpr,1.5);
     pipeline.target.setSize(Math.max(1,Math.floor(size.width*ratio)),Math.max(1,Math.floor(size.height*ratio)));
     pipeline.material.uniforms.resolution.value.set(size.width*ratio,size.height*ratio);
     cached.current.dirty=true;invalidate();
-  },[gl,size,pipeline,invalidate]);
+  },[viewport.dpr,size,pipeline,invalidate]);
   useEffect(() => () => {
     pipeline.target.dispose(); pipeline.geometry.dispose(); pipeline.material.dispose();
   },[pipeline]);
   useFrame(() => {
+    if(contextLost.current){clearTimeout(timer.current);return;}
     const now=performance.now()/1000;
     const uniforms=pipeline.material.uniforms;
     uniforms.time.value=now;
