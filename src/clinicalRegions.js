@@ -5,7 +5,7 @@ import {ORGAN_ATLAS} from './organAtlas.js';
 // contains muscles and sense organs as well as nerves.
 // Match these complete identities before translated component words.
 // Rotatores are back muscles; Pubo-analis belongs to the pelvic diaphragm.
-const IDENTITY_REGIONS=new Map([['rotatores','spine'],['pubo analis muscle','pelvis']]);
+const IDENTITY_REGIONS=new Map([['rotatores','spine'],['pubo analis muscle','pelvis'],['plantaris muscle','lower-limb']]);
 const REGIONS=[
  // Resolve complete anatomical identities before generic component words
  // (e.g. abdominal pectoral fibres are not abdominal-wall muscles).

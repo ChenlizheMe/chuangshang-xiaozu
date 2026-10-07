@@ -48,3 +48,18 @@ test('real cerebral gyri retain head routing; corrected muscle identities do not
  const names=meshNames('nervous_male.glb');
  for(const raw of ['Angular gyrus.l','Angular gyrus.r','Cingulate gyrus (Posteroventral part*).l','Cingulate gyrus (Posteroventral part*).r']){assert.ok(names.has(raw));assert.equal(clinicalProfile(raw,'nerve').region,'head');}
 });
+
+for(const file of ['muscle-mobile.glb','muscle-optimized.glb'])test(`${file}: whole Plantaris identity remains distinct from plantar foot structures`,()=>{
+ const names=meshNames(file);
+ for(const suffix of ['l','r'])for(const [name,zh,region] of [['Plantaris muscle','跖肌','lower-limb'],['Soleus muscle','比目鱼肌','lower-limb'],['Calcaneal tendon','跟腱','ankle'],['Plantar aponeurosis','足底腱膜','foot']]){
+  const part=`${name}.${suffix}`,profile=clinicalProfile(part,'muscle');assert.ok(names.has(part));assert.ok(isVisibleAnatomyMesh(part,'muscle'));
+  assert.equal(profile.region,region);assert.equal(profile.label.zh,(suffix==='l'?'左侧':'右侧')+zh);assert.equal(profile.label.en,(suffix==='l'?'Left ':'Right ')+name);
+  assert.equal(profile.side,suffix==='l'?'left':'right');
+ }
+});
+test('Plantaris ordinary pain uses the existing broad lower-limb assessment, not an assumed sole location',()=>{
+ for(const part of ['Plantaris muscle.l','Plantaris muscle.r']){
+  const normal=assess(part,['疼痛']);assert.equal(normal.triageLevel,null);assert.equal(normal.items.length,1);assert.equal(normal.items[0].id,'basic-lower-limb-lower-limb');
+  assert.equal(assess(part,['新运动后1至3天','尿色深','肌力下降']).triageLevel,'emergency');
+ }
+});

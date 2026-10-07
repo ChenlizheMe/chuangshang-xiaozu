@@ -1524,6 +1524,41 @@
         "tests/priority-guidance.test.mjs",
         "tests/diagnosis-reuse.test.mjs"
       ]
+    },
+    {
+      "id": "plantaris-whole-identity-region",
+      "reviewedOn": "2026-10-07",
+      "type": "Exact anatomical region correction",
+      "sources": [
+        {
+          "title": "FIPAT Terminologia Anatomica second edition, Part 2: entries 2655–2669",
+          "url": "https://cdn.dal.ca/content/dam/dalhousie/pdf/library/FIPAT/TA2/FIPAT-TA2-Part-2.pdf",
+          "use": "PDF page 76 places Plantaris under the superficial posterior leg compartment, before the separate foot-muscle group."
+        },
+        {
+          "title": "Chinese Terms of Human Anatomy, second edition: 02.1782",
+          "url": "https://xtjp.fudan.edu.cn/Upload/Files/201804100314393640155.pdf",
+          "use": "PDF page 132 describes the small proximal belly and long descending tendon of 跖肌; the whole identity is not a plantar foot muscle."
+        }
+      ],
+      "implementation": [
+        "Map only normalized plantaris muscle to the existing lower-limb region before generic plantar/跖 word fragments. Retain both languages, raw nodes, left/right identities and all model bytes.",
+        "Keep Soleus lower-limb, Calcaneal tendon ankle and Plantar aponeurosis foot. Existing regional controls and rules apply without altering their medical criteria."
+      ],
+      "positiveExamples": [
+        "Plantaris muscle.l/.r in both deployed muscle assets route to lower-limb.",
+        "Ordinary reported pain produces the broad lower-limb basic reference without assigning a sole or toe location."
+      ],
+      "negativeExamples": [
+        "Plantar aponeurosis and other plantar structures are not globally rerouted.",
+        "A model selection alone does not establish where along the muscle/tendon discomfort originates."
+      ],
+      "limits": [
+        "This corrects the broad anatomical region, not geometric laterality, symptom source or a clinical diagnosis. No option, model or condition is added."
+      ],
+      "tests": [
+        "tests/anatomy-identity-routing.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [
