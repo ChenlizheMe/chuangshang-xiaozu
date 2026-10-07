@@ -33,14 +33,17 @@ async function loadApp(testViewer=false){
   main=replace(main,"createRoot(document.getElementById('root')).render(<Root/>);",'export {Root,knowledge};');
   main=replace(main,'function App({lang,setLang,active=true,aboutLinkRef}){',
     `function App({lang,setLang,active=true,aboutLinkRef}){globalThis.${probeKey}.appRenders++;`);
+  main=replace(main,'const displayWhy=useCallback(w=>{',`const displayWhy=useCallback(w=>{globalThis.${probeKey}.whyCalls++;`);
   main=replace(main,' return <div className="app"',
-    ` globalThis.${probeKey}.state={selection,sheet,lang,layer,zoom,lift,updateReport,modelNonce}; return <div className="app"`);
+    ` globalThis.${probeKey}.state={selection,sheet,lang,layer,zoom,lift,updateReport,modelNonce,result}; return <div className="app"`);
   const built=await build({stdin:{contents:main,sourcefile:path.join(repo,'src/main.jsx'),resolveDir:path.join(repo,'src'),loader:'jsx'},
     bundle:true,platform:'node',format:'cjs',packages:'external',write:false,logLevel:'silent',
     define:{'import.meta.env.PROD':'false'},plugins:[{name:'render-test-host',setup(build){
       build.onLoad({filter:/\.css$/},()=>({contents:'',loader:'js'}));
       build.onLoad({filter:/ReportEditor\.jsx$/},args=>({loader:'jsx',contents:replace(fs.readFileSync(args.path,'utf8'),
         '{knowledge,focused,kind,lang,onUpdate}){',`{knowledge,focused,kind,lang,onUpdate}){globalThis.${probeKey}.editorRenders++;`)}));
+      build.onLoad({filter:/DiagnosisCard\.jsx$/},args=>({loader:'jsx',contents:replace(fs.readFileSync(args.path,'utf8'),
+        '{condition,index,lang,copy,displayWhy,partLabel}){',`{condition,index,lang,copy,displayWhy,partLabel}){globalThis.${probeKey}.cardRenders++;`)}));
       build.onLoad({filter:/symptomFilters\.js$/},args=>({loader:'js',contents:replace(fs.readFileSync(args.path,'utf8'),
         "kind='feelings'}={}){",`kind='feelings'}={}){globalThis.${probeKey}.filterCalls++;`)}));
     }}]});
@@ -81,7 +84,7 @@ function createRenderer(){
 export async function mountEditorApp({loadViewerModule,initialHash=''}={}){
   const keys=['window','document','requestAnimationFrame','cancelAnimationFrame',probeKey];
   const saved=new Map(keys.map(key=>[key,Object.getOwnPropertyDescriptor(globalThis,key)]));
-  const probe={appRenders:0,editorRenders:0,filterCalls:0,state:null,loadViewerModule,reloads:0};
+  const probe={appRenders:0,editorRenders:0,filterCalls:0,cardRenders:0,whyCalls:0,state:null,loadViewerModule,reloads:0};
   const frames=new Map();let frameId=0;
   const restore=()=>{for(const [key,descriptor] of saved)if(descriptor)Object.defineProperty(globalThis,key,descriptor);else delete globalThis[key]};
   globalThis[probeKey]=probe;
@@ -105,7 +108,8 @@ export async function mountEditorApp({loadViewerModule,initialHash=''}={}){
     const click=node=>act(()=>node.props.onClick({currentTarget:node,target:node,preventDefault:noop,stopPropagation:noop}));
     return {
       get state(){return probe.state},get reloads(){return probe.reloads},get counts(){return {app:probe.appRenders,editor:probe.editorRenders,filters:probe.filterCalls}},
-      resetCounts(){probe.appRenders=probe.editorRenders=probe.filterCalls=0},
+      get cardCounts(){return {cards:probe.cardRenders,why:probe.whyCalls}},
+      resetCounts(){probe.appRenders=probe.editorRenders=probe.filterCalls=probe.cardRenders=probe.whyCalls=0},
       all,find,cls,button,click,act,knowledge,
       navigate(hash){act(()=>{window.location.hash=hash;for(const handler of events.get('hashchange')||[])handler();});},
       key(key){act(()=>{for(const handler of events.get('keydown')||[])handler({key,preventDefault:noop,stopPropagation:noop});});},
