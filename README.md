@@ -175,6 +175,10 @@ https://github.com/Nurkan1/Anatria-3D/tree/main/public/anatomy
 
 指针候选现在通过原生事件跟踪移动、取消、移出释放和窗口失焦；模型不再注册R3F pointermove，闲置悬停不再遍历网格；按下/抬起及点击等其他事件仍按需要做命中。双指手势（即使仅移动2像素）、右键菜单及双击附带通知不会额外选中部位；取消后复用同一pointerId的首个新点击可用。触摸取消不启动惯性，捏合结束后剩余单指可从当前位置继续旋转；RESET/切层清理未结束的手势，保留滑块自身拖动。`tests/pointer-selection.test.mjs`及实际R3F事件序列覆盖这些状态；物理手机多指手势仍需实机复验。事件终止语义参考[W3C Touch Events](https://www.w3.org/TR/touch-events/#the-touchcancel-event)。
 
+520毫秒点击门槛按同一窗口的原生按下/抬起时间戳成对计算，避免把排队等待算成长按或把挤在一起执行的长按回调误作短点；R3F包装读取原始nativeEvent。任一端缺失、非数值、零、倒退或明显来自不同时间基准时，整对回退处理时刻，不混用两种时钟。依据[DOM事件构造时间](https://dom.spec.whatwg.org/#constructing-events)及[W3C Event Timing对输入与处理时刻的区分](https://www.w3.org/TR/event-timing/#sec-performance-event-timing)。`tests/pointer-timing.test.mjs`覆盖受控排队、边界、异常与延迟清理；这改善事件分类，未减少渲染阻塞，也无法恢复浏览器时间精度降低时已经丢失的信息。
+
+原生抬起阶段同步记录时长和长按抑制，候选仍留给R3F精确命中消费；无精确命中时的延后清理不再是近邻点击检查长按的前提。这个独立问题曾在云原生鼠标的900毫秒背景近邻按住操作复现，精确命中长按原本就会拒绝。实际R3F回归覆盖“抬起→click先到→清理后到”的次序，兼顾下一次短点与精确候选不被提前清空。
+
 视觉调整沿用橄榄、炭黑和暖橙：面板头部展示真实“已选结构”，完整长名自然换行；当前面板键在hover/focus下保持压下状态，选项键使用较浅静态键面，报告仍保持平面。短横屏让现有面板使用可用高度，不增加控件或持续特效；报告的匹配线索、一般参考表现和相关因素分开标注，优先就医标题保持清楚。层级参考[Braun色彩与功能设计](https://www.braun-audio.com/en-IT/stories/design/braun-colour-choices/)及[Nagra IV-S实体控制面](https://www.nagraaudio.com/product/nagra-iv-s/)，具体CSS属于本项目的设计选择。底部状态位反映是否选中结构，不再显示没有实际录制行为的REC。
 
 症状编辑器采用浅比较复用和按当前报告ID稳定的更新回调，避免相机缩放/上下平移重复生成未改变的选项。真实React 18持久渲染树的云Node计数中，60次滚轮、键盘滑杆或指针滑杆更新各自使编辑器执行从60次降为0、感觉筛选从180次降为0；App仍正常更新60次。这是执行次数，不能换算为手机FPS或操作毫秒。`tests/editor-reuse.test.mjs`直接编译当前App，覆盖相机复用以及同ID症状/位置/时长/诱因更新、语言/面板/部位切换，防止复用导致旧内容或旧回调。

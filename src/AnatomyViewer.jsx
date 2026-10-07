@@ -65,7 +65,7 @@ function Model({layer,onPart,selectedParts,registerApproximatePick}){
     const down=event=>pointerSelection.down(event),move=event=>pointerSelection.move(event);
     // Browsers can drain microtasks between capture and target listeners.
     // Defer to the next task so R3F can consume this pointer-up first.
-    const up=event=>{const token=pointerSelection.token(event.pointerId);const timer=setTimeout(()=>{pendingReleases.delete(timer);pointerSelection.finishOutside(event,token);},0);pendingReleases.add(timer);};
+    const up=event=>{pointerSelection.release(event);const token=pointerSelection.token(event.pointerId);const timer=setTimeout(()=>{pendingReleases.delete(timer);pointerSelection.finishOutside(event,token);},0);pendingReleases.add(timer);};
     // Element blur follows a toolbar-to-canvas click. Only leaving the window
     // cancels the gesture; a button losing focus must not consume the first tap.
     const cancel=event=>pointerSelection.cancel(event),blur=event=>{if(event.target===host)pointerSelection.clear();};

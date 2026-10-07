@@ -20,7 +20,7 @@ test('hidden Suspense models cannot be picked and one visible branch raycasts on
  globalThis.__loadTestModel=url=>{if(/muscl/.test(url)){if(!ready)throw pending;return muscle;}return skeleton;};
  const noop=()=>{};const canvas={addEventListener:noop,removeEventListener:noop,style:{},getBoundingClientRect:()=>({width:390,height:844,left:0,top:0})};
  const gl={render:noop,setPixelRatio:noop,setSize:noop,domElement:canvas,xr:{addEventListener:noop,removeEventListener:noop},shadowMap:{},capabilities:{isWebGL2:true}};
- const root=fiber.createRoot(canvas);root.configure({gl,events:fiber.events,size:{width:390,height:844,top:0,left:0},frameloop:'never',camera:{position:[0,0,3.8],fov:38}});
+ const root=fiber.createRoot(canvas);root.configure({gl,events:fiber.events,onPointerMissed:event=>approximate.current?.(event),size:{width:390,height:844,top:0,left:0},frameloop:'never',camera:{position:[0,0,3.8],fov:38}});
  const approximate={current:null},selected=[],choices=[];
  const render=layer=>root.render(React.createElement(React.Suspense,{fallback:React.createElement('group',{name:'loading'})},React.createElement(Model,{layer,selectedParts:selected,onPart:p=>choices.push({layer,part:p.part}),registerApproximatePick:approximate})));
  const event={offsetX:195,offsetY:422,clientX:195,clientY:422,pointerId:1,button:0,target:canvas};
@@ -40,6 +40,15 @@ test('hidden Suspense models cannot be picked and one visible branch raycasts on
   native('pointerup',event);await Promise.resolve();state.events.handlers.onPointerUp(event);
   assert.equal(choices.splice(0).length,1,'the first anatomy tap after a focused control must survive its blur');
   native('pointerdown',event);state.events.handlers.onPointerDown(event);native('blur',{target:globalThis.window});state.events.handlers.onPointerUp(event);assert.deepEqual(choices,[],'actual window blur still cancels');
+  const near={...event,offsetX:250,clientX:250,detail:1};
+  native('pointerdown',near);state.events.handlers.onPointerDown(near);await sleep(550);
+  native('pointerup',near);await Promise.resolve();state.events.handlers.onPointerUp(near);
+  state.events.handlers.onClick({...near,type:'click'});
+  assert.deepEqual(choices,[],'a long near-miss is rejected even when click precedes deferred cleanup');
+  native('pointerdown',near);state.events.handlers.onPointerDown(near);
+  native('pointerup',near);await Promise.resolve();state.events.handlers.onPointerUp(near);
+  state.events.handlers.onClick({...near,type:'click'});
+  assert.equal(choices.splice(0).length,1,'the next short near-miss still selects once');
   const staleApproximate=approximate.current;state.events.handlers.onPointerDown(event);
   render('muscle');await until(()=>state.scene.children.some(o=>o.name==='loading'));state.scene.updateMatrixWorld(true);
   assert.equal(approximate.current,null);assert.equal(skeleton.mesh.visible,true,'mesh visibility alone is not a sufficient guard');
