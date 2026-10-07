@@ -21,7 +21,7 @@ for(const file of ['muscle-mobile.glb','muscle-optimized.glb'])test(`${file}: re
   ['Opponens digiti minimi muscle of hand','小指对掌肌','hand'],
   ['Opponens pollicis muscle','拇对掌肌','hand'],
   ['Rotatores','回旋肌','spine'],
-  ['Pubo-analis muscle',null,'pelvis'],
+  ['Pubo-analis muscle','肛提肌相关结构','pelvis'],
   ['Pectineus muscle','耻骨肌','hip']
  ]){
   const raw=`${name}.${suffix}`,side=suffix==='l'?'left':'right',prefix=suffix==='l'?'左侧':'右侧';

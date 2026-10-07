@@ -1483,7 +1483,7 @@
         "Pain alone does not acquire an urgent action merely because the anatomical region was corrected."
       ],
       "limits": [
-        "Pubo-analis Chinese subdivision terminology is still being checked across editions; this batch uses its unambiguous complete English identity for region routing without inventing a new Chinese term.",
+        "The formal Chinese subdivision name for Pubo-analis remains unverified; the later qualified-pubo-analis-display entry uses an explicit parent-level description, not a certified subdivision translation.",
         "The model selection cannot establish the actual symptomatic tissue, disease or geometric laterality. No model, global symptom option or condition ID is added."
       ],
       "tests": [
@@ -1558,6 +1558,41 @@
       ],
       "tests": [
         "tests/anatomy-identity-routing.test.mjs"
+      ]
+    },
+    {
+      "id": "qualified-pubo-analis-display",
+      "reviewedOn": "2026-10-07",
+      "type": "Qualified anatomical display terminology",
+      "sources": [
+        {
+          "title": "FIPAT Terminologia Anatomica second edition, Part 2: entries 2402–2409",
+          "url": "https://cdn.dal.ca/content/dam/dalhousie/pdf/library/FIPAT/TA2/FIPAT-TA2-Part-2.pdf",
+          "use": "PDF page 67 places Pubo-analis within the pelvic diaphragm / levator ani subdivision group."
+        },
+        {
+          "title": "Chinese Terms of Human Anatomy, second edition: 03.0905",
+          "url": "https://xtjp.fudan.edu.cn/Upload/Files/201804100314393640155.pdf",
+          "use": "PDF page 193 supports the parent name 肛提肌 for levator ani; it does not certify a direct Chinese translation of the Pubo-analis subdivision used by this atlas."
+        }
+      ],
+      "implementation": [
+        "Replace the misleading Chinese Pectineus-like subdivision wording with the short parent-level description 肛提肌相关结构.",
+        "In Chinese model and panel context, show the curated English subdivision Pubo-analis with a brief explicit provisional-name qualifier. Keep the main name short and retain the existing full English labels, sides and exact pelvis routing."
+      ],
+      "positiveExamples": [
+        "Pubo-analis muscle.l/.r keep their actual model identity and side, with a qualified Chinese context."
+      ],
+      "negativeExamples": [
+        "Pectineus, the general levator ani and every other structure keep their names and do not acquire the qualifier."
+      ],
+      "limits": [
+        "The Chinese phrase is a temporary broad description, not an approved formal subdivision term. TA98/TA2 subdivision synonyms differ; the app does not equate this mesh with another named subdivision or infer the symptom source."
+      ],
+      "tests": [
+        "tests/anatomy-identity-routing.test.mjs",
+        "tests/sheet-context.test.mjs",
+        "tests/provisional-anatomy-context.test.mjs"
       ]
     }
   ],

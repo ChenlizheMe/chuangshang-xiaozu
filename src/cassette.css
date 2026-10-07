@@ -125,3 +125,5 @@ button:active{transform:translateY(1px) scale(.98)}
 .about-footer a small{grid-column:1/-1;color:#b5bea1;font:11px/1.4 ui-monospace,monospace}
 .about-footer a:hover{background:#424e34;border-color:#d08553}
 @media(max-width:760px){.about-page{padding:12px 12px 22px}.about-shell{padding:22px 20px;grid-template-columns:minmax(0,1fr);grid-template-areas:'nav' 'heading' 'story' 'limits' 'footer';gap:0;box-shadow:5px 7px 0 #11160e}.about-navigation{padding-bottom:22px}.about-heading{padding-top:28px}.about-heading h1{font-size:clamp(34px,8vw,48px);margin:20px 0 24px}.about-story{padding-top:0;font-size:16px;line-height:1.9}.about-story .about-intro{font-size:18px}.about-limits{margin:0 0 24px}.about-footer{align-items:stretch;flex-direction:column;gap:14px;padding-top:22px}.about-footer a{min-width:0}.about-kicker{font-size:9px}}
+
+.anatomy-name-note{display:block;margin-top:4px;overflow-wrap:anywhere;font-size:11px;font-weight:400;line-height:1.4;letter-spacing:0;color:#d0d3c6}

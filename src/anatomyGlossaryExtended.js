@@ -130,7 +130,7 @@ const anatomyGlossaryExtended={
   'precentral sulcus superior part':{zh:'中央前沟上部'},
   'procerus muscle':{zh:'降眉间肌'},
   'pronator quadratus':{zh:'旋前方肌'},
-  'pubo analis muscle':{zh:'耻骨肌肛提部'},
+  'pubo analis muscle':{zh:'肛提肌相关结构'},
   'pubococcygeus muscle':{zh:'耻尾肌'},
   'pudendal nerve':{zh:'阴部神经'},
   'pyramidalis muscle':{zh:'锥状肌'},

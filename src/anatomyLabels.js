@@ -91,4 +91,10 @@ export function safePartLabel(raw,layer){
   return {zh:generic.test(zh)||/[A-Za-z]{2,}/.test(zh)?fallback.zh:zh||fallback.zh,en:en||fallback.en};
 }
 
+// A concise, explicitly provisional Chinese description retains the reviewed
+// English subdivision instead of presenting an unverified Chinese term.
+export function anatomyNameNote(raw,lang='zh'){
+ return lang==='zh'&&anatomyIdentity(raw).name.toLowerCase()==='pubo analis muscle'?'Pubo-analis · 中文暂用概括名':'';
+}
+
 export { cleanPartName, partLabel };

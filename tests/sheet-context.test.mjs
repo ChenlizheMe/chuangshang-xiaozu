@@ -15,3 +15,11 @@ test('short-landscape nonempty panels can fit the header and several full 44px o
  css.walkAtRules('media',m=>{if(m.params==='(max-height:450px)')m.walkRules('.sticker-sheet:not(.empty-sheet)',r=>{values=Object.fromEntries(r.nodes.map(d=>[d.prop,d.value]));});});
  assert.equal(values.top,'12px');assert.equal(values.bottom,'86px');assert.equal(values['max-height'],'none');assert.ok(376-parseInt(values.top)-parseInt(values.bottom)>3*44+90);
 });
+test('provisional Pubo-analis Chinese context stays short while retaining the specific English identity',()=>{
+ for(const side of ['l','r']){
+  const zh=render({part:`Pubo-analis muscle.${side}`,layer:'muscle'},'zh');
+  assert.match(zh,/肛提肌相关结构/);assert.match(zh,/Pubo-analis · 中文暂用概括名/);assert.doesNotMatch(zh,/耻骨肌肛提部|细分中文名待核验/);
+  const en=render({part:`Pubo-analis muscle.${side}`,layer:'muscle'},'en');assert.match(en,/Pubo analis muscle/);assert.doesNotMatch(en,/中文暂用|anatomy-name-note/);
+ }
+ assert.doesNotMatch(render({part:'Pectineus muscle.r',layer:'muscle'},'zh'),/anatomy-name-note/);
+});
