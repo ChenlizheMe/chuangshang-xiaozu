@@ -2,13 +2,18 @@ import {readFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-const [apk,badgingFile]=process.argv.slice(2);
-const badging=await readFile(badgingFile,'utf8');
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+
+export function verifyApkBadging(badging){
 assert.match(badging,/package: name='cn\.traumateam\.app' versionCode='1' versionName='1\.0\.0'/);
-assert.match(badging,/sdkVersion:'26'/);
+assert.deepEqual([...badging.matchAll(/^minSdkVersion:'([^']+)'$/gm)].map(x=>x[1]),['26']);
 assert.match(badging,/targetSdkVersion:'35'/);
 assert.deepEqual([...badging.matchAll(/uses-permission: name='([^']+)'/g)].map(x=>x[1]),['android.permission.INTERNET']);
 assert.ok(!badging.includes('application-debuggable'));
+}
+export async function inspectApk(apk,badgingFile){
+verifyApkBadging(await readFile(badgingFile,'utf8'));
 const files=execFileSync('unzip',['-Z1',apk],{encoding:'utf8'}).trim().split('\n');
 assert.ok(files.includes('assets/packaged-assets.properties'));
 assert.equal(files.filter(x=>/^assets\/anatomy\/.*\.glb$/.test(x)).length,3);
@@ -24,4 +29,6 @@ for(const [logical,entry] of Object.entries(inventory.assets)){
  assert.equal(createHash('sha256').update(bytes).digest('hex'),entry.sha256);
 }
 for(const notice of ['assets/anatomy/LICENSE','assets/anatomy/NOTICE','assets/licenses/DRACO-LICENSE.txt','assets/licenses/DRACO-NOTICE.txt'])assert.ok(files.includes(notice));
-console.log('APK checked: cn.traumateam.app 1.0.0 (1), API 26–35 target, INTERNET only, not debuggable; content-addressed assets only.');
+console.log('APK checked: cn.traumateam.app 1.0.0 (1), min API 26, target API 35, INTERNET only, not debuggable; content-addressed assets only.');
+}
+if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url))await inspectApk(...process.argv.slice(2));
