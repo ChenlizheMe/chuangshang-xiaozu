@@ -1450,6 +1450,45 @@
       "tests": [
         "tests/painful-gum-swelling.test.mjs"
       ]
+    },
+    {
+      "id": "reviewed-foot-back-pelvic-identities",
+      "reviewedOn": "2026-10-07",
+      "type": "Anatomical terminology and existing region routing correction",
+      "sources": [
+        {
+          "title": "Chinese Terms of Human Anatomy, second edition, sections 02.1796 / 02.1687 and 02.1538",
+          "url": "https://xtjp.fudan.edu.cn/Upload/Files/201804100314393640155.pdf",
+          "use": "Distinguishes the foot little-toe opponens from the hand little-finger opponens; locates rotatores between vertebrae. PDF pages 133, 127 and 118 (one based)."
+        },
+        {
+          "title": "FIPAT Terminologia Anatomica second edition, Part 2: entries 2284 and 2406",
+          "url": "https://cdn.dal.ca/content/dam/dalhousie/pdf/library/FIPAT/TA2/FIPAT-TA2-Part-2.pdf",
+          "use": "Places Rotatores in the back musculature and Pubo-analis in the pelvic diaphragm/levator ani group. Supports anatomical region, not diagnosis or symptom origin."
+        }
+      ],
+      "implementation": [
+        "Correct the existing foot opponens Chinese label to 小趾对跖肌; retain hand opponens labels and all English/raw mesh names.",
+        "Route the exact normalized identities Rotatores and Pubo-analis muscle to existing spine and pelvis regions before broad translated component words can classify them as head or hip.",
+        "Keep neighboring cerebral gyri in head, Pectineus in hip, and hand opponens structures in hand. Existing regional symptom filters and safety rules then apply without changing their criteria."
+      ],
+      "positiveExamples": [
+        "Both .l/.r foot opponens meshes retain foot with the corrected Chinese term.",
+        "Rotatores.l/.r with pain and fever reaches the existing back warning.",
+        "Pubo-analis muscle.l/.r with explicit LLQ, pain and fever reaches the existing pelvic/abdominal same-day path."
+      ],
+      "negativeExamples": [
+        "Hand opponens labels remain 对掌肌.",
+        "Cerebral gyri do not move to spine; Pectineus does not move to pelvis.",
+        "Pain alone does not acquire an urgent action merely because the anatomical region was corrected."
+      ],
+      "limits": [
+        "Pubo-analis Chinese subdivision terminology is still being checked across editions; this batch uses its unambiguous complete English identity for region routing without inventing a new Chinese term.",
+        "The model selection cannot establish the actual symptomatic tissue, disease or geometric laterality. No model, global symptom option or condition ID is added."
+      ],
+      "tests": [
+        "tests/anatomy-identity-routing.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [

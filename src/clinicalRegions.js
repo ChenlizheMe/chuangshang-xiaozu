@@ -3,6 +3,9 @@ import {ORGAN_ATLAS} from './organAtlas.js';
 
 // Anatomical identity is independent of the visible layer: the nervous GLB
 // contains muscles and sense organs as well as nerves.
+// Match these complete identities before translated component words.
+// Rotatores are back muscles; Pubo-analis belongs to the pelvic diaphragm.
+const IDENTITY_REGIONS=new Map([['rotatores','spine'],['pubo analis muscle','pelvis']]);
 const REGIONS=[
  // Resolve complete anatomical identities before generic component words
  // (e.g. abdominal pectoral fibres are not abdominal-wall muscles).
@@ -11,7 +14,7 @@ const REGIONS=[
  ['spine',/髂肋肌(?:腰|胸)部|iliocostalis (?:lumborum|thoracis)/i],
  ['throat',/二腹肌|胸骨甲状肌|digastric|sternothyroid/i],
  ['upper-limb',/旋前圆肌|pronator teres/i],
- ['foot',/opponens digiti minimi muscle of foot|小趾对掌肌/i],
+ ['foot',/opponens digiti minimi muscle of foot|小趾对跖肌/i],
  ['eye',/总腱环|上斜肌|上直肌|玻璃体|睫状|视交叉|视束/],
  ['ear',/鼓索/],
  ['nose',/筛骨|大翼软骨/],
@@ -77,7 +80,7 @@ export function clinicalProfile(raw,layer){
  const {name,side}=anatomyIdentity(raw);const label=safePartLabel(raw,layer);
  const text=`${/待核验|人体骨骼|所选结构/.test(label.zh)?'':label.zh} ${name}`;
  const organ=layer==='organ'?ORGAN_ATLAS[name.toLowerCase()]:null;
- const region=organ?.region||REGIONS.find(([,pattern])=>pattern.test(text))?.[0]||'general';
+ const region=organ?.region||IDENTITY_REGIONS.get(name.toLowerCase())||REGIONS.find(([,pattern])=>pattern.test(text))?.[0]||'general';
  const tissue=organ?'organ':/髓核|椎间盘|nucleus pulposus|intervertebral disc/i.test(text)?'skeleton':/神经|脊髓|脑|nerve|tract|nucleus|gyrus|sulc|cereb|fascicul|gangli/i.test(text)?'nerve':/肌|腱|筋膜|muscle|tendon|fascia/i.test(text)?'muscle':/骨|韧带|软骨|椎间盘|关节|bone|ligament|cartilage/i.test(text)?'skeleton':layer;
  const [zh,en,summary,summaryEn,question,questionEn]=INFO[region];
  const sideZh=side?`${side==='left'?'左侧':'右侧'}${zh}`:zh;

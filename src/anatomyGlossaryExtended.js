@@ -70,7 +70,7 @@ const anatomyGlossaryExtended={
   'omohyoid muscle':{zh:'肩胛舌骨肌'},
   'opercular part of inferior frontal gyrus':{zh:'额下回盖部'},
   'ophthalmic nerve':{zh:'眼神经'},
-  'opponens digiti minimi muscle of foot':{zh:'小趾对掌肌'},
+  'opponens digiti minimi muscle of foot':{zh:'小趾对跖肌'},
   'opponens digiti minimi muscle of hand':{zh:'小指对掌肌'},
   'opponens pollicis muscle':{zh:'拇对掌肌'},
   'optic chiasm':{zh:'视交叉'},
