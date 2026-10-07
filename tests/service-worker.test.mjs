@@ -43,6 +43,8 @@ test('a UI release preserves earlier model and decoder downloads',async()=>{
  const browser=browserCache(),old=await browser.caches.open('trauma-team-international-shell-v7');
  await old.put(model,glb());await old.put('/draco/draco_wasm_wrapper.js',new Response('decoder',{headers:{'content-type':'application/javascript'}}));
  await browser.caches.open('unrelated-feature-cache');
+ // Normal upgrade fixture: install has already created the current generation.
+ await browser.caches.open('trauma-team-international-shell-v11-development');
  await browser.lifecycle('activate');browser.state.online=false;
  const response=await browser.request(model);assert.equal(response.status,200);assert.deepEqual(new Uint8Array(await response.arrayBuffer()),binary);
  assert.equal(await (await browser.request('/draco/draco_wasm_wrapper.js')).text(),'decoder');assert.equal(browser.calls.length,0);
@@ -53,6 +55,8 @@ test('a UI release preserves earlier model and decoder downloads',async()=>{
 test('an existing independent model cache survives subsequent UI upgrades',async()=>{
  const browser=browserCache(),models=await browser.caches.open('trauma-team-international-models-v5');
  await models.put(model,glb());await browser.caches.open('trauma-team-international-shell-v7');
+ // Normal upgrade fixture: install has already created the current generation.
+ await browser.caches.open('trauma-team-international-shell-v11-development');
  await browser.lifecycle('activate');browser.state.online=false;
  assert.equal((await browser.request(model)).status,200);assert.equal(browser.calls.length,0);
 });
@@ -71,7 +75,7 @@ test('an uncached model fails as a resource rather than receiving offline HTML',
 test('HTML responses and old geometry versions are not migrated as current models',async()=>{
  const browser=browserCache(),old=await browser.caches.open('trauma-team-international-shell-v7');
  await old.put(model,new Response('<html>Wrong fallback</html>',{headers:{'content-type':'text/html'}}));
- await old.put('/anatomy/organs-mobile.glb?v=4',glb());await browser.lifecycle('activate');browser.state.online=false;
+ await old.put('/anatomy/organs-mobile.glb?v=4',glb());await browser.caches.open('trauma-team-international-shell-v11-development');await browser.lifecycle('activate');browser.state.online=false;
  assert.equal((await browser.request(model)).status,503);assert.equal((await browser.request('/anatomy/organs-mobile.glb?v=5')).status,503);
 });
 

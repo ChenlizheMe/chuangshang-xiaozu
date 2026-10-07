@@ -118,7 +118,11 @@ self.addEventListener('activate', event => {
     const keys = await caches.keys();
     // Do not retire a newer worker's cache if it was created during this
     // worker's installation/activation handover.
-    const previousKeys = keys.slice(0, keys.indexOf(CACHE) < 0 ? keys.length : keys.indexOf(CACHE));
+    const currentIndex = keys.indexOf(CACHE);
+    // If this generation was evicted, cache insertion order no longer gives a
+    // safe boundary between old caches and a newer worker's staging caches.
+    if (currentIndex < 0) { await self.clients.claim(); return; }
+    const previousKeys = keys.slice(0, currentIndex);
     let models;
     try { models = await caches.open(MODEL_CACHE); } catch { await self.clients.claim(); return; }
     const preserveShells = new Set();
