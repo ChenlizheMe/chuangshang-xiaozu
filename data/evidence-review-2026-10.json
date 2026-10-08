@@ -2087,6 +2087,56 @@
       "tests": [
         "tests/urinary-advice-copy.test.mjs"
       ]
+    },
+    {
+      "id": "right-lower-action-place-copy",
+      "type": "Source-reviewed clinical action-place wording calibration",
+      "sources": [
+        {
+          "title": "NHS: Appendicitis, urgent and immediate advice",
+          "url": "https://www.nhs.uk/conditions/appendicitis/",
+          "use": "Worsening or migrating right-lower abdominal pain warrants urgent medical assessment; severe abdominal pain or sepsis-like findings require immediate emergency help. Assessment can start through an urgent primary-care/triage service and may require hospital tests and treatment."
+        }
+      ],
+      "decision": "Keep the existing same-day predicate and priority order. Replace the blanket Chinese emergency-department location instruction with explicit urgent medical assessment the same day, and make the same-day timing explicit in English. Fever remains an optional concerning accompaniment, not a required prerequisite.",
+      "appliesTo": "The existing migrating-right-lower-pain or confirmed RLQ pain-plus-worsening warning across its current abdominal/pelvic entries. All warning predicates, severity levels, identifiers and independent emergency overrides are unchanged.",
+      "notEstablished": [
+        "This is a clinically meaningful adjustment of the place-of-care wording, not merely a translation correction or evidence of diagnostic validity.",
+        "Progressively worsening pain does not establish severe or sudden severe pain, and model anatomy does not establish appendicitis.",
+        "The UK urgent GP/111 pathway is not a guarantee that outpatient care is sufficient or that emergency care is inappropriate; hospital evaluation may still be needed.",
+        "Retaining same-day urgent assessment does not permit watchful waiting or a routine appointment delay."
+      ],
+      "tests": [
+        "tests/action-place-copy.test.mjs"
+      ]
+    },
+    {
+      "id": "swelling-fever-action-place-copy",
+      "type": "Source-reviewed clinical action-place and reported-fact wording calibration",
+      "sources": [
+        {
+          "title": "SANJO: diagnostic approach, recommendations 1 and 3",
+          "url": "https://jbji.copernicus.org/articles/8/29/2023/",
+          "use": "Possible native-joint infection needs prompt clinical assessment and, when suspected, aspiration as soon as possible. Clinical observations alone do not confirm or exclude infection."
+        },
+        {
+          "title": "NHS: Septic arthritis, when and where to get help",
+          "url": "https://www.nhs.uk/conditions/septic-arthritis/",
+          "use": "Suspected infection warrants urgent medical help; an urgent GP/111 assessment is an initial route, while confirmed infection usually requires hospital treatment."
+        }
+      ],
+      "decision": "Keep the existing same-day swelling-plus-systemic-fever/chills predicate and urgent assessment today. Describe the reported swelling and fever or feeling cold/chills, with the actual joint or surrounding tissue involvement left for examination; selecting a whole humerus does not establish joint involvement.",
+      "appliesTo": "Only the bilingual text of the existing main-engine swelling with fever/chills warning. The separate hot-swollen-joint literature rule, reference gates, body-region list and all independent emergency priorities are unchanged.",
+      "notEstablished": [
+        "This changes a clinically meaningful care-location instruction and avoids an unestablished anatomical assertion; it is not clinical validation.",
+        "SANJO concerns clinician-assessed possible or confirmed native-joint infection and does not turn these checkboxes into a diagnosis or specify the only initial care setting for every user.",
+        "Urgent assessment today is retained as a conservative application policy. It does not promise that a clinic is sufficient or exclude emergency referral or admission.",
+        "The existing 发冷 / 寒战 input is not upgraded to confirmed rigors. Model side is not confirmed symptom side.",
+        "Missing either trigger is not evidence excluding infection, and treatment-timing guidance for already assessed patients must not justify delaying an initial assessment."
+      ],
+      "tests": [
+        "tests/action-place-copy.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [
