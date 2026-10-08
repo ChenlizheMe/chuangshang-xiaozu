@@ -2065,6 +2065,28 @@
       "tests": [
         "tests/bilingual-observation-copy.test.mjs"
       ]
+    },
+    {
+      "id": "urinary-reference-assessment-advice",
+      "type": "Source-reviewed supportive advice wording",
+      "sources": [
+        {
+          "title": "NHS: Urinary tract infections (UTIs), Treatment",
+          "url": "https://www.nhs.uk/conditions/urinary-tract-infections-utis/",
+          "use": "Urinary symptoms should be assessed; a clinician may perform a urine test, but it is not always needed. The page distinguishes care pathways by age, pregnancy and other clinical circumstances."
+        }
+      ],
+      "decision": "In urinary-tract-infection-pattern advice only, retain prompt assessment in both languages and clarify that a clinician decides whether urine testing is needed. Keep the existing ordinary appropriate hydration wording. No reference gate, priority predicate, level or warning text changes.",
+      "appliesTo": "The existing urinary reference without a priority override. Actual Anterior longitudinal ligament reports with painful urination and urinary frequency or urgency display this advice. Existing fever, blood-in-urine and retention priorities still replace reference advice.",
+      "notEstablished": [
+        "A model location or reference match does not establish infection, patient age, pregnancy, reproductive anatomy, catheter use or medical history.",
+        "This does not tell users that testing is unnecessary; population-specific assessment and testing remain clinical decisions.",
+        "The original prompt contact intent is retained, without a new same-day rule, test prescription, medicine or fluid-volume target.",
+        "NICE NG109 recommendations were available only as official search excerpts during the source review; the full page returned 403 and was not treated as a directly read source."
+      ],
+      "tests": [
+        "tests/urinary-advice-copy.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [
@@ -2136,5 +2158,5 @@
       "tests": []
     }
   ],
-  "updatedOn": "2026-10-07"
+  "updatedOn": "2026-10-08"
 }
