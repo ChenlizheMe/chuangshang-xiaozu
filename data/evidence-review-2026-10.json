@@ -2137,6 +2137,38 @@
       "tests": [
         "tests/action-place-copy.test.mjs"
       ]
+    },
+    {
+      "id": "mixed-hand-distribution-context",
+      "type": "Source-reviewed saved-report context without a new diagnostic or triage rule",
+      "sources": [
+        {
+          "title": "MSD Professional: Carpal Tunnel Syndrome, symptoms and diagnosis",
+          "url": "https://www.msdmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/hand-disorders/carpal-tunnel-syndrome",
+          "use": "Although classic symptoms follow the median distribution, they can involve the whole hand. Uncertain localization needs clinical assessment; a second reported finger distribution does not by itself exclude a carpal tunnel pattern."
+        },
+        {
+          "title": "Merck Professional: Cubital Tunnel Syndrome",
+          "url": "https://www.merckmanuals.com/professional/musculoskeletal-and-connective-tissue-disorders/hand-disorders/cubital-tunnel-syndrome",
+          "use": "Ring/little-finger symptoms can relate to the ulnar pathway, but localization and possible alternatives require examination."
+        },
+        {
+          "title": "Merck Professional: Numbness, evaluation",
+          "url": "https://www.merckmanuals.com/professional/neurologic-disorders/symptoms-of-neurologic-disorders/numbness",
+          "use": "Actual sensory distribution, onset, course and accompanying findings must be considered together rather than deriving a nerve or lesion site solely from checkbox words."
+        }
+      ],
+      "decision": "When a saved assessment has exactly one hand/upper-limb profile and both existing finger-distribution observations, show a neutral distribution clarification after the highest-priority guidance and before the reference cards. This includes existing sensory basic results. Use only the saved result, never current unassessed edits.",
+      "appliesTo": "The simultaneously recorded thumb/index/middle and ring/little-finger groups remain real reported observations even when same-family ranking shows a single possible carpal or ulnar reference. Reassessment after removing either group removes the paragraph.",
+      "notEstablished": [
+        "The two reports are not treated as mutually exclusive or as proof of two nerve disorders, a single cause, a compression site, actual side or simultaneous onset.",
+        "The context adds no diagnostic evidence family, score, exclusion, reference card, priority level or care timing. All engine output and higher-priority card advice remain unchanged.",
+        "Preserving the existing possible carpal reference is not diagnostic confirmation. In particular, symptoms outside a classic median distribution do not automatically rule it out.",
+        "Missing, invalid or multiple saved profiles do not cause a mixed-distribution paragraph."
+      ],
+      "tests": [
+        "tests/mixed-hand-context.test.mjs"
+      ]
     }
   ],
   "retainedBoundaries": [

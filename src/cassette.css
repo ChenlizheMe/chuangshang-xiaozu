@@ -147,3 +147,5 @@ button:active{transform:translateY(1px) scale(.98)}
  .viewer>.sticker-sheet{position:fixed;left:max(17px,calc(env(safe-area-inset-left,0px) + 12px));right:max(17px,calc(env(safe-area-inset-right,0px) + 12px));top:max(12px,env(safe-area-inset-top,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));width:auto;height:auto;max-height:none}
  .viewer:has(>.sticker-sheet) .screen-label.about-control,.viewer:has(>.sticker-sheet) .scene-controls,.viewer:has(>.sticker-sheet) .model-layers,.viewer:has(>.sticker-sheet) .vertical-control,.viewer:has(>.sticker-sheet) .model-error,.viewer:has(>.sticker-sheet) .sticker-dock{visibility:hidden}
 }
+
+.mixed-hand-context{margin:0 0 13px}
